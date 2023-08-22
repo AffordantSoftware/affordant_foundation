@@ -1,0 +1,26 @@
+name: affordant_foundation
+description: A new Flutter project.
+publish_to: 'none'
+version: 0.0.1+1
+
+environment:
+  sdk: '>=3.1.0 <4.0.0'
+
+dependencies:
+  affordant_core:
+    path: ../affordant_core
+  affordant_bloc:
+    path: ../affordant_bloc
+  affordant_flutter_bloc:
+    path: ../affordant_flutter_bloc
+  affordant_auth:
+    path: ../affordant_auth
+  affordant_form:
+    path: ../affordant_form
+  affordant_navigation:
+    path: ../affordant_navigation
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
