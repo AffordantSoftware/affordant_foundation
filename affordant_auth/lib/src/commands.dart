@@ -37,8 +37,8 @@ final class SignOut extends Command with Auth {
   }
 }
 
-final class UserQuery extends Query<User?> with Observer, Auth {
-  UserQuery() : super(null) {
-    watch(auth.authStateChanges, emit);
+final class UserViewModel extends ViewModel<User?> with Observer2, Auth {
+  UserViewModel() : super(null) {
+    forEach(auth.authStateChanges, onData: (user) => user);
   }
 }

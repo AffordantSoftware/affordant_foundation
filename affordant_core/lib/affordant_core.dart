@@ -1,3 +1,5 @@
-int calculate() {
-  return 6 * 7;
+import 'package:flutter/widgets.dart';
+
+mixin Displayable {
+  String display(BuildContext context);
 }
