@@ -1,5 +1,5 @@
 import 'dart:collection';
-import 'dart:ffi';
+import 'package:affordant_form/src/errors.dart';
 import 'package:flutter/material.dart';
 
 // Todo: Support for isSubmitButton enabled
@@ -74,15 +74,15 @@ abstract base class FormController with ChangeNotifier {
   }
 }
 
-abstract class Validator<T, E> {
+abstract class Validator<T> {
   const Validator({this.dependsOn});
 
-  Iterable<E>? validate(T value);
+  Iterable<ValidatorError>? validate(T value);
 
   final List<Field>? dependsOn;
 }
 
-class Field<T, E> with ChangeNotifier {
+class Field<T> with ChangeNotifier {
   Field(
     this.key, {
     required this.initialValue,
@@ -94,10 +94,10 @@ class Field<T, E> with ChangeNotifier {
 
   final String key;
   final T initialValue;
-  final List<Validator<T, E>>? validators;
+  final List<Validator<T>>? validators;
 
   T _value;
-  Iterable<E>? _errors;
+  FieldError? _error;
 
   T get value => _value;
 
@@ -113,14 +113,13 @@ class Field<T, E> with ChangeNotifier {
 
   bool get isDirty => !isPure;
 
-  UnmodifiableListView<E>? get errors =>
-      _errors != null ? UnmodifiableListView(_errors!) : null;
+  FieldError? get error => _error;
 
-  bool get hasError => errors?.isNotEmpty == true;
+  bool get hasError => _error != null;
 
   bool isValid() {
-    if (isPure) return _computeErrors()?.isEmpty ?? true;
-    return errors == null || errors!.isEmpty == true;
+    if (isPure) return _computeFieldError() == null;
+    return _error == null;
   }
 
   void reset() {
@@ -128,13 +127,13 @@ class Field<T, E> with ChangeNotifier {
   }
 
   bool validate() {
-    final newErrors = _computeErrors()?.expand((errors) => errors);
-    if (newErrors != _errors) {
-      _errors = newErrors;
+    final newError = _computeFieldError();
+    if (newError != _error) {
+      _error = newError;
       notifyListeners();
     }
 
-    return newErrors == null;
+    return newError == null;
   }
 
   Iterable<Field> _getDependencies() {
@@ -151,9 +150,19 @@ class Field<T, E> with ChangeNotifier {
     }
   }
 
-  Iterable<Iterable<E>>? _computeErrors() {
-    final list =
-        validators?.map((v) => v.validate(value)).whereType<Iterable<E>>();
+  FieldError<Field<T>>? _computeFieldError() {
+    final validatorsErrors =
+        _computeValidatorsErrors()?.expand((errors) => errors);
+    if (validatorsErrors != null) {
+      return FieldError(this, validatorsErrors.toList());
+    }
+    return null;
+  }
+
+  Iterable<Iterable<ValidatorError>>? _computeValidatorsErrors() {
+    final list = validators
+        ?.map((v) => v.validate(value))
+        .whereType<Iterable<ValidatorError>>();
     if (list?.isNotEmpty == true) return list;
     return null;
   }
@@ -185,15 +194,15 @@ class Form<T extends FormController> extends InheritedWidget {
   }
 }
 
-class FormField<T, E> extends StatelessWidget {
+class FormField<T> extends StatelessWidget {
   const FormField({
     super.key,
     required this.field,
     required this.builder,
   });
 
-  final Field<T, E> field;
-  final Widget Function(BuildContext context, Field<T, E> field) builder;
+  final Field<T> field;
+  final Widget Function(BuildContext context, Field<T> field) builder;
 
   @override
   Widget build(BuildContext context) {

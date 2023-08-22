@@ -1,19 +1,25 @@
+import 'package:affordant_core/affordant_core.dart';
 import 'package:flutter/material.dart';
 
 import 'form.dart';
 
-abstract class FieldError<T extends Field> {
-  FieldError(this.field);
-
-  final T field;
+class ValidatorError {
   final String errorKey;
-  final Map<String, dynamic> parameters;
+  final Map<String, dynamic>? parameters;
+
+  const ValidatorError(
+    this.errorKey, {
+    this.parameters,
+  });
 }
 
-class LocalizedError {
-  const LocalizedError(this.key);
+class FieldError<T extends Field> with Displayable {
+  FieldError(this.field, this.errors);
 
-  final String key;
+  final T field;
+  final List<ValidatorError> errors;
 
-  String display(BuildContext context) => key;
+  @override
+  String display(BuildContext context) =>
+      errors.firstOrNull?.errorKey ?? "error";
 }
