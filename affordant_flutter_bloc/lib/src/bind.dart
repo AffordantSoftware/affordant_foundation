@@ -6,18 +6,18 @@ import 'package:affordant_bloc/affordant_bloc.dart';
 
 class Bind<T> extends StatelessWidget {
   const Bind({
-    required this.query,
+    required this.viewModel,
     required this.builder,
     super.key,
   });
 
-  final ViewModel<T> query;
+  final ViewModel<T> viewModel;
   final Widget Function(BuildContext context, T value) builder;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => query,
+      create: (context) => viewModel,
       child: BlocBuilder<ViewModel<T>, T>(
         builder: builder,
       ),
@@ -27,16 +27,16 @@ class Bind<T> extends StatelessWidget {
 
 class Bind2<T> extends StatelessWidget {
   const Bind2({
-    required this.query,
+    required this.viewModel,
     required this.child,
     super.key,
   });
 
-  final ViewModel<T> query;
+  final ViewModel<T> viewModel;
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(create: (context) => query, child: child);
+    return BlocProvider(create: (context) => viewModel, child: child);
   }
 }
