@@ -1,7 +1,8 @@
 name: affordant_flutter_view_model
-description: A new Flutter project.
+description: Flutter binding for affordant_view_model. Built on top of Flutter bloc library
+repository: https://github.com/AffordantSoftware/affordant_foundation
 publish_to: 'none'
-version: 1.0.0+1
+version: 0.0.1
 
 environment:
   sdk: '>=3.0.6 <4.0.0'

@@ -1,5 +1,6 @@
 name: affordant_navigation
-description: Affordant navigation
+description: Affordant Software's navigation system for flutter
+repository: https://github.com/AffordantSoftware/affordant_foundation
 version: 0.0.1
 publish_to: none
 
@@ -11,7 +12,9 @@ dependencies:
   flutter:
     sdk: flutter
   affordant_core:
-    path: ../affordant_core
+    git:
+      url: git@github.com:AffordantSoftware/affordant_foundation.git
+      path: affordant_core
   go_router: ^10.0.0
 
 dev_dependencies:
