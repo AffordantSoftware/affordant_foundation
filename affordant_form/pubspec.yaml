@@ -11,7 +11,9 @@ dependencies:
   flutter:
     sdk: flutter
   affordant_core:
-    path: ../affordant_core
+    git:
+      url: git@github.com:AffordantSoftware/affordant_foundation.git
+    path: affordant_core
 
 dev_dependencies:
   flutter_test:
