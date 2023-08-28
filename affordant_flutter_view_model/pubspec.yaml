@@ -1,6 +1,6 @@
-name: affordant_flutter_bloc
+name: affordant_flutter_view_model
 description: A new Flutter project.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: 'none'
 version: 1.0.0+1
 
 environment:
@@ -10,8 +10,8 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.3
-  affordant_bloc:
-    path: ../affordant_bloc
+  affordant_view_model:
+    path: ../affordant_view_model
 
 dev_dependencies:
   flutter_test:

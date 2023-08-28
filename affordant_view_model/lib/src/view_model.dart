@@ -1,11 +1,8 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:get_it/get_it.dart';
 
-mixin DependencyInjection {
-  GetIt get di => GetIt.I;
-}
+import 'package:affordant_core/affordant_core.dart';
 
 /// Command can depend on scope
 /// Command should provides a nice api to catch error

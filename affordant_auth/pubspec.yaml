@@ -1,7 +1,7 @@
 name: affordant_auth
 description: A sample command-line application.
 version: 1.0.0
-publish_to: none
+publish_to: "none"
 
 environment:
   sdk: ^3.0.6
@@ -10,8 +10,16 @@ dependencies:
   firebase_auth: ^4.7.2
   get_it: ^7.6.0
   meta: ^1.9.1
-  affordant_bloc:
-    path: ../affordant_bloc
+  affordant_core:
+    path: ../affordant_core
+    # git:
+    #   url: git@github.com:AffordantSoftware/affordant_foundation.git
+    #   path: affordant_core
+  affordant_view_model:
+    path: ../affordant_view_model
+    # git:
+    #   url: git@github.com:AffordantSoftware/affordant_foundation.git
+    #   path: affordant_view_model
   bloc: ^8.1.2
 
 dev_dependencies:

@@ -9,10 +9,10 @@ environment:
 dependencies:
   affordant_core:
     path: ../affordant_core
-  affordant_bloc:
-    path: ../affordant_bloc
-  affordant_flutter_bloc:
-    path: ../affordant_flutter_bloc
+  affordant_view_model:
+    path: ../affordant_view_model
+  affordant_flutter_view_model:
+    path: ../affordant_flutter_view_model
   affordant_auth:
     path: ../affordant_auth
   affordant_form:

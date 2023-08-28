@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:affordant_bloc/affordant_bloc.dart';
+import 'package:affordant_view_model/affordant_view_model.dart';
 
 class Bind<T> extends StatelessWidget {
   const Bind({
