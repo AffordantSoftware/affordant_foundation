@@ -25,18 +25,18 @@ class Bind<T> extends StatelessWidget {
   }
 }
 
-class Bind2<T> extends StatelessWidget {
+class Bind2<T extends ViewModel> extends StatelessWidget {
   const Bind2({
     required this.viewModel,
     required this.child,
     super.key,
   });
 
-  final ViewModel<T> viewModel;
+  final T viewModel;
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(create: (context) => viewModel, child: child);
+    return BlocProvider<T>(create: (context) => viewModel, child: child);
   }
 }
