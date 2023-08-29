@@ -10,7 +10,7 @@ environment:
 dependencies:    
   affordant_core:
     git:
-      url: git@github.com:AffordantSoftware/affordant_foundation.git
+      url: https://github.com/AffordantSoftware/affordant_foundation.git
       path: affordant_core
 
   bloc: ^8.1.2 

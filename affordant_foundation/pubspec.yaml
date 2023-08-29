@@ -10,27 +10,27 @@ environment:
 dependencies:
   affordant_core:
     git:
-      url: git@github.com:AffordantSoftware/affordant_foundation.git
+      url: https://github.com/AffordantSoftware/affordant_foundation.git
       path: affordant_core
   affordant_view_model:
     git:
-      url: git@github.com:AffordantSoftware/affordant_foundation.git
+      url: https://github.com/AffordantSoftware/affordant_foundation.git
       path: affordant_view_model
   affordant_flutter_view_model:
     git:
-      url: git@github.com:AffordantSoftware/affordant_foundation.git
+      url: https://github.com/AffordantSoftware/affordant_foundation.git
       path: affordant_flutter_view_model
   affordant_auth:
     git:
-      url: git@github.com:AffordantSoftware/affordant_foundation.git
+      url: https://github.com/AffordantSoftware/affordant_foundation.git
       path: affordant_auth
   affordant_form:
     git:
-      url: git@github.com:AffordantSoftware/affordant_foundation.git
+      url: https://github.com/AffordantSoftware/affordant_foundation.git
       path: affordant_form
   affordant_navigation:
     git:
-      url: git@github.com:AffordantSoftware/affordant_foundation.git
+      url: https://github.com/AffordantSoftware/affordant_foundation.git
       path: affordant_navigation
 
 dev_dependencies:
