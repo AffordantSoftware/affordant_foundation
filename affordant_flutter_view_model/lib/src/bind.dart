@@ -6,29 +6,29 @@ import 'package:affordant_view_model/affordant_view_model.dart';
 
 class Bind<T extends ViewModel> extends StatelessWidget {
   const Bind({
-    required this.viewModel,
+    required this.create,
     required this.child,
     super.key,
   });
 
   static BindAndConsume consume<T extends ViewModel<S>, S>({
-    required T viewModel,
+    required T Function(BuildContext) create,
     required final Widget Function(BuildContext context, S state) builder,
     Key? key,
   }) =>
       BindAndConsume<T, S>(
-        viewModel: viewModel,
+        create: create,
         builder: builder,
         key: key,
       );
 
-  final T viewModel;
+  final T Function(BuildContext) create;
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<T>(
-      create: (context) => viewModel,
+      create: create,
       child: child,
     );
   }
@@ -36,21 +36,23 @@ class Bind<T extends ViewModel> extends StatelessWidget {
 
 class BindAndConsume<T extends ViewModel<S>, S> extends StatelessWidget {
   const BindAndConsume({
-    required this.viewModel,
+    required this.create,
     required this.builder,
     super.key,
   });
 
-  final T viewModel;
+  final T Function(BuildContext) create;
   final Widget Function(BuildContext context, S state) builder;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<T>(
-      create: (context) => viewModel,
-      child: BlocBuilder(
-        bloc: viewModel,
-        builder: builder,
+      create: create,
+      child: Builder(
+        builder: (context) => BlocBuilder<T, S>(
+          bloc: context.read(),
+          builder: builder,
+        ),
       ),
     );
   }
