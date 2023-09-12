@@ -8,7 +8,6 @@ environment:
   sdk: ^3.0.6
 
 dependencies:
-  firebase_auth: ^4.7.2
   get_it: ^7.6.0
   meta: ^1.9.1
   affordant_core:

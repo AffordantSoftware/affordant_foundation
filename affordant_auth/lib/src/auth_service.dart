@@ -1,16 +1,16 @@
 import 'dart:async';
-import 'package:firebase_auth/firebase_auth.dart' as fb;
 import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
 
-typedef RegisterUserServicesDelegate = FutureOr<void> Function(GetIt, User);
+typedef RegisterUserServicesDelegate<User> = FutureOr<void> Function(
+  GetIt,
+  AuthService<User>,
+);
 typedef DisposeUserServicesDelegate = FutureOr<void> Function();
-
-typedef User = fb.User;
 
 const _authScopeName = "authScope";
 
-abstract base class AuthService with Disposable {
+abstract base class AuthService<User> with Disposable {
   AuthService({
     this.registerUserServices,
     this.disposeUserServices,
@@ -25,7 +25,10 @@ abstract base class AuthService with Disposable {
   }
 
   late final StreamSubscription<User?> _authChangesSub;
-  final RegisterUserServicesDelegate? registerUserServices;
+  final FutureOr<void> Function(
+    GetIt,
+    AuthService<User>,
+  )? registerUserServices;
   final DisposeUserServicesDelegate? disposeUserServices;
 
   Stream<User?> get authStateChanges;
@@ -45,7 +48,7 @@ abstract base class AuthService with Disposable {
     if (delegate != null) {
       GetIt.instance.pushNewScopeAsync(
         scopeName: _authScopeName,
-        init: (scope) async => await delegate(scope, user),
+        init: (scope) async => await delegate(scope, this),
         dispose: disposeUserServices,
       );
     }
@@ -53,7 +56,8 @@ abstract base class AuthService with Disposable {
 
   @protected
   void dropAuthScope() {
-    if (registerUserServices != null) {
+    if (registerUserServices != null &&
+        GetIt.instance.hasScope(_authScopeName)) {
       GetIt.instance.dropScope(_authScopeName);
     }
   }
