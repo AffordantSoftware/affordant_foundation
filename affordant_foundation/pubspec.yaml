@@ -16,10 +16,6 @@ dependencies:
     git:
       url: https://github.com/AffordantSoftware/affordant_foundation.git
       path: affordant_view_model
-  affordant_flutter_view_model:
-    git:
-      url: https://github.com/AffordantSoftware/affordant_foundation.git
-      path: affordant_flutter_view_model
   affordant_auth:
     git:
       url: https://github.com/AffordantSoftware/affordant_foundation.git
