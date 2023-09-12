@@ -1,0 +1,24 @@
+name: affordant_query_view
+description: A sample command-line application.
+version: 0.0.2
+publish_to: none
+
+environment:
+  sdk: ^3.1.0
+
+dependencies:
+  affordant_core:
+    git:
+      url: https://github.com/AffordantSoftware/affordant_foundation.git
+      path: affordant_core
+  affordant_view_model:
+    git:
+      url: https://github.com/AffordantSoftware/affordant_foundation.git
+      path: affordant_view_model
+  dart_mappable: ^3.2.0
+
+dev_dependencies:
+  build_runner: ^2.4.6
+  dart_mappable_builder: ^3.2.1
+  lints: ^2.0.0
+  test: ^1.21.0
