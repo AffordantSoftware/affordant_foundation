@@ -59,8 +59,8 @@ class QueryViewModelStateMapper extends ClassMapperBase<QueryViewModelState> {
   static bool _$isLoading(QueryViewModelState v) => v.isLoading;
   static const Field<QueryViewModelState, bool> _f$isLoading =
       Field('isLoading', _$isLoading);
-  static InvalidType _$error(QueryViewModelState v) => v.error;
-  static const Field<QueryViewModelState, InvalidType> _f$error =
+  static DisplayableError? _$error(QueryViewModelState v) => v.error;
+  static const Field<QueryViewModelState, DisplayableError> _f$error =
       Field('error', _$error);
 
   @override
@@ -191,7 +191,7 @@ abstract class QueryViewModelStateCopyWith<
       QueryResult? queryResult,
       Data? data,
       bool? isLoading,
-      InvalidType? error});
+      DisplayableError? error});
   QueryViewModelStateCopyWith<
       $R2,
       $In,
@@ -231,14 +231,14 @@ class _QueryViewModelStateCopyWithImpl<$R, $Out, QueryParameters,
           Object? queryResult = $none,
           Object? data = $none,
           bool? isLoading,
-          InvalidType? error}) =>
+          Object? error = $none}) =>
       $apply(FieldCopyWithData({
         if (queryParams != null) #queryParams: queryParams,
         if (displayParams != null) #displayParams: displayParams,
         if (queryResult != $none) #queryResult: queryResult,
         if (data != $none) #data: data,
         if (isLoading != null) #isLoading: isLoading,
-        if (error != null) #error: error
+        if (error != $none) #error: error
       }));
   @override
   QueryViewModelState<QueryParameters, DisplayParameters, QueryResult, Data>

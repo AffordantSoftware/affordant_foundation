@@ -112,7 +112,7 @@ abstract base class QueryViewModel<QueryParameters, DisplayParameters,
 
       emit(state.copyWith(
         queryResult: queryRes,
-        displayResult: displayRes,
+        data: displayRes,
         error: null,
         isLoading: false,
       ));
