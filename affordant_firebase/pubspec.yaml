@@ -9,7 +9,9 @@ environment:
 # Add regular dependencies here.
 dependencies:
   affordant_auth:
-    path: ../affordant_auth
+    git:
+      url: https://github.com/AffordantSoftware/affordant_foundation.git
+      path: affordant_auth
   cloud_firestore: ^4.9.1
   collection: ^1.17.2
   firebase_auth: ^4.7.2
