@@ -59,6 +59,9 @@ class QueryViewModelStateMapper extends ClassMapperBase<QueryViewModelState> {
   static bool _$isLoading(QueryViewModelState v) => v.isLoading;
   static const Field<QueryViewModelState, bool> _f$isLoading =
       Field('isLoading', _$isLoading);
+  static bool _$hasExecutedQuery(QueryViewModelState v) => v.hasExecutedQuery;
+  static const Field<QueryViewModelState, bool> _f$hasExecutedQuery =
+      Field('hasExecutedQuery', _$hasExecutedQuery);
   static DisplayableError? _$error(QueryViewModelState v) => v.error;
   static const Field<QueryViewModelState, DisplayableError> _f$error =
       Field('error', _$error);
@@ -70,6 +73,7 @@ class QueryViewModelStateMapper extends ClassMapperBase<QueryViewModelState> {
     #queryResult: _f$queryResult,
     #data: _f$data,
     #isLoading: _f$isLoading,
+    #hasExecutedQuery: _f$hasExecutedQuery,
     #error: _f$error,
   };
 
@@ -83,6 +87,7 @@ class QueryViewModelStateMapper extends ClassMapperBase<QueryViewModelState> {
         queryResult: data.dec(_f$queryResult),
         data: data.dec(_f$data),
         isLoading: data.dec(_f$isLoading),
+        hasExecutedQuery: data.dec(_f$hasExecutedQuery),
         error: data.dec(_f$error));
   }
 
@@ -191,6 +196,7 @@ abstract class QueryViewModelStateCopyWith<
       QueryResult? queryResult,
       Data? data,
       bool? isLoading,
+      bool? hasExecutedQuery,
       DisplayableError? error});
   QueryViewModelStateCopyWith<
       $R2,
@@ -231,6 +237,7 @@ class _QueryViewModelStateCopyWithImpl<$R, $Out, QueryParameters,
           Object? queryResult = $none,
           Object? data = $none,
           bool? isLoading,
+          bool? hasExecutedQuery,
           Object? error = $none}) =>
       $apply(FieldCopyWithData({
         if (queryParams != null) #queryParams: queryParams,
@@ -238,6 +245,7 @@ class _QueryViewModelStateCopyWithImpl<$R, $Out, QueryParameters,
         if (queryResult != $none) #queryResult: queryResult,
         if (data != $none) #data: data,
         if (isLoading != null) #isLoading: isLoading,
+        if (hasExecutedQuery != null) #hasExecutedQuery: hasExecutedQuery,
         if (error != $none) #error: error
       }));
   @override
@@ -248,6 +256,8 @@ class _QueryViewModelStateCopyWithImpl<$R, $Out, QueryParameters,
           queryResult: data.get(#queryResult, or: $value.queryResult),
           data: data.get(#data, or: $value.data),
           isLoading: data.get(#isLoading, or: $value.isLoading),
+          hasExecutedQuery:
+              data.get(#hasExecutedQuery, or: $value.hasExecutedQuery),
           error: data.get(#error, or: $value.error));
 
   @override

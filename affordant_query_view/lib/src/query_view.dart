@@ -17,6 +17,7 @@ class QueryViewModelState<QueryParameters, DisplayParameters, QueryResult, Data>
     required this.queryResult,
     required this.data,
     required this.isLoading,
+    required this.hasExecutedQuery,
     required this.error,
   });
 
@@ -25,6 +26,7 @@ class QueryViewModelState<QueryParameters, DisplayParameters, QueryResult, Data>
   final QueryResult? queryResult;
   final Data? data;
   final DisplayableError? error;
+  final bool hasExecutedQuery;
   final bool isLoading;
 }
 
@@ -55,6 +57,7 @@ abstract base class QueryViewModel<QueryParameters, DisplayParameters,
             queryResult: initialQueryResult,
             data: initialDisplayResult,
             error: null,
+            hasExecutedQuery: false,
             isLoading: false,
           ),
         ) {
@@ -101,6 +104,7 @@ abstract base class QueryViewModel<QueryParameters, DisplayParameters,
     emit(state.copyWith(
       queryParams: queryParams,
       displayParams: displayParams,
+      hasExecutedQuery: true,
       isLoading: true,
     ));
     try {
@@ -119,8 +123,8 @@ abstract base class QueryViewModel<QueryParameters, DisplayParameters,
     } catch (e, s) {
       emit(
         state.copyWith(
-          error: DisplayableError(e, s),
           isLoading: false,
+          error: DisplayableError(e, s),
         ),
       );
     }
