@@ -8,12 +8,19 @@ abstract class MapAccessorBase {
 }
 
 base mixin ObjectAccessor<T> on DocRef {
-  T fromData(String id, Map<String, dynamic>? data);
+  T defaultValue(String id);
+
+  T fromData(String id, Map<String, dynamic> data);
   Map<String, dynamic> toData(T value);
 
   Future<T> get() async {
     final doc = await ref.get();
-    return fromData(doc.id, doc.data());
+    final data = doc.data();
+    if (data == null) {
+      return defaultValue(doc.id);
+    } else {
+      return fromData(doc.id, data);
+    }
   }
 
   Future<void> set(T value) {
@@ -24,7 +31,8 @@ base mixin ObjectAccessor<T> on DocRef {
   Future<void> setMap(Map<String, dynamic> data) async {
     final snapshot = await ref.get();
     if (snapshot.exists == false) {
-      await ref.set(toData(fromData(snapshot.id, null)));
+      //create the doc if it doesn't exist yet
+      await ref.set(toData(defaultValue(snapshot.id)));
     }
     return ref.set(
       data,
@@ -32,12 +40,27 @@ base mixin ObjectAccessor<T> on DocRef {
     );
   }
 
+  Future<void> delete() {
+    return ref.delete();
+  }
+
   Stream<T> snapshots() {
-    return ref.snapshots().map((doc) => fromData(doc.id, doc.data()));
+    return ref.snapshots().map(
+      (doc) {
+        if (doc.exists) {
+          return fromData(
+            doc.id,
+            doc.data()!,
+          );
+        } else {
+          return defaultValue(doc.id);
+        }
+      },
+    );
   }
 }
 
-base class DocRef implements MapAccessorBase {
+abstract base class DocRef implements MapAccessorBase {
   final fs.DocumentReference<Map<String, dynamic>> ref;
 
   const DocRef(this.ref);
@@ -54,7 +77,7 @@ base class DocRef implements MapAccessorBase {
   }
 }
 
-base class CollectionRef<ID, DocRefType extends DocRef> {
+abstract base class CollectionRef<ID, DocRefType extends DocRef> {
   CollectionRef(
     this.collection, {
     required this.convertID,
@@ -75,7 +98,7 @@ base class CollectionRef<ID, DocRefType extends DocRef> {
   Future<void> delete(String id) => collection.doc(id).delete();
 }
 
-base class MapAccessor implements MapAccessorBase {
+abstract base class MapAccessor implements MapAccessorBase {
   final MapAccessorBase parent;
   final String key;
 
