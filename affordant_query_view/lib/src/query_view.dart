@@ -1,10 +1,37 @@
 import 'dart:async';
-
 import 'package:affordant_view_model/affordant_view_model.dart';
 import 'package:affordant_core/affordant_core.dart';
 import 'package:dart_mappable/dart_mappable.dart';
 
 part 'query_view.mapper.dart';
+
+abstract interface class Debouncer {
+  const Debouncer();
+
+  void debounce(void Function() delegate);
+  FutureOr<void> dispose();
+}
+
+class SearchDebouncer implements Debouncer {
+  SearchDebouncer({this.duration = const Duration(milliseconds: 330)});
+
+  final Duration duration;
+  Timer? _timer;
+  // U Function()? _delegate;
+
+  @override
+  void debounce(void Function() delegate) {
+    _timer?.cancel();
+    _timer = Timer(duration, () {
+      delegate();
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+  }
+}
 
 @MappableClass()
 class QueryViewModelState<QueryParameters, DisplayParameters, QueryResult, Data>
@@ -14,17 +41,17 @@ class QueryViewModelState<QueryParameters, DisplayParameters, QueryResult, Data>
   QueryViewModelState({
     required this.queryParams,
     required this.displayParams,
-    required this.queryResult,
     required this.data,
-    required this.isLoading,
-    required this.hasExecutedQuery,
-    required this.error,
+    this.queryResult,
+    this.isLoading = false,
+    this.hasExecutedQuery = false,
+    this.error,
   });
 
   final QueryParameters queryParams;
   final DisplayParameters displayParams;
   final QueryResult? queryResult;
-  final Data? data;
+  final Data data;
   final DisplayableError? error;
   final bool hasExecutedQuery;
   final bool isLoading;
@@ -45,26 +72,30 @@ abstract base class QueryViewModel<QueryParameters, DisplayParameters,
         QueryViewModelState<QueryParameters, DisplayParameters, QueryResult,
             Data>> {
   QueryViewModel({
+    Debouncer? debouncer,
     required QueryParameters initialQueryParams,
     required DisplayParameters initialDisplayParams,
-    required QueryResult? initialQueryResult,
-    required Data? initialDisplayResult,
+    required Data initialData,
+    QueryResult? initialQueryResult,
     bool runQuery = true,
-  }) : super(
+  })  : debouncer = debouncer ?? SearchDebouncer(),
+        super(
           QueryViewModelState(
             displayParams: initialDisplayParams,
             queryParams: initialQueryParams,
             queryResult: initialQueryResult,
-            data: initialDisplayResult,
+            data: initialData,
             error: null,
             hasExecutedQuery: false,
             isLoading: false,
           ),
         ) {
     if (runQuery) {
-      _execQuery();
+      _execQueryWithDebouncer();
     }
   }
+
+  final Debouncer debouncer;
 
   FutureOr<QueryResult> query(
     QueryParameters params,
@@ -85,15 +116,27 @@ abstract base class QueryViewModel<QueryParameters, DisplayParameters,
   }
 
   void setQueryParams(QueryParameters params) {
-    _execQuery(useCache: false, queryParams: params);
+    _execQueryWithDebouncer(useCache: false, queryParams: params);
   }
 
   Future<void> setDisplayParams(DisplayParameters params) async {
-    _execQuery(useCache: true, displayParams: params);
+    _execQueryWithDebouncer(useCache: true, displayParams: params);
   }
 
   void refresh() {
-    _execQuery(useCache: false);
+    _execQueryWithDebouncer(useCache: false);
+  }
+
+  void _execQueryWithDebouncer({
+    bool useCache = false,
+    QueryParameters? queryParams,
+    DisplayParameters? displayParams,
+  }) {
+    debouncer.debounce(() => _execQuery(
+          useCache: useCache,
+          queryParams: queryParams,
+          displayParams: displayParams,
+        ));
   }
 
   Future<void> _execQuery({

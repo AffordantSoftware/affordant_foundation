@@ -1,0 +1,16 @@
+name: Flutter norm and tests
+on:
+  pull_request:
+
+jobs:
+  run_tests_and_check_norm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+      - run: flutter --version
+      - id: A
+        run: "flutter test"
+      - id: B
+        run: "flutter analyze"
+        if: steps.A.conclusion == 'success'

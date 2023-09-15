@@ -1,0 +1,33 @@
+name: example
+description: A new Flutter project.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.1.1 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  flex_color_scheme: ^7.3.1
+  affordant_view_model:
+    git:
+      url: https://github.com/AffordantSoftware/affordant_foundation.git
+      path: affordant_view_model
+  affordant_query_view:
+    path: ../
+  dart_mappable: ^3.2.0
+  freezed_annotation: ^2.4.1
+  fuzzywuzzy: ^1.1.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+  dart_mappable_builder: ^3.2.1
+  build_runner: ^2.4.6
+  freezed: ^2.4.1
+
+flutter:
+  uses-material-design: true
