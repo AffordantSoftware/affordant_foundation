@@ -140,7 +140,7 @@ base class FieldAccessor<T> {
         }
       });
 
-  Future<void> set(T value) => parent.setMap(toJson(value));
+  Future<void> set(T value) => parent.setMap({key: toJson(value)});
 }
 
 base class ArrayAccessor<T> {
