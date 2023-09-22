@@ -3,6 +3,7 @@ import 'package:collection/collection.dart';
 
 abstract class MapAccessorBase {
   // Future<String> id();
+  Stream<Map<String, dynamic>?> get stream;
   Future<Map<String, dynamic>?> getMap();
   Future<void> setMap(Map<String, dynamic> data);
 }
@@ -66,6 +67,10 @@ abstract base class DocRef implements MapAccessorBase {
   const DocRef(this.ref);
 
   @override
+  Stream<Map<String, dynamic>?> get stream =>
+      ref.snapshots().map((snapshot) => snapshot.data());
+
+  @override
   Future<Map<String, dynamic>?> getMap() => ref.get().then((e) => e.data());
 
   @override
@@ -105,6 +110,10 @@ abstract base class MapAccessor implements MapAccessorBase {
   MapAccessor(this.parent, {required this.key});
 
   @override
+  Stream<Map<String, dynamic>?> get stream =>
+      parent.stream.map((map) => map?[key]);
+
+  @override
   Future<Map<String, dynamic>?> getMap() {
     return parent.getMap().then((data) {
       return data?[key];
@@ -131,6 +140,15 @@ base class FieldAccessor<T> {
     required this.fromJson,
     required this.toJson,
   });
+
+  @override
+  Stream<T?> get stream => parent.stream.map((map) {
+        try {
+          return fromJson(map?[key]);
+        } catch (e) {
+          return defaultValue();
+        }
+      });
 
   Future<T> get() => parent.getMap().then((data) {
         try {
@@ -189,4 +207,151 @@ base class ArrayAccessor<T> {
     list.removeAt(index);
     set(list);
   }
+}
+
+final class DoubleAccessor extends FieldAccessor<double> {
+  DoubleAccessor({
+    required super.parent,
+    required super.key,
+    required super.defaultValue,
+  }) : super(
+          fromJson: (json) => json,
+          toJson: (value) => value,
+        );
+}
+
+final class IntAccessor extends FieldAccessor<int> {
+  IntAccessor({
+    required super.parent,
+    required super.key,
+    required super.defaultValue,
+  }) : super(
+          fromJson: (json) => json,
+          toJson: (value) => value,
+        );
+}
+
+final class StringAccessor extends FieldAccessor<String> {
+  StringAccessor({
+    required super.parent,
+    required super.key,
+    required super.defaultValue,
+  }) : super(
+          fromJson: (json) => json,
+          toJson: (value) => value,
+        );
+}
+
+final class BoolAccessor extends FieldAccessor<bool> {
+  BoolAccessor({
+    required super.parent,
+    required super.key,
+    required super.defaultValue,
+  }) : super(
+          fromJson: (json) => json,
+          toJson: (value) => value,
+        );
+}
+
+final class DateTimeAccessor extends FieldAccessor<DateTime> {
+  DateTimeAccessor({
+    required super.parent,
+    required super.key,
+    required super.defaultValue,
+  }) : super(
+          fromJson: (json) => DateTime.parse(json),
+          toJson: (value) => value.toIso8601String(),
+        );
+}
+
+final class EnumAccessor<T extends Enum> extends FieldAccessor<T> {
+  EnumAccessor({
+    required super.parent,
+    required super.key,
+    required super.defaultValue,
+    required Map<String, T> nameMap,
+  }) : super(
+          fromJson: (json) => nameMap[json]!,
+          toJson: (value) => value.name,
+        );
+}
+
+// ignore: prefer_void_to_null
+Null _getNull() => null;
+
+final class NullableEnumAccessor<T extends Enum> extends FieldAccessor<T?> {
+  NullableEnumAccessor({
+    required super.parent,
+    required super.key,
+    required Map<String, T> nameMap,
+    super.defaultValue = _getNull,
+  }) : super(
+          fromJson: (json) => nameMap[json]!,
+          toJson: (value) => value?.name,
+        );
+}
+
+final class NullableDoubleAccessor extends FieldAccessor<double?> {
+  static double? _defaultValue() => null;
+
+  NullableDoubleAccessor({
+    required super.parent,
+    required super.key,
+    super.defaultValue = _defaultValue,
+  }) : super(
+          fromJson: (json) => json,
+          toJson: (value) => value,
+        );
+}
+
+final class NullableIntAccessor extends FieldAccessor<int?> {
+  static int? _defaultValue() => null;
+
+  NullableIntAccessor({
+    required super.parent,
+    required super.key,
+    super.defaultValue = _defaultValue,
+  }) : super(
+          fromJson: (json) => json,
+          toJson: (value) => value,
+        );
+}
+
+final class NullableStringAccessor extends FieldAccessor<String?> {
+  static String? _defaultValue() => null;
+
+  NullableStringAccessor({
+    required super.parent,
+    required super.key,
+    super.defaultValue = _defaultValue,
+  }) : super(
+          fromJson: (json) => json,
+          toJson: (value) => value,
+        );
+}
+
+final class NullableBoolAccessor extends FieldAccessor<bool?> {
+  static bool? _defaultValue() => null;
+
+  NullableBoolAccessor({
+    required super.parent,
+    required super.key,
+    super.defaultValue = _defaultValue,
+  }) : super(
+          fromJson: (json) => json,
+          toJson: (value) => value,
+        );
+}
+
+final class NullableDateTimeAccessor extends FieldAccessor<DateTime?> {
+  static DateTime? _defaultValue() => null;
+
+  NullableDateTimeAccessor({
+    required super.parent,
+    required super.key,
+    super.defaultValue = _defaultValue,
+  }) : super(
+          fromJson: (json) => DateTime.tryParse(json),
+          toJson: (value) => value?.toIso8601String(),
+        );
 }
