@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart' as fs;
 import 'package:collection/collection.dart';
 
@@ -9,7 +11,7 @@ abstract class MapAccessorBase {
 }
 
 base mixin ObjectAccessor<T> on DocRef {
-  T defaultValue(String id);
+  FutureOr<T> defaultValue(String id);
 
   T fromData(String id, Map<String, dynamic> data);
   Map<String, dynamic> toData(T value);
@@ -18,7 +20,7 @@ base mixin ObjectAccessor<T> on DocRef {
     final doc = await ref.get();
     final data = doc.data();
     if (data == null) {
-      return defaultValue(doc.id);
+      return await defaultValue(doc.id);
     } else {
       return fromData(doc.id, data);
     }
@@ -33,7 +35,7 @@ base mixin ObjectAccessor<T> on DocRef {
     final snapshot = await ref.get();
     if (snapshot.exists == false) {
       //create the doc if it doesn't exist yet
-      await ref.set(toData(defaultValue(snapshot.id)));
+      await ref.set(toData(await defaultValue(snapshot.id)));
     }
     return ref.set(
       data,
@@ -46,15 +48,15 @@ base mixin ObjectAccessor<T> on DocRef {
   }
 
   Stream<T> snapshots() {
-    return ref.snapshots().map(
-      (doc) {
+    return ref.snapshots().asyncMap(
+      (doc) async {
         if (doc.exists) {
           return fromData(
             doc.id,
             doc.data()!,
           );
         } else {
-          return defaultValue(doc.id);
+          return await defaultValue(doc.id);
         }
       },
     );
@@ -83,16 +85,13 @@ abstract base class DocRef implements MapAccessorBase {
 }
 
 abstract base class CollectionRef<ID, DocRefType extends DocRef> {
-  CollectionRef(
-    this.collection, {
-    required this.convertID,
-    required this.convertDoc,
-  });
+  CollectionRef(this.collection);
 
   final fs.CollectionReference<Map<String, dynamic>> collection;
-  final String Function(ID) convertID;
-  final DocRefType Function(fs.DocumentReference<Map<String, dynamic>> doc)
-      convertDoc;
+
+  String convertID(ID id);
+
+  DocRefType convertDoc(fs.DocumentReference<Map<String, dynamic>> doc);
 
   DocRefType doc(ID id) {
     final path = convertID(id);
