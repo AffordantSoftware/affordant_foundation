@@ -61,6 +61,26 @@ mixin Observer<T> on ViewModel<T> {
     _streamSubscriptions.add(sub);
   }
 
+  /// Emit a new state for each event received from the stream
+  void forEachAsync<StreamType>(
+    Stream<StreamType> stream, {
+    required FutureOr<T> Function(StreamType) onData,
+    T Function(Object, StackTrace)? onError,
+  }) {
+    Function? errorHandler;
+    if (onError != null) {
+      errorHandler = (Object e, StackTrace s) {
+        emit(onError(e, s));
+      };
+    }
+
+    final sub = stream.asyncMap(onData).listen(
+          emit,
+          onError: errorHandler,
+        );
+    _streamSubscriptions.add(sub);
+  }
+
   @override
   Future<void> close() async {
     Future.wait(_streamSubscriptions.map((s) => s.cancel()));
