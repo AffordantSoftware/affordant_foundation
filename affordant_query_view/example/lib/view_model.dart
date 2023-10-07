@@ -245,7 +245,8 @@ final class SearchViewModel
   }
 
   @override
-  FutureOr<SearchResult> computeData(List<String> queryResult, void params) =>
+  FutureOr<SearchResult> queryResultToDisplayData(
+          List<String> queryResult, void params) =>
       state.data.copyWith(results: queryResult);
 
   @override
