@@ -140,7 +140,6 @@ base class FieldAccessor<T> {
     required this.toJson,
   });
 
-  @override
   Stream<T?> get stream => parent.stream.map((map) {
         try {
           return fromJson(map?[key]);
@@ -165,7 +164,7 @@ base class ArrayAccessor<T> {
   final String key;
 
   final T Function(int index, dynamic data) fromData;
-  final Map<String, dynamic> Function(T value) toData;
+  final dynamic Function(T value) toData;
 
   ArrayAccessor(
     this.parent, {
