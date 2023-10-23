@@ -205,6 +205,12 @@ base class ArrayAccessor<T> {
     list.removeAt(index);
     set(list);
   }
+
+  Stream<List<T>> get stream => parent.stream.map(
+        (data) => toData(
+          data?[key],
+        ),
+      );
 }
 
 final class DoubleAccessor extends FieldAccessor<double> {
