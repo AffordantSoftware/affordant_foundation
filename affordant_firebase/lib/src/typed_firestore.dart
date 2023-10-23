@@ -207,9 +207,7 @@ base class ArrayAccessor<T> {
   }
 
   Stream<List<T>> get stream => parent.stream.map(
-        (data) => toData(
-          data?[key],
-        ),
+        (data) => (data?[key] as List).map((e) => toData(e) as T).toList(),
       );
 }
 
