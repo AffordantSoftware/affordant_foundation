@@ -44,3 +44,25 @@ class BindMany<T extends ViewModel> extends StatelessWidget {
     );
   }
 }
+
+class BindAndConsume<ViewModelType extends ViewModel<StateType>, StateType>
+    extends StatelessWidget {
+  const BindAndConsume({
+    required this.create,
+    required this.builder,
+    super.key,
+  });
+
+  final ViewModelType Function(BuildContext) create;
+  final Widget Function(BuildContext, StateType) builder;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider<ViewModelType>(
+      create: create,
+      child: BlocBuilder<ViewModelType, StateType>(
+        builder: builder,
+      ),
+    );
+  }
+}
