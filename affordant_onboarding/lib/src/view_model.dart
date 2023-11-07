@@ -13,6 +13,13 @@ class OnboardingState<SessionDataType, StepType extends Step<SessionDataType>>
     required SessionDataType? data,
     required StepType? step,
   }) = _OnboardingState;
+
+  bool get isCurrentStepValid {
+    final s = step;
+    final d = data;
+    if (d == null || s == null) return false;
+    return s.validate(d);
+  }
 }
 
 class OnboardingViewModel<SessionData, StepType extends Step<SessionData>>
