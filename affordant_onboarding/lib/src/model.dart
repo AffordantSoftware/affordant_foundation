@@ -20,16 +20,16 @@ abstract interface class OnboardingRepository<SessionData> {
 
 class OnboardingModel<SessionData, StepType extends Step<SessionData>> {
   OnboardingModel({
-    required this.createSession,
+    required this.initialSessionData,
     required this.onboardingRepository,
-    required this.config,
-  }) : assert(config.isNotEmpty);
+    required this.steps,
+  }) : assert(steps.isNotEmpty);
 
-  FutureOr<SessionData> Function() createSession;
+  FutureOr<SessionData> Function() initialSessionData;
 
   final OnboardingRepository onboardingRepository;
 
-  final List<StepType> config;
+  final List<StepType> steps;
 
   final _stepStreamController = StreamController<StepType?>.broadcast();
 
@@ -51,13 +51,13 @@ class OnboardingModel<SessionData, StepType extends Step<SessionData>> {
   SessionData? get sessionData => _sessionData;
 
   Future<void> init() async {
-    sessionData =
-        await onboardingRepository.getSessionData() ?? await createSession();
+    sessionData = await onboardingRepository.getSessionData() ??
+        await initialSessionData();
     visitedSteps = await onboardingRepository.getVisitedSteps() ?? [];
 
     /// Iterate over all step and found the first non-visited step
     _setCurrentStepAndNotify(
-      config.firstWhereOrNull(
+      steps.firstWhereOrNull(
         (step) => visitedSteps.contains(step.id) == false,
       ),
     );
@@ -68,7 +68,7 @@ class OnboardingModel<SessionData, StepType extends Step<SessionData>> {
   StepType? get currentStep => _currentStep;
 
   SpecificStep? step<SpecificStep extends StepType>() =>
-      config.firstWhereOrNull((step) => step is SpecificStep) as SpecificStep;
+      steps.firstWhereOrNull((step) => step is SpecificStep) as SpecificStep;
 
   void _setCurrentStepAndNotify(StepType? value) {
     if (_currentStep != value) {
@@ -81,9 +81,9 @@ class OnboardingModel<SessionData, StepType extends Step<SessionData>> {
   /// a new session
   void previous() {
     if (_currentStep != null) {
-      final index = config.indexOf(_currentStep!);
+      final index = steps.indexOf(_currentStep!);
       if (index > 0) {
-        final previousStep = config[index - 1];
+        final previousStep = steps[index - 1];
         visitedSteps.remove(_currentStep!.id);
         onboardingRepository.markStepVisited(_currentStep!.id, false);
         _setCurrentStepAndNotify(previousStep);
@@ -101,9 +101,9 @@ class OnboardingModel<SessionData, StepType extends Step<SessionData>> {
       onboardingRepository.setSessionData(sessionData);
       onboardingRepository.markStepVisited(step.id, true);
 
-      final index = config.indexOf(step);
-      if (index < config.length - 1) {
-        final nextStep = config[index + 1];
+      final index = steps.indexOf(step);
+      if (index < steps.length - 1) {
+        final nextStep = steps[index + 1];
         _setCurrentStepAndNotify(nextStep);
       } else {
         _setCurrentStepAndNotify(null);
@@ -111,5 +111,5 @@ class OnboardingModel<SessionData, StepType extends Step<SessionData>> {
     }
   }
 
-  bool get isDone => visitedSteps.contains(config.last.id);
+  bool get isDone => visitedSteps.contains(steps.last.id);
 }
