@@ -28,6 +28,10 @@ dependencies:
     git:
       url: https://github.com/AffordantSoftware/affordant_foundation.git
       path: affordant_navigation
+  affordant_onboarding:
+    git:
+      url: https://github.com/AffordantSoftware/affordant_foundation.git
+      path: affordant_onboarding
 
 dev_dependencies:
   flutter_test:
