@@ -1,5 +1,7 @@
 import 'package:affordant_onboarding/affordant_onboarding.dart';
 
+import 'repository.dart';
+
 // sealed class ExampleStep<T> extends Step<T> {}
 
 // class Step1 extends ExampleStep<bool> {}
@@ -11,7 +13,7 @@ class SessionData {
   bool hasReadStep2 = false;
 }
 
-sealed class ExampleStep with Step<SessionData> {
+sealed class MyStep with Step<SessionData> {
   @override
   String get id => runtimeType.toString();
 
@@ -19,12 +21,22 @@ sealed class ExampleStep with Step<SessionData> {
   bool validate(SessionData data) => true;
 }
 
-class Step1 extends ExampleStep {
-//   @override
-//   bool validate(SessionData data) => data.hasReadStep1;
+class Step1 extends MyStep {}
+
+class Step2 extends MyStep {}
+
+class MyOnboardingModel extends OnboardingModel<SessionData, MyStep> {
+  MyOnboardingModel({
+    required super.onboardingRepository,
+  }) : super(
+          initialSessionData: () => SessionData(),
+          steps: [
+            Step1(),
+            Step2(),
+          ],
+        );
 }
 
-class Step2 extends ExampleStep {
-  // @override
-  // bool validate(SessionData data) => data.hasReadStep2;
-}
+final exampleModel = MyOnboardingModel(
+  onboardingRepository: ExampleOnboardingRepository(),
+);

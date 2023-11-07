@@ -14,7 +14,10 @@ mixin OnboardingRouteMixin<
 
   String get redirection;
 
-  Widget buildStep(BuildContext context, StepType? step);
+  Widget buildStep(
+    BuildContext context,
+    OnboardingState<SessionData, StepType> state,
+  );
 
   OnboardingViewModelType createViewModel(BuildContext context);
 
@@ -28,7 +31,8 @@ mixin OnboardingRouteMixin<
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return BindAndConsume<OnboardingViewModelType, StepType?>(
+    return BindAndConsume<OnboardingViewModelType,
+        OnboardingState<SessionData, StepType>>(
       create: createViewModel,
       builder: buildStep,
     );

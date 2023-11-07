@@ -1,3 +1,4 @@
+import 'package:example/model.dart';
 import 'package:example/router.dart';
 import 'package:flutter/material.dart';
 

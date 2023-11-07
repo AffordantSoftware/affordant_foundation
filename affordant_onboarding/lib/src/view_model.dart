@@ -5,20 +5,29 @@ import 'model.dart';
 part 'view_model.freezed.dart';
 
 @freezed
-class OnboardingState<StepType extends Step> with _$OnboardingState<StepType> {
+class OnboardingState<SessionDataType, StepType extends Step<SessionDataType>>
+    with _$OnboardingState<SessionDataType, StepType> {
   const OnboardingState._();
 
   const factory OnboardingState({
-    required StepType step,
-    required bool isDone,
+    required SessionDataType? data,
+    required StepType? step,
   }) = _OnboardingState;
 }
 
 class OnboardingViewModel<SessionData, StepType extends Step<SessionData>>
-    extends ViewModel<StepType?> with Observer {
+    extends ViewModel<OnboardingState<SessionData, StepType>> with Observer {
   OnboardingViewModel({required this.onboardingModel})
-      : super(onboardingModel.currentStep) {
-    forEach(onboardingModel.stepStream, onData: (step) => step);
+      : super(OnboardingState(
+          data: onboardingModel.sessionData,
+          step: onboardingModel.currentStep,
+        )) {
+    forEach(
+      onboardingModel.sessionDataStream,
+      onData: (data) => state.copyWith(data: data),
+    );
+    forEach(onboardingModel.stepStream,
+        onData: (step) => state.copyWith(step: step));
   }
 
   final OnboardingModel<SessionData, StepType> onboardingModel;
@@ -36,15 +45,15 @@ class OnboardingViewModel<SessionData, StepType extends Step<SessionData>>
   }
 }
 
-@freezed
-class StepState<T> with _$StepState<T> {
-  const StepState._();
+// @freezed
+// class StepState<T> with _$StepState<T> {
+//   const StepState._();
 
-  const factory StepState({
-    required bool canGoNext,
-    required T data,
-  }) = _StepState;
-}
+//   const factory StepState({
+//     required bool canGoNext,
+//     required T data,
+//   }) = _StepState;
+// }
 
 // class OnboardingStepViewModel<SpecificStep extends Step<SessionData>,
 //     ViewDataType> extends ViewModel<StepState<ViewDataType>> {

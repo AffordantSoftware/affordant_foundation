@@ -22,40 +22,6 @@ class ListenableStreamAdapter with ChangeNotifier {
   }
 }
 
-// final exampleModel = OnboardingModel<ExampleStep>(
-//   config: [
-//     Step1(),
-//     Step2(),
-//   ],
-// );
-
-class ExampleOnboardingRepository implements OnboardingRepository<SessionData> {
-  @override
-  SessionData? getSessionData() {
-    return null;
-  }
-
-  @override
-  List<String>? getVisitedSteps() {
-    return null;
-  }
-
-  @override
-  void markStepVisited(String stepID, bool visited) {}
-
-  @override
-  void setSessionData(data) {}
-}
-
-final exampleModel = OnboardingModel<SessionData, ExampleStep>(
-  createSession: () => SessionData(),
-  onboardingRepository: ExampleOnboardingRepository(),
-  config: [
-    Step1(),
-    Step2(),
-  ],
-);
-
 final router = GoRouter(
   refreshListenable: ListenableStreamAdapter(exampleModel.stepStream),
   initialLocation: '/onboarding',
@@ -91,8 +57,7 @@ class HomeRoute extends GoRouteData {
 //       };
 // }
 
-class MyOnboardingViewModel
-    extends OnboardingViewModel<SessionData, ExampleStep> {
+class MyOnboardingViewModel extends OnboardingViewModel<SessionData, MyStep> {
   MyOnboardingViewModel({
     required super.onboardingModel,
   });
@@ -106,12 +71,12 @@ class MyOnboardingViewModel
   path: '/onboarding',
 )
 class OnboardingRoute extends GoRouteData
-    with OnboardingRouteMixin<SessionData, ExampleStep, MyOnboardingViewModel> {
+    with OnboardingRouteMixin<SessionData, MyStep, MyOnboardingViewModel> {
   @override
   final redirection = '/';
 
   @override
-  OnboardingModel<SessionData, ExampleStep> get model => exampleModel;
+  OnboardingModel<SessionData, MyStep> get model => exampleModel;
 
   @override
   MyOnboardingViewModel createViewModel(context) => MyOnboardingViewModel(
@@ -119,7 +84,7 @@ class OnboardingRoute extends GoRouteData
       );
 
   @override
-  Widget buildStep(BuildContext context, ExampleStep? step) => switch (step) {
+  Widget buildStep(BuildContext context, state) => switch (state.step) {
         Step1 s => Onboarding1Screen(step: s),
         Step2 s => Onboarding2Screen(step: s),
         _ => const Scaffold(

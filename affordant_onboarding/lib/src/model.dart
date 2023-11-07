@@ -40,7 +40,20 @@ class OnboardingModel<SessionData, StepType extends Step<SessionData>> {
 
   StepType? _currentStep;
 
-  List<String> visitedSteps = [];
+  List<String> _visitedSteps = [];
+
+  Future<void> init() async {
+    sessionData = await onboardingRepository.getSessionData() ??
+        await initialSessionData();
+    _visitedSteps = await onboardingRepository.getVisitedSteps() ?? [];
+
+    /// Iterate over all step and found the first non-visited step
+    _setCurrentStepAndNotify(
+      steps.firstWhereOrNull(
+        (step) => _visitedSteps.contains(step.id) == false,
+      ),
+    );
+  }
 
   set sessionData(SessionData? data) {
     _sessionData = data;
@@ -50,22 +63,22 @@ class OnboardingModel<SessionData, StepType extends Step<SessionData>> {
 
   SessionData? get sessionData => _sessionData;
 
-  Future<void> init() async {
-    sessionData = await onboardingRepository.getSessionData() ??
-        await initialSessionData();
-    visitedSteps = await onboardingRepository.getVisitedSteps() ?? [];
-
-    /// Iterate over all step and found the first non-visited step
-    _setCurrentStepAndNotify(
-      steps.firstWhereOrNull(
-        (step) => visitedSteps.contains(step.id) == false,
-      ),
-    );
-  }
+  Stream<SessionData?> get sessionDataStream =>
+      _sessionDataStreamController.stream;
 
   Stream<StepType?> get stepStream => _stepStreamController.stream;
 
   StepType? get currentStep => _currentStep;
+
+  bool get isCurrentStepValid {
+    final step = _currentStep;
+    final data = _sessionData;
+    if (step != null && data != null) {
+      return step.validate(data);
+    } else {
+      return false;
+    }
+  }
 
   SpecificStep? step<SpecificStep extends StepType>() =>
       steps.firstWhereOrNull((step) => step is SpecificStep) as SpecificStep;
@@ -84,7 +97,7 @@ class OnboardingModel<SessionData, StepType extends Step<SessionData>> {
       final index = steps.indexOf(_currentStep!);
       if (index > 0) {
         final previousStep = steps[index - 1];
-        visitedSteps.remove(_currentStep!.id);
+        _visitedSteps.remove(_currentStep!.id);
         onboardingRepository.markStepVisited(_currentStep!.id, false);
         _setCurrentStepAndNotify(previousStep);
       }
@@ -97,7 +110,7 @@ class OnboardingModel<SessionData, StepType extends Step<SessionData>> {
     final step = currentStep;
     final data = sessionData;
     if (step != null && data != null && step.validate(data)) {
-      visitedSteps.add(step.id);
+      _visitedSteps.add(step.id);
       onboardingRepository.setSessionData(sessionData);
       onboardingRepository.markStepVisited(step.id, true);
 
@@ -111,5 +124,5 @@ class OnboardingModel<SessionData, StepType extends Step<SessionData>> {
     }
   }
 
-  bool get isDone => visitedSteps.contains(steps.last.id);
+  bool get isDone => _visitedSteps.contains(steps.last.id);
 }
