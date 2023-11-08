@@ -8,22 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'screens.dart';
 part 'router.g.dart';
 
-class ListenableStreamAdapter with ChangeNotifier {
-  ListenableStreamAdapter(Stream stream) {
-    _subscription = stream.listen((_) => notifyListeners());
-  }
-
-  late final StreamSubscription _subscription;
-
-  @override
-  Future<void> dispose() async {
-    await _subscription.cancel();
-    super.dispose();
-  }
-}
-
 final router = GoRouter(
-  refreshListenable: ListenableStreamAdapter(exampleModel.stepStream),
   initialLocation: '/onboarding',
   routes: $appRoutes,
 );
@@ -60,6 +45,7 @@ class HomeRoute extends GoRouteData {
 class MyOnboardingViewModel extends OnboardingViewModel<SessionData, MyStep> {
   MyOnboardingViewModel({
     required super.onboardingModel,
+    required super.navigationService,
   });
 
   void setStep1Read() {
@@ -80,6 +66,7 @@ class OnboardingRoute extends GoRouteData
 
   @override
   MyOnboardingViewModel createViewModel(context) => MyOnboardingViewModel(
+        navigationService: router,
         onboardingModel: exampleModel,
       );
 

@@ -1,3 +1,4 @@
+import 'package:affordant_navigation/affordant_navigation.dart';
 import 'package:affordant_view_model/affordant_view_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -24,8 +25,10 @@ class OnboardingState<SessionDataType, StepType extends Step<SessionDataType>>
 
 class OnboardingViewModel<SessionData, StepType extends Step<SessionData>>
     extends ViewModel<OnboardingState<SessionData, StepType>> with Observer {
-  OnboardingViewModel({required this.onboardingModel})
-      : super(OnboardingState(
+  OnboardingViewModel({
+    required this.navigationService,
+    required this.onboardingModel,
+  }) : super(OnboardingState(
           data: onboardingModel.sessionData,
           step: onboardingModel.currentStep,
         )) {
@@ -33,11 +36,18 @@ class OnboardingViewModel<SessionData, StepType extends Step<SessionData>>
       onboardingModel.sessionDataStream,
       onData: (data) => state.copyWith(data: data),
     );
-    forEach(onboardingModel.stepStream,
-        onData: (step) => state.copyWith(step: step));
+    onEach(onboardingModel.stepStream, onData: _handleStepChanged);
   }
 
+  final NavigationService navigationService;
   final OnboardingModel<SessionData, StepType> onboardingModel;
+
+  void _handleStepChanged(StepType? step) {
+    if (onboardingModel.isDone) {
+      navigationService.refresh();
+    }
+    emit(state.copyWith(step: step));
+  }
 
   void setData(SessionData data) {
     onboardingModel.sessionData = data;
