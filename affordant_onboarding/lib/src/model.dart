@@ -1,3 +1,5 @@
+// ignore_for_file: curly_braces_in_flow_control_structures
+
 import 'dart:async';
 
 import 'package:collection/collection.dart';
@@ -16,6 +18,12 @@ abstract interface class OnboardingRepository<SessionData> {
   FutureOr<SessionData?> getSessionData();
   FutureOr<void> markStepVisited(String stepID, bool visited);
   FutureOr<List<String>?> getVisitedSteps();
+}
+
+enum OnboardingStatus {
+  loading,
+  inProgress,
+  done,
 }
 
 class OnboardingModel<SessionData, StepType extends Step<SessionData>> {
@@ -41,6 +49,11 @@ class OnboardingModel<SessionData, StepType extends Step<SessionData>> {
   StepType? _currentStep;
 
   List<String> _visitedSteps = [];
+
+  OnboardingStatus _status = OnboardingStatus.loading;
+
+  final _statusStreamController =
+      StreamController<OnboardingStatus>.broadcast();
 
   Future<void> init() async {
     sessionData = await onboardingRepository.getSessionData() ??
@@ -70,6 +83,12 @@ class OnboardingModel<SessionData, StepType extends Step<SessionData>> {
 
   StepType? get currentStep => _currentStep;
 
+  OnboardingStatus get status => _status;
+
+  Stream<OnboardingStatus?> get statusStream => _statusStreamController.stream;
+
+  bool get isDone => status == OnboardingStatus.done;
+
   bool get isCurrentStepValid {
     final step = _currentStep;
     final data = _sessionData;
@@ -87,6 +106,27 @@ class OnboardingModel<SessionData, StepType extends Step<SessionData>> {
     if (_currentStep != value) {
       _currentStep = value;
       _stepStreamController.add(_currentStep);
+      _updateStatus();
+    }
+  }
+
+  void _updateStatus() {
+    final isDone = _visitedSteps.contains(steps.last.id);
+    OnboardingStatus status;
+    if (isDone) {
+      status = OnboardingStatus.done;
+    } else if (currentStep == null) {
+      status = OnboardingStatus.loading;
+    } else {
+      status = OnboardingStatus.inProgress;
+    }
+    _setStatusAndNotify(status);
+  }
+
+  void _setStatusAndNotify(OnboardingStatus status) {
+    if (status != _status) {
+      _status = status;
+      _statusStreamController.add(_status);
     }
   }
 
@@ -122,6 +162,4 @@ class OnboardingModel<SessionData, StepType extends Step<SessionData>> {
       }
     }
   }
-
-  bool get isDone => _visitedSteps.contains(steps.last.id);
 }

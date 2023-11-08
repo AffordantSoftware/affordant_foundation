@@ -10,24 +10,12 @@ mixin OnboardingRouteMixin<
     StepType extends Step<SessionData>,
     OnboardingViewModelType extends OnboardingViewModel<SessionData,
         StepType>> on GoRouteData {
-  OnboardingModel<SessionData, StepType> get model;
-
-  String get redirection;
-
   Widget buildStep(
     BuildContext context,
     OnboardingState<SessionData, StepType> state,
   );
 
   OnboardingViewModelType createViewModel(BuildContext context);
-
-  @override
-  String? redirect(BuildContext context, GoRouterState state) {
-    if (model.isDone) {
-      return redirection;
-    }
-    return null;
-  }
 
   @override
   Widget build(BuildContext context, GoRouterState state) {

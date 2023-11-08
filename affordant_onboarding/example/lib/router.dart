@@ -46,6 +46,7 @@ class MyOnboardingViewModel extends OnboardingViewModel<SessionData, MyStep> {
   MyOnboardingViewModel({
     required super.onboardingModel,
     required super.navigationService,
+    required super.redirection,
   });
 
   void setStep1Read() {
@@ -59,13 +60,8 @@ class MyOnboardingViewModel extends OnboardingViewModel<SessionData, MyStep> {
 class OnboardingRoute extends GoRouteData
     with OnboardingRouteMixin<SessionData, MyStep, MyOnboardingViewModel> {
   @override
-  final redirection = '/';
-
-  @override
-  OnboardingModel<SessionData, MyStep> get model => exampleModel;
-
-  @override
   MyOnboardingViewModel createViewModel(context) => MyOnboardingViewModel(
+        redirection: '/',
         navigationService: router,
         onboardingModel: exampleModel,
       );

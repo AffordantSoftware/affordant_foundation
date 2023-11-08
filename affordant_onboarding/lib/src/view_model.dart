@@ -26,6 +26,7 @@ class OnboardingState<SessionDataType, StepType extends Step<SessionDataType>>
 class OnboardingViewModel<SessionData, StepType extends Step<SessionData>>
     extends ViewModel<OnboardingState<SessionData, StepType>> with Observer {
   OnboardingViewModel({
+    required this.redirection,
     required this.navigationService,
     required this.onboardingModel,
   }) : super(OnboardingState(
@@ -36,17 +37,19 @@ class OnboardingViewModel<SessionData, StepType extends Step<SessionData>>
       onboardingModel.sessionDataStream,
       onData: (data) => state.copyWith(data: data),
     );
-    onEach(onboardingModel.stepStream, onData: _handleStepChanged);
+    forEach(onboardingModel.stepStream,
+        onData: (step) => state.copyWith(step: step));
+    onEach(onboardingModel.statusStream, onData: _handleStepChanged);
   }
 
+  final String redirection;
   final NavigationService navigationService;
   final OnboardingModel<SessionData, StepType> onboardingModel;
 
-  void _handleStepChanged(StepType? step) {
-    if (onboardingModel.isDone) {
-      navigationService.refresh();
+  void _handleStepChanged(OnboardingStatus? status) {
+    if (status == OnboardingStatus.done) {
+      navigationService.go(redirection);
     }
-    emit(state.copyWith(step: step));
   }
 
   void setData(SessionData data) {
