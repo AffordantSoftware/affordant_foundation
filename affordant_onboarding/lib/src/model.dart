@@ -90,15 +90,14 @@ class OnboardingModel<SessionData, StepType extends Step<SessionData>> {
     }
   }
 
-  /// Unset data in back-end only so we avoid skipping step if we start
-  /// a new session
+  /// We remove previous screen from visisted list
   void previous() {
     if (_currentStep != null) {
       final index = steps.indexOf(_currentStep!);
       if (index > 0) {
         final previousStep = steps[index - 1];
-        _visitedSteps.remove(_currentStep!.id);
-        onboardingRepository.markStepVisited(_currentStep!.id, false);
+        _visitedSteps.remove(previousStep.id);
+        onboardingRepository.markStepVisited(previousStep.id, false);
         _setCurrentStepAndNotify(previousStep);
       }
     }
