@@ -1,7 +1,4 @@
-// ignore_for_file: curly_braces_in_flow_control_structures
-
 import 'dart:async';
-
 import 'package:collection/collection.dart';
 
 mixin Step<SessionData> {
@@ -59,6 +56,8 @@ class OnboardingModel<SessionData, StepType extends Step<SessionData>> {
     sessionData = await onboardingRepository.getSessionData() ??
         await initialSessionData();
     _visitedSteps = await onboardingRepository.getVisitedSteps() ?? [];
+
+    _updateStatus();
 
     /// Iterate over all step and found the first non-visited step
     _setCurrentStepAndNotify(
