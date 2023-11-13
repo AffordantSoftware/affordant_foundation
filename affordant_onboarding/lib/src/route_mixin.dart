@@ -15,7 +15,20 @@ mixin OnboardingRouteMixin<
     OnboardingState<SessionData, StepType> state,
   );
 
+  String get redirection;
+
+  OnboardingModel getModel(BuildContext context);
+
   OnboardingViewModelType createViewModel(BuildContext context);
+
+  @override
+  String? redirect(BuildContext context, GoRouterState state) {
+    final model = getModel(context);
+    if (model.isDone) {
+      return redirection;
+    }
+    return null;
+  }
 
   @override
   Widget build(BuildContext context, GoRouterState state) {

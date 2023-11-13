@@ -60,8 +60,14 @@ class MyOnboardingViewModel extends OnboardingViewModel<SessionData, MyStep> {
 class OnboardingRoute extends GoRouteData
     with OnboardingRouteMixin<SessionData, MyStep, MyOnboardingViewModel> {
   @override
+  final String redirection = '/';
+
+  @override
+  OnboardingModel getModel(BuildContext context) => exampleModel;
+
+  @override
   MyOnboardingViewModel createViewModel(context) => MyOnboardingViewModel(
-        redirection: '/',
+        redirection: redirection,
         navigationService: router,
         onboardingModel: exampleModel,
       );
