@@ -44,6 +44,7 @@ class HomeRoute extends GoRouteData {
 
 class MyOnboardingViewModel extends OnboardingViewModel<SessionData, MyStep> {
   MyOnboardingViewModel({
+    required super.pageController,
     required super.onboardingModel,
     required super.navigationService,
     required super.redirection,
@@ -57,27 +58,29 @@ class MyOnboardingViewModel extends OnboardingViewModel<SessionData, MyStep> {
 @TypedGoRoute<OnboardingRoute>(
   path: '/onboarding',
 )
-class OnboardingRoute extends GoRouteData
-    with OnboardingRouteMixin<SessionData, MyStep, MyOnboardingViewModel> {
+class OnboardingRoute extends GoRouteData with OnboardingRouteMixin {
   @override
   final String redirection = '/';
 
   @override
-  OnboardingModel getModel(BuildContext context) => exampleModel;
+  getModel(BuildContext context) => exampleModel;
 
   @override
-  MyOnboardingViewModel createViewModel(context) => MyOnboardingViewModel(
+  Widget build(BuildContext context, GoRouterState state) {
+    return OnboardingView(
+      createViewModel: (_) => MyOnboardingViewModel(
+        pageController: PageController(),
         redirection: redirection,
         navigationService: router,
         onboardingModel: exampleModel,
-      );
-
-  @override
-  Widget buildStep(BuildContext context, state) => switch (state.step) {
+      ),
+      loadingBuilder: (_) => const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      ),
+      stepBuilder: (BuildContext context, MyStep step) => switch (step) {
         Step1 s => Onboarding1Screen(step: s),
         Step2 s => Onboarding2Screen(step: s),
-        _ => const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
-          ),
-      };
+      },
+    );
+  }
 }

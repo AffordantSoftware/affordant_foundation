@@ -1,5 +1,6 @@
 import 'package:affordant_navigation/affordant_navigation.dart';
 import 'package:affordant_view_model/affordant_view_model.dart';
+import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'model.dart';
@@ -26,10 +27,14 @@ class OnboardingState<SessionDataType, StepType extends Step<SessionDataType>>
 class OnboardingViewModel<SessionData, StepType extends Step<SessionData>>
     extends ViewModel<OnboardingState<SessionData, StepType>> with Observer {
   OnboardingViewModel({
+    this.pageTransitionCurve = Curves.easeInOutCubic,
+    this.pageTransitionDuration = const Duration(milliseconds: 460),
+    required this.pageController,
     required this.redirection,
     required this.navigationService,
     required this.onboardingModel,
-  }) : super(OnboardingState(
+  })  : steps = onboardingModel.steps,
+        super(OnboardingState(
           data: onboardingModel.sessionData,
           step: onboardingModel.currentStep,
         )) {
@@ -42,9 +47,13 @@ class OnboardingViewModel<SessionData, StepType extends Step<SessionData>>
     onEach(onboardingModel.statusStream, onData: _handleStepChanged);
   }
 
+  final Duration pageTransitionDuration;
+  final Curve pageTransitionCurve;
   final String redirection;
   final NavigationService navigationService;
+  final PageController pageController;
   final OnboardingModel<SessionData, StepType> onboardingModel;
+  final List<StepType> steps;
 
   void _handleStepChanged(OnboardingStatus? status) {
     if (status == OnboardingStatus.done) {
@@ -57,10 +66,18 @@ class OnboardingViewModel<SessionData, StepType extends Step<SessionData>>
   }
 
   void prev() {
+    pageController.previousPage(
+      duration: pageTransitionDuration,
+      curve: pageTransitionCurve,
+    );
     onboardingModel.previous();
   }
 
   void next() {
+    pageController.nextPage(
+      duration: pageTransitionDuration,
+      curve: pageTransitionCurve,
+    );
     onboardingModel.next();
   }
 }
@@ -93,3 +110,6 @@ class OnboardingViewModel<SessionData, StepType extends Step<SessionData>>
 //     ));
 //   }
 // }
+
+
+
