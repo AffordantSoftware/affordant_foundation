@@ -44,7 +44,6 @@ class HomeRoute extends GoRouteData {
 
 class MyOnboardingViewModel extends OnboardingViewModel<SessionData, MyStep> {
   MyOnboardingViewModel({
-    required super.pageController,
     required super.onboardingModel,
     required super.navigationService,
     required super.redirection,
@@ -69,7 +68,6 @@ class OnboardingRoute extends GoRouteData with OnboardingRouteMixin {
   Widget build(BuildContext context, GoRouterState state) {
     return OnboardingView(
       createViewModel: (_) => MyOnboardingViewModel(
-        pageController: PageController(),
         redirection: redirection,
         navigationService: router,
         onboardingModel: exampleModel,

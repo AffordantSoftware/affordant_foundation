@@ -29,11 +29,15 @@ class OnboardingViewModel<SessionData, StepType extends Step<SessionData>>
   OnboardingViewModel({
     this.pageTransitionCurve = Curves.easeInOutCubic,
     this.pageTransitionDuration = const Duration(milliseconds: 460),
-    required this.pageController,
     required this.redirection,
     required this.navigationService,
     required this.onboardingModel,
   })  : steps = onboardingModel.steps,
+        pageController = PageController(
+          initialPage: onboardingModel.currentStep != null
+              ? onboardingModel.steps.indexOf(onboardingModel.currentStep!)
+              : 0,
+        ),
         super(OnboardingState(
           data: onboardingModel.sessionData,
           step: onboardingModel.currentStep,
@@ -42,9 +46,11 @@ class OnboardingViewModel<SessionData, StepType extends Step<SessionData>>
       onboardingModel.sessionDataStream,
       onData: (data) => state.copyWith(data: data),
     );
-    forEach(onboardingModel.stepStream,
-        onData: (step) => state.copyWith(step: step));
-    onEach(onboardingModel.statusStream, onData: _handleStepChanged);
+    onEach(
+      onboardingModel.stepStream,
+      onData: _handleStepChanged,
+    );
+    onEach(onboardingModel.statusStream, onData: _handleStatusChanged);
   }
 
   final Duration pageTransitionDuration;
@@ -55,7 +61,21 @@ class OnboardingViewModel<SessionData, StepType extends Step<SessionData>>
   final OnboardingModel<SessionData, StepType> onboardingModel;
   final List<StepType> steps;
 
-  void _handleStepChanged(OnboardingStatus? status) {
+  void _handleStepChanged(StepType? newStep) {
+    final jumpToPage = newStep != null && state.step == null;
+    emit(state.copyWith(step: newStep));
+    if (jumpToPage) _initializePageController();
+  }
+
+  void _initializePageController() {
+    if (pageController.hasClients) {
+      pageController.jumpToPage(
+        steps.indexOf(state.step!),
+      );
+    }
+  }
+
+  void _handleStatusChanged(OnboardingStatus? status) {
     if (status == OnboardingStatus.done) {
       navigationService.go(redirection);
     }
