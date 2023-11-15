@@ -57,9 +57,9 @@ class OnboardingViewModel<SessionData, StepType extends Step<SessionData>>
   final Curve pageTransitionCurve;
   final String redirection;
   final NavigationService navigationService;
-  final PageController pageController;
   final OnboardingModel<SessionData, StepType> onboardingModel;
   final List<StepType> steps;
+  PageController pageController;
 
   void _handleStepChanged(StepType? newStep) {
     final jumpToPage = newStep != null && state.step == null;
@@ -68,10 +68,14 @@ class OnboardingViewModel<SessionData, StepType extends Step<SessionData>>
   }
 
   void _initializePageController() {
+    final index = steps.indexOf(state.step!);
     if (pageController.hasClients) {
       pageController.jumpToPage(
         steps.indexOf(state.step!),
       );
+    } else {
+      /// We can safely re-construct the controller since it doesn't have client
+      pageController = PageController(initialPage: index);
     }
   }
 
