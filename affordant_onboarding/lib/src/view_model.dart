@@ -101,35 +101,3 @@ class OnboardingViewModel<SessionData, StepType extends Step<SessionData>>
     onboardingModel.next();
   }
 }
-
-// @freezed
-// class StepState<T> with _$StepState<T> {
-//   const StepState._();
-
-//   const factory StepState({
-//     required bool canGoNext,
-//     required T data,
-//   }) = _StepState;
-// }
-
-// class OnboardingStepViewModel<SpecificStep extends Step<SessionData>,
-//     ViewDataType> extends ViewModel<StepState<ViewDataType>> {
-//   final OnboardingViewModel onboardingViewModel;
-//   final SpecificStep step;
-
-//   OnboardingStepViewModel(
-//     super.initialState, {
-//     required this.step,
-//     required this.onboardingViewModel,
-//   });
-
-//   void setSessionData(SessionData data) {
-//     onboardingViewModel.setData(data);
-//     emit(state.copyWith(
-//       canGoNext: step.validate(data),
-//     ));
-//   }
-// }
-
-
-
