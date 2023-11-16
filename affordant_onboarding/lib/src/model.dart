@@ -5,7 +5,7 @@ mixin Step<SessionData> {
   /// A unique id representing this step
   String get id;
 
-  /// Check if the session data match requierments for this step
+  /// Check if the session data match requirements for this step
   /// If no, the step will be displayed
   bool validate(SessionData data);
 }

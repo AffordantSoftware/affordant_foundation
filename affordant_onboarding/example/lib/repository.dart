@@ -3,18 +3,18 @@ import 'package:example/model.dart';
 
 class ExampleOnboardingRepository implements OnboardingRepository<SessionData> {
   @override
-  SessionData? getSessionData() {
+  Future<SessionData?> getSessionData() async {
     return null;
   }
 
   @override
-  List<String>? getVisitedSteps() {
+  Future<List<String>?> getVisitedSteps() async {
     return null;
   }
 
   @override
-  void markStepVisited(String stepID, bool visited) {}
+  Future<void> markStepVisited(String stepID, bool visited) async {}
 
   @override
-  void setSessionData(data) {}
+  Future<void> setSessionData(data) async {}
 }
