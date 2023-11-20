@@ -6,7 +6,7 @@ mixin Displayable {
   String display(BuildContext context);
 }
 
-abstract base class DisplayableError with Displayable {
+abstract class DisplayableError with Displayable {
   const DisplayableError(this.error, this.stackTrace);
 
   final Object error;
