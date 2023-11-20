@@ -25,14 +25,18 @@ abstract base class AuthService<User> with Disposable {
   }
 
   late final StreamSubscription<User?> _authChangesSub;
+
   final FutureOr<void> Function(
     GetIt,
     AuthService<User>,
   )? registerUserServices;
+
   final DisposeUserServicesDelegate? disposeUserServices;
 
   Stream<User?> get authStateChanges;
+
   Stream<User?> get idTokenChanges;
+
   Stream<User?> get userChangeStream;
 
   User? get currentUser;
@@ -63,6 +67,11 @@ abstract base class AuthService<User> with Disposable {
   }
 
   Future<void> signInWithEmailAndPassword({
+    required String email,
+    required String password,
+  });
+
+  Future<void> createUserWithEmailAndPassword({
     required String email,
     required String password,
   });

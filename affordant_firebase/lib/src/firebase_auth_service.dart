@@ -45,6 +45,14 @@ final class FirebaseAuthService extends AuthService<fb.User> {
     );
   }
 
+  Future<void> createUserWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) async {
+    await _firebase.createUserWithEmailAndPassword(
+        email: email, password: password);
+  }
+
   @override
   Future<void> signOut() async {
     await _firebase.signOut();
