@@ -6,7 +6,7 @@ packages:
     description:
       path: affordant_auth
       ref: HEAD
-      resolved-ref: f717239b0d9cb5cf5e7668aea9b726262e40fdc1
+      resolved-ref: a83b374b3993fe0db92a35e6bcd0f6f4d100bb32
       url: "https://github.com/AffordantSoftware/affordant_foundation.git"
     source: git
     version: "0.0.1"
@@ -15,7 +15,7 @@ packages:
     description:
       path: affordant_core
       ref: HEAD
-      resolved-ref: f717239b0d9cb5cf5e7668aea9b726262e40fdc1
+      resolved-ref: a83b374b3993fe0db92a35e6bcd0f6f4d100bb32
       url: "https://github.com/AffordantSoftware/affordant_foundation.git"
     source: git
     version: "0.0.1"
@@ -24,7 +24,7 @@ packages:
     description:
       path: affordant_form
       ref: HEAD
-      resolved-ref: f717239b0d9cb5cf5e7668aea9b726262e40fdc1
+      resolved-ref: a83b374b3993fe0db92a35e6bcd0f6f4d100bb32
       url: "https://github.com/AffordantSoftware/affordant_foundation.git"
     source: git
     version: "0.0.1"
@@ -33,7 +33,7 @@ packages:
     description:
       path: affordant_navigation
       ref: HEAD
-      resolved-ref: f717239b0d9cb5cf5e7668aea9b726262e40fdc1
+      resolved-ref: a83b374b3993fe0db92a35e6bcd0f6f4d100bb32
       url: "https://github.com/AffordantSoftware/affordant_foundation.git"
     source: git
     version: "0.0.1"
@@ -42,7 +42,7 @@ packages:
     description:
       path: affordant_onboarding
       ref: HEAD
-      resolved-ref: f717239b0d9cb5cf5e7668aea9b726262e40fdc1
+      resolved-ref: a83b374b3993fe0db92a35e6bcd0f6f4d100bb32
       url: "https://github.com/AffordantSoftware/affordant_foundation.git"
     source: git
     version: "1.0.0+1"
@@ -51,7 +51,7 @@ packages:
     description:
       path: affordant_view_model
       ref: HEAD
-      resolved-ref: f717239b0d9cb5cf5e7668aea9b726262e40fdc1
+      resolved-ref: a83b374b3993fe0db92a35e6bcd0f6f4d100bb32
       url: "https://github.com/AffordantSoftware/affordant_foundation.git"
     source: git
     version: "0.0.1"
@@ -162,10 +162,10 @@ packages:
     dependency: transitive
     description:
       name: go_router
-      sha256: "5098760d7478aabfe682a462bf121d61bc5dbe5df5aac8dad733564a0aee33bc"
+      sha256: c247a4f76071c3b97bb5ae8912968870d5565644801c5e09f3bc961b4d874895
       url: "https://pub.dev"
     source: hosted
-    version: "12.1.0"
+    version: "12.1.1"
   json_annotation:
     dependency: transitive
     description:
@@ -234,10 +234,10 @@ packages:
     dependency: transitive
     description:
       name: provider
-      sha256: cdbe7530b12ecd9eb455bdaa2fcb8d4dad22e80b8afb4798b41479d5ce26847f
+      sha256: "9a96a0a19b594dbc5bf0f1f27d2bc67d5f95957359b461cd9feb44ed6ae75096"
       url: "https://pub.dev"
     source: hosted
-    version: "6.0.5"
+    version: "6.1.1"
   sky_engine:
     dependency: transitive
     description: flutter

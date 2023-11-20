@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:affordant_query_view/src/errors.dart';
 import 'package:affordant_view_model/affordant_view_model.dart';
 import 'package:affordant_core/affordant_core.dart';
 import 'package:dart_mappable/dart_mappable.dart';
@@ -193,7 +194,7 @@ abstract base class QueryViewModel<QueryParameters, DisplayParameters,
       _safeEmit(
         state.copyWith(
           isLoading: false,
-          error: DisplayableError(e, s),
+          error: QueryError(e, s),
         ),
       );
     }
