@@ -6,14 +6,9 @@ mixin Displayable {
   String display(BuildContext context);
 }
 
-base class DisplayableError with Displayable {
-  DisplayableError(this.error, this.stackTrace);
+abstract base class DisplayableError with Displayable {
+  const DisplayableError(this.error, this.stackTrace);
 
-  final dynamic error;
+  final Object error;
   final StackTrace stackTrace;
-
-  @override
-  String display(BuildContext context) {
-    return "error toString";
-  }
 }
