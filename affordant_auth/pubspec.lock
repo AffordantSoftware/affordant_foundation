@@ -14,7 +14,7 @@ packages:
     description:
       path: affordant_core
       ref: HEAD
-      resolved-ref: d6c1615d7fb6636943373810763f86fd07f865f1
+      resolved-ref: "4591efdeee16bd3317b1e67e496c344e5d17a74e"
       url: "https://github.com/AffordantSoftware/affordant_foundation.git"
     source: git
     version: "0.0.1"
@@ -23,7 +23,7 @@ packages:
     description:
       path: affordant_view_model
       ref: HEAD
-      resolved-ref: d6c1615d7fb6636943373810763f86fd07f865f1
+      resolved-ref: "4591efdeee16bd3317b1e67e496c344e5d17a74e"
       url: "https://github.com/AffordantSoftware/affordant_foundation.git"
     source: git
     version: "0.0.1"
