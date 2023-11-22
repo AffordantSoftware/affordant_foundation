@@ -12,6 +12,10 @@ dependencies:
     git:
       url: https://github.com/AffordantSoftware/affordant_foundation.git
       path: affordant_auth
+  affordant_core:
+    git:
+      url: https://github.com/AffordantSoftware/affordant_foundation.git
+      path: affordant_core
   cloud_firestore: ^4.9.1
   collection: ^1.17.2
   firebase_auth: ^4.7.2

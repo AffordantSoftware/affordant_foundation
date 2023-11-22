@@ -1,8 +1,27 @@
 import 'dart:async';
+import 'package:affordant_core/affordant_core.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fb;
 import 'package:affordant_auth/affordant_auth.dart';
 
 typedef User = fb.User;
+
+FutureOr<T> _safeFirebaseCall<T>(
+  FutureOr<T> Function() run, [
+  Map<String, Function(Object e, StackTrace s)>? convertExceptions,
+]) async {
+  return await safeServerCall(() async {
+    try {
+      return await run();
+    } on fb.FirebaseAuthException catch (e, s) {
+      final converter = convertExceptions?[e.code];
+      if (converter != null) {
+        throw converter(e, s);
+      } else {
+        rethrow;
+      }
+    }
+  });
+}
 
 abstract class FirebaseUserService extends UserService<fb.User> {
   const FirebaseUserService(AuthService<fb.User> firebaseAuthService)
@@ -31,7 +50,7 @@ final class FirebaseAuthService extends AuthService<fb.User> {
 
   @override
   Future<void> signInAnonymously() async {
-    await _firebase.signInAnonymously();
+    await _safeFirebaseCall(_firebase.signInAnonymously);
   }
 
   @override
@@ -39,22 +58,42 @@ final class FirebaseAuthService extends AuthService<fb.User> {
     required String email,
     required String password,
   }) async {
-    await _firebase.signInWithEmailAndPassword(
-      email: email,
-      password: password,
+    await _safeFirebaseCall(
+      () => _firebase.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      ),
+      {
+        'auth/rejected-credential': (e, s) => InvalidCredentialException(s),
+      },
     );
   }
 
+  @override
   Future<void> createUserWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
-    await _firebase.createUserWithEmailAndPassword(
-        email: email, password: password);
+    await _safeFirebaseCall(
+      () => _firebase.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      ),
+      {
+        'auth/email-already-exists': (e, s) => AccountAlreadyExistsException(s),
+      },
+    );
   }
 
   @override
   Future<void> signOut() async {
-    await _firebase.signOut();
+    await _safeFirebaseCall(_firebase.signOut);
+  }
+
+  @override
+  Future<void> sendPasswordResetEmail(String email) async {
+    await _safeFirebaseCall(
+      () => _firebase.sendPasswordResetEmail(email: email),
+    );
   }
 }
