@@ -1,0 +1,7 @@
+arb-dir: arb/
+template-arb-file: affordant_query_view_en.arb
+output-class: AffordantQueryViewLocalizations
+output-localization-file: affordant_query_view_localizations.dart
+output-dir: lib/src/l10n
+nullable-getter: false
+synthetic-package: false

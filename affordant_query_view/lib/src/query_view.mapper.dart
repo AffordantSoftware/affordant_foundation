@@ -62,8 +62,8 @@ class QueryViewModelStateMapper extends ClassMapperBase<QueryViewModelState> {
   static bool _$hasExecutedQuery(QueryViewModelState v) => v.hasExecutedQuery;
   static const Field<QueryViewModelState, bool> _f$hasExecutedQuery =
       Field('hasExecutedQuery', _$hasExecutedQuery);
-  static DisplayableError? _$error(QueryViewModelState v) => v.error;
-  static const Field<QueryViewModelState, DisplayableError> _f$error =
+  static DisplayableException? _$error(QueryViewModelState v) => v.error;
+  static const Field<QueryViewModelState, DisplayableException> _f$error =
       Field('error', _$error);
 
   @override
@@ -197,7 +197,7 @@ abstract class QueryViewModelStateCopyWith<
       Data? data,
       bool? isLoading,
       bool? hasExecutedQuery,
-      DisplayableError? error});
+      DisplayableException? error});
   QueryViewModelStateCopyWith<
       $R2,
       $In,

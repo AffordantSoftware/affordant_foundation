@@ -55,7 +55,7 @@ class QueryViewModelState<QueryParameters, DisplayParameters, QueryResult,
   final QueryResult? queryResult;
   final DisplayParameters displayParams;
   final DisplayData data;
-  final DisplayableError? error;
+  final DisplayableException? error;
   final bool hasExecutedQuery;
   final bool isLoading;
 }
