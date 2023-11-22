@@ -6,9 +6,8 @@ mixin Displayable {
   String display(BuildContext context);
 }
 
-abstract class DisplayableError with Displayable {
-  const DisplayableError(this.error, this.stackTrace);
+abstract class DisplayableException with Displayable {
+  const DisplayableException(this.stackTrace);
 
-  final Object error;
   final StackTrace stackTrace;
 }
