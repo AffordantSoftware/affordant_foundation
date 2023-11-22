@@ -1,0 +1,7 @@
+arb-dir: arb/
+template-arb-file: affordant_auth_en.arb
+output-class: AffordantAuthLocalizations
+output-localization-file: affordant_auth_localizations.dart
+output-dir: lib/src/l10n
+nullable-getter: false
+synthetic-package: false

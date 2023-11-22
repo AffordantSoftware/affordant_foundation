@@ -8,6 +8,8 @@ environment:
   sdk: ^3.0.6
 
 dependencies:
+  flutter:
+    sdk: flutter
   get_it: ^7.6.0
   meta: ^1.9.1
   affordant_core:
@@ -19,6 +21,9 @@ dependencies:
       url: https://github.com/AffordantSoftware/affordant_foundation.git
       path: affordant_view_model
   bloc: ^8.1.2
+  intl: ^0.18.1
+  flutter_localizations:
+    sdk: flutter
 
 dev_dependencies:
   lints: ^2.0.0
