@@ -64,7 +64,7 @@ final class FirebaseAuthService extends AuthService<fb.User> {
         password: password,
       ),
       {
-        'auth/rejected-credential': (e, s) => InvalidCredentialException(s),
+        'auth/rejected-credential': (e, s) => InvalidCredentialException(),
       },
     );
   }
@@ -80,7 +80,7 @@ final class FirebaseAuthService extends AuthService<fb.User> {
         password: password,
       ),
       {
-        'auth/email-already-exists': (e, s) => AccountAlreadyExistsException(s),
+        'auth/email-already-exists': (e, s) => AccountAlreadyExistsException(),
       },
     );
   }
