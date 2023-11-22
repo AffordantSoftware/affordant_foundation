@@ -1,0 +1,7 @@
+arb-dir: arb/
+template-arb-file: affordant_core_en.arb
+output-class: AffordantCoreLocalizations
+output-localization-file: affordant_core_localizations.dart
+output-dir: lib/src/l10n
+nullable-getter: false
+synthetic-package: false
