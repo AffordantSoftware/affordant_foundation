@@ -6,7 +6,7 @@ packages:
     description:
       path: affordant_auth
       ref: HEAD
-      resolved-ref: f5561c8815e208715da5c52f1c536603e53d8b1a
+      resolved-ref: "5a2a50401179e1f8f7c8e20dd73d3ca4346c1ac6"
       url: "https://github.com/AffordantSoftware/affordant_foundation.git"
     source: git
     version: "0.0.1"
@@ -15,7 +15,7 @@ packages:
     description:
       path: affordant_core
       ref: HEAD
-      resolved-ref: f5561c8815e208715da5c52f1c536603e53d8b1a
+      resolved-ref: "5a2a50401179e1f8f7c8e20dd73d3ca4346c1ac6"
       url: "https://github.com/AffordantSoftware/affordant_foundation.git"
     source: git
     version: "0.0.1"
@@ -24,7 +24,7 @@ packages:
     description:
       path: affordant_form
       ref: HEAD
-      resolved-ref: f5561c8815e208715da5c52f1c536603e53d8b1a
+      resolved-ref: "5a2a50401179e1f8f7c8e20dd73d3ca4346c1ac6"
       url: "https://github.com/AffordantSoftware/affordant_foundation.git"
     source: git
     version: "0.0.1"
@@ -33,7 +33,7 @@ packages:
     description:
       path: affordant_navigation
       ref: HEAD
-      resolved-ref: f5561c8815e208715da5c52f1c536603e53d8b1a
+      resolved-ref: "5a2a50401179e1f8f7c8e20dd73d3ca4346c1ac6"
       url: "https://github.com/AffordantSoftware/affordant_foundation.git"
     source: git
     version: "0.0.1"
@@ -42,7 +42,7 @@ packages:
     description:
       path: affordant_onboarding
       ref: HEAD
-      resolved-ref: f5561c8815e208715da5c52f1c536603e53d8b1a
+      resolved-ref: "5a2a50401179e1f8f7c8e20dd73d3ca4346c1ac6"
       url: "https://github.com/AffordantSoftware/affordant_foundation.git"
     source: git
     version: "1.0.0+1"
@@ -51,7 +51,7 @@ packages:
     description:
       path: affordant_view_model
       ref: HEAD
-      resolved-ref: f5561c8815e208715da5c52f1c536603e53d8b1a
+      resolved-ref: "5a2a50401179e1f8f7c8e20dd73d3ca4346c1ac6"
       url: "https://github.com/AffordantSoftware/affordant_foundation.git"
     source: git
     version: "0.0.1"
