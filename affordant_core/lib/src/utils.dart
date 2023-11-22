@@ -6,9 +6,14 @@ import 'package:affordant_core/affordant_core.dart';
 T safeServerCall<T>(T Function() run) {
   try {
     return run();
-  } on SocketException catch (e, s) {
-    throw NetworkUnavailableException(e, s);
   } catch (e, s) {
-    throw UnspecifiedServerException(e, s);
+    if (e is DisplayableException) {
+      rethrow;
+    } else {
+      throw switch (e) {
+        SocketException() => NetworkUnavailableException(e, s),
+        _ => UnspecifiedServerException(e, s),
+      };
+    }
   }
 }
