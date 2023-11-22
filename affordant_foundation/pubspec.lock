@@ -6,7 +6,7 @@ packages:
     description:
       path: affordant_auth
       ref: HEAD
-      resolved-ref: a83b374b3993fe0db92a35e6bcd0f6f4d100bb32
+      resolved-ref: f5561c8815e208715da5c52f1c536603e53d8b1a
       url: "https://github.com/AffordantSoftware/affordant_foundation.git"
     source: git
     version: "0.0.1"
@@ -15,7 +15,7 @@ packages:
     description:
       path: affordant_core
       ref: HEAD
-      resolved-ref: a83b374b3993fe0db92a35e6bcd0f6f4d100bb32
+      resolved-ref: f5561c8815e208715da5c52f1c536603e53d8b1a
       url: "https://github.com/AffordantSoftware/affordant_foundation.git"
     source: git
     version: "0.0.1"
@@ -24,7 +24,7 @@ packages:
     description:
       path: affordant_form
       ref: HEAD
-      resolved-ref: a83b374b3993fe0db92a35e6bcd0f6f4d100bb32
+      resolved-ref: f5561c8815e208715da5c52f1c536603e53d8b1a
       url: "https://github.com/AffordantSoftware/affordant_foundation.git"
     source: git
     version: "0.0.1"
@@ -33,7 +33,7 @@ packages:
     description:
       path: affordant_navigation
       ref: HEAD
-      resolved-ref: a83b374b3993fe0db92a35e6bcd0f6f4d100bb32
+      resolved-ref: f5561c8815e208715da5c52f1c536603e53d8b1a
       url: "https://github.com/AffordantSoftware/affordant_foundation.git"
     source: git
     version: "0.0.1"
@@ -42,7 +42,7 @@ packages:
     description:
       path: affordant_onboarding
       ref: HEAD
-      resolved-ref: a83b374b3993fe0db92a35e6bcd0f6f4d100bb32
+      resolved-ref: f5561c8815e208715da5c52f1c536603e53d8b1a
       url: "https://github.com/AffordantSoftware/affordant_foundation.git"
     source: git
     version: "1.0.0+1"
@@ -51,7 +51,7 @@ packages:
     description:
       path: affordant_view_model
       ref: HEAD
-      resolved-ref: a83b374b3993fe0db92a35e6bcd0f6f4d100bb32
+      resolved-ref: f5561c8815e208715da5c52f1c536603e53d8b1a
       url: "https://github.com/AffordantSoftware/affordant_foundation.git"
     source: git
     version: "0.0.1"
@@ -132,6 +132,11 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.3"
+  flutter_localizations:
+    dependency: transitive
+    description: flutter
+    source: sdk
+    version: "0.0.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -166,6 +171,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "12.1.1"
+  intl:
+    dependency: transitive
+    description:
+      name: intl
+      sha256: "3bc132a9dbce73a7e4a21a17d06e1878839ffbf975568bc875c60537824b0c4d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.18.1"
   json_annotation:
     dependency: transitive
     description:
