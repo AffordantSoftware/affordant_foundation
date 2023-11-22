@@ -66,11 +66,13 @@ abstract base class AuthService<User> with Disposable {
     }
   }
 
+  /// throw `InvalidCredentialException` on unrecognized credentials
   Future<void> signInWithEmailAndPassword({
     required String email,
     required String password,
   });
 
+  /// throw `AccountAlreadyExistsException` if account already exists
   Future<void> createUserWithEmailAndPassword({
     required String email,
     required String password,
