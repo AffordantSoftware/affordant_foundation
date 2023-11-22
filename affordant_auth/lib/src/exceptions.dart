@@ -7,13 +7,9 @@ extension _LocalizationDelegate on BuildContext {
       Localizations.of(this, AffordantAuthLocalizations);
 }
 
-sealed class RegistrationException extends DisplayableException {
-  const RegistrationException(super.stackTrace);
-}
+sealed class RegistrationException with DisplayableException {}
 
 final class AccountAlreadyExistsException extends RegistrationException {
-  AccountAlreadyExistsException(super.stackTrace);
-
   @override
   String localizedTitle(BuildContext context) {
     return context._authL10n.error_registration_account_already_exists_title;
@@ -25,13 +21,9 @@ final class AccountAlreadyExistsException extends RegistrationException {
   }
 }
 
-sealed class SignInException extends DisplayableException {
-  const SignInException(super.stackTrace);
-}
+sealed class SignInException with DisplayableException {}
 
 final class InvalidCredentialException extends RegistrationException {
-  InvalidCredentialException(super.stackTrace);
-
   @override
   String localizedTitle(BuildContext context) {
     return context._authL10n.error_sign_in_invalid_credentials_title;
