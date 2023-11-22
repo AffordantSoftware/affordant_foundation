@@ -81,4 +81,6 @@ abstract base class AuthService<User> with Disposable {
   Future<void> signInAnonymously();
 
   Future<void> signOut();
+
+  Future<void> sendPasswordResetEmail(String email);
 }
