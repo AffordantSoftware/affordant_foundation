@@ -13,15 +13,15 @@ import 'package:flutter/material.dart';
 /// Unable to save your changes
 /// Your changes are saved locally, but we are unable to connect to your account because your device not connected to internet.
 /// Please re-connect and try again. If the problem persist, contact [Customer Care](http://customercare.com)
-abstract class DisplayableException {
-  const DisplayableException(
-    this.stackTrace,
-  );
-
-  final StackTrace stackTrace;
-
+mixin DisplayableException {
   String localizedTitle(BuildContext context);
   String localizedMessage(BuildContext context);
+}
+
+base class TraceableException<T> {
+  const TraceableException(this.error, this.stackTrace);
+  final T error;
+  final StackTrace stackTrace;
 }
 
 extension _CoreLocalizations on BuildContext {
@@ -29,8 +29,9 @@ extension _CoreLocalizations on BuildContext {
       Localizations.of(this, AffordantCoreLocalizations);
 }
 
-final class UnspecifiedServerException extends DisplayableException {
-  const UnspecifiedServerException(super.stackTrace);
+final class UnspecifiedServerException extends TraceableException
+    with DisplayableException {
+  const UnspecifiedServerException(super.error, super.stackTrace);
 
   @override
   String localizedTitle(BuildContext context) =>
@@ -41,8 +42,9 @@ final class UnspecifiedServerException extends DisplayableException {
       context._coreL10n.error_server_unspecified_message;
 }
 
-final class NetworkUnavailableException extends DisplayableException {
-  const NetworkUnavailableException(super.stackTrace);
+final class NetworkUnavailableException extends TraceableException
+    with DisplayableException {
+  const NetworkUnavailableException(super.error, super.stackTrace);
 
   @override
   String localizedTitle(BuildContext context) =>
@@ -53,8 +55,8 @@ final class NetworkUnavailableException extends DisplayableException {
       context._coreL10n.error_network_unavailable_message;
 }
 
-final class ServerUnavailableException extends DisplayableException {
-  const ServerUnavailableException(super.stackTrace);
+final class ServerUnavailableException with DisplayableException {
+  const ServerUnavailableException();
 
   @override
   String localizedTitle(BuildContext context) =>
