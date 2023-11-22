@@ -7,7 +7,9 @@ extension _LocalizationDelegate on BuildContext {
       Localizations.of(this, AffordantAuthLocalizations);
 }
 
-sealed class RegistrationException with DisplayableException {}
+sealed class RegistrationException with DisplayableException {
+  const RegistrationException();
+}
 
 final class AccountAlreadyExistsException extends RegistrationException {
   @override
@@ -21,7 +23,9 @@ final class AccountAlreadyExistsException extends RegistrationException {
   }
 }
 
-sealed class SignInException with DisplayableException {}
+sealed class SignInException with DisplayableException {
+  const SignInException();
+}
 
 final class InvalidCredentialException extends RegistrationException {
   @override
