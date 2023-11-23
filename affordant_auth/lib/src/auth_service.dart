@@ -83,4 +83,6 @@ abstract base class AuthService<User> with Disposable {
   Future<void> signOut();
 
   Future<void> sendPasswordResetEmail(String email);
+
+  Future<void> deleteAccount();
 }
