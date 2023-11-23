@@ -96,4 +96,9 @@ final class FirebaseAuthService extends AuthService<fb.User> {
       () => _firebase.sendPasswordResetEmail(email: email),
     );
   }
+
+  @override
+  Future<void> deleteAccount() async {
+    await _firebase.currentUser?.delete();
+  }
 }
