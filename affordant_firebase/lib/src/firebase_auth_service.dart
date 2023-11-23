@@ -64,7 +64,9 @@ final class FirebaseAuthService extends AuthService<fb.User> {
         password: password,
       ),
       {
-        'auth/rejected-credential': (e, s) => InvalidCredentialException(),
+        'invalid-email': (e, s) => InvalidCredentialException(),
+        'invalid-credential': (e, s) => InvalidCredentialException(),
+        'rejected-credential': (e, s) => InvalidCredentialException(),
       },
     );
   }

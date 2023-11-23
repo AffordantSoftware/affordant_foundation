@@ -102,7 +102,7 @@ abstract class AffordantCoreLocalizations {
   /// No description provided for @error_server_unspecified_message.
   ///
   /// In en, this message translates to:
-  /// **'An error occurred on our server. Please try again later. If the problem persist, contact (Customer Care)[]'**
+  /// **'An error occurred on our server. Please try again later. If the problem persist please contact us.'**
   String get error_server_unspecified_message;
 
   /// No description provided for @error_network_unavailable_title.
@@ -126,7 +126,7 @@ abstract class AffordantCoreLocalizations {
   /// No description provided for @error_server_unavailable_message.
   ///
   /// In en, this message translates to:
-  /// **'Server is actually unavailable. This may be due to a maintenance. Please try again later. If the problem persist, contact (Customer Care)[]'**
+  /// **'Server is actually unavailable. This may be due to a maintenance. Please try again later. If the problem persist please contact us'**
   String get error_server_unavailable_message;
 }
 
