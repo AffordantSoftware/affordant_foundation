@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
 import 'affordant_auth_localizations_en.dart';
+import 'affordant_auth_localizations_fr.dart';
 
 /// Callers can lookup localized strings with an instance of AffordantAuthLocalizations
 /// returned by `AffordantAuthLocalizations.of(context)`.
@@ -88,7 +89,8 @@ abstract class AffordantAuthLocalizations {
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
-    Locale('en')
+    Locale('en'),
+    Locale('fr')
   ];
 
   /// No description provided for @error_registration_account_already_exists_title.
@@ -125,7 +127,7 @@ class _AffordantAuthLocalizationsDelegate extends LocalizationsDelegate<Affordan
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['en'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['en', 'fr'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AffordantAuthLocalizationsDelegate old) => false;
@@ -137,6 +139,7 @@ AffordantAuthLocalizations lookupAffordantAuthLocalizations(Locale locale) {
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
     case 'en': return AffordantAuthLocalizationsEn();
+    case 'fr': return AffordantAuthLocalizationsFr();
   }
 
   throw FlutterError(

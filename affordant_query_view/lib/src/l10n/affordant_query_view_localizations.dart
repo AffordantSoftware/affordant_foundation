@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
 import 'affordant_query_view_localizations_en.dart';
+import 'affordant_query_view_localizations_fr.dart';
 
 /// Callers can lookup localized strings with an instance of AffordantQueryViewLocalizations
 /// returned by `AffordantQueryViewLocalizations.of(context)`.
@@ -88,7 +89,8 @@ abstract class AffordantQueryViewLocalizations {
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
-    Locale('en')
+    Locale('en'),
+    Locale('fr')
   ];
 
   /// No description provided for @error_query_unspecified_title.
@@ -113,7 +115,7 @@ class _AffordantQueryViewLocalizationsDelegate extends LocalizationsDelegate<Aff
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['en'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['en', 'fr'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AffordantQueryViewLocalizationsDelegate old) => false;
@@ -125,6 +127,7 @@ AffordantQueryViewLocalizations lookupAffordantQueryViewLocalizations(Locale loc
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
     case 'en': return AffordantQueryViewLocalizationsEn();
+    case 'fr': return AffordantQueryViewLocalizationsFr();
   }
 
   throw FlutterError(
