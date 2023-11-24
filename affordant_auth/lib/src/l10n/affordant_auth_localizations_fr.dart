@@ -5,14 +5,14 @@ class AffordantAuthLocalizationsFr extends AffordantAuthLocalizations {
   AffordantAuthLocalizationsFr([String locale = 'fr']) : super(locale);
 
   @override
-  String get error_registration_account_already_exists_title => 'Account already exists.';
+  String get error_registration_account_already_exists_title => 'Adresse email indisponible.';
 
   @override
-  String get error_registration_account_already_exists_message => 'It seams that an account already uses this email address. Please try to connect or use a different email address.';
+  String get error_registration_account_already_exists_message => 'Un compte avec cette address email exist déjà. Essayez de vous connecter.';
 
   @override
-  String get error_sign_in_invalid_credentials_title => 'Invalid credentials.';
+  String get error_sign_in_invalid_credentials_title => 'Identifiants invalides.';
 
   @override
-  String get error_sign_in_invalid_credentials_message => 'The password entered doesn\'t match the credential. Please try another password or use a different email address. If the problem persist, please try to reset the password.';
+  String get error_sign_in_invalid_credentials_message => 'Les identifiants que vous avez fournis ne sont invalides.';
 }
