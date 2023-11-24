@@ -5,20 +5,20 @@ class AffordantCoreLocalizationsFr extends AffordantCoreLocalizations {
   AffordantCoreLocalizationsFr([String locale = 'fr']) : super(locale);
 
   @override
-  String get error_server_unspecified_title => 'An error occurred on our server';
+  String get error_server_unspecified_title => 'Une erreur est survenue sur notre serveur';
 
   @override
-  String get error_server_unspecified_message => 'An error occurred on our server. Please try again later. If the problem persist please contact us.';
+  String get error_server_unspecified_message => 'Une erreur est survenue sur notre serveur. Veuillez réessayer plus tard. Si le problème persiste, veuillez nous contacter.';
 
   @override
-  String get error_network_unavailable_title => 'Device not connected.';
+  String get error_network_unavailable_title => 'Appareil non connecté.';
 
   @override
-  String get error_network_unavailable_message => 'Its seams that your devices isn\'t connect to internet. Please connect your device and try again';
+  String get error_network_unavailable_message => 'Il semble que votre appareil ne soit pas connecté à Internet. Veuillez connecter votre appareil et réessayer';
 
   @override
-  String get error_server_unavailable_title => 'Server unavailable.';
+  String get error_server_unavailable_title => 'Serveur indisponible.';
 
   @override
-  String get error_server_unavailable_message => 'Server is actually unavailable. This may be due to a maintenance. Please try again later. If the problem persist please contact us';
+  String get error_server_unavailable_message => 'Le serveur est actuellement indisponible. Cela peut être dû à une maintenance de notre système. Veuillez réessayer plus tard. Si le problème persiste, veuillez nous contacter';
 }
