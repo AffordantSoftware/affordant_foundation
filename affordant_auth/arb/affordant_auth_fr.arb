@@ -1,9 +1,9 @@
 {
   "error_registration_account_already_exists_title": "Adresse email indisponible.",
-  "error_registration_account_already_exists_message": "Un compte avec cette address email exist déjà. Essayez de vous connecter.",
+  "error_registration_account_already_exists_message": "Un compte associé à cette address email existe déjà. Essayez de vous connecter.",
   
   "error_sign_in_invalid_credentials_title": "Identifiants invalides.",
-  "error_sign_in_invalid_credentials_message": "Les identifiants que vous avez fournis ne sont invalides.",
+  "error_sign_in_invalid_credentials_message": "Les identifiants fournis sont invalides.",
   
   "@END": "Don't add coma here"
 }
