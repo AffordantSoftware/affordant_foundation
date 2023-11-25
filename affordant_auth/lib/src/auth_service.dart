@@ -80,6 +80,8 @@ abstract base class AuthService<User> with Disposable {
 
   Future<void> signInAnonymously();
 
+  Future<void> signInWithGoogle({String clientID});
+
   Future<void> signOut();
 
   Future<void> sendPasswordResetEmail(String email);
