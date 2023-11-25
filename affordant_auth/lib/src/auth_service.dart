@@ -80,7 +80,9 @@ abstract base class AuthService<User> with Disposable {
 
   Future<void> signInAnonymously();
 
-  Future<void> signInWithGoogle({String? clientID});
+  Future<void> signInWithGoogle({
+    required String iosClientID,
+  });
 
   Future<void> signOut();
 
