@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:affordant_core/affordant_core.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fb;
 import 'package:affordant_auth/affordant_auth.dart';
@@ -74,9 +75,14 @@ final class FirebaseAuthService extends AuthService<fb.User> {
 
   @override
   Future<void> signInWithGoogle({
-    required String clientID,
+    required String iosClientID,
   }) async {
     await _safeFirebaseCall(() async {
+      String? clientID;
+      if (Platform.isIOS) {
+        clientID = iosClientID;
+      }
+
       final GoogleSignInAccount? googleUser = await GoogleSignIn(
         scopes: ['email'],
         hostedDomain: "",
