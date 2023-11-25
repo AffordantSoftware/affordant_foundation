@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:affordant_core/affordant_core.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fb;
 import 'package:affordant_auth/affordant_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 typedef User = fb.User;
 
@@ -72,6 +73,32 @@ final class FirebaseAuthService extends AuthService<fb.User> {
   }
 
   @override
+  Future<void> signInWithGoogle({
+    required String clientID,
+  }) async {
+    await _safeFirebaseCall(() async {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn(
+        scopes: ['email'],
+        hostedDomain: "",
+        clientId: clientID,
+      ).signIn();
+
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
+
+      // Create a new credential
+      final credential = fb.GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+
+      // Once signed in, return the UserCredential
+      return await _firebase.signInWithCredential(credential);
+    });
+  }
+
+  @override
   Future<void> createUserWithEmailAndPassword({
     required String email,
     required String password,
@@ -82,7 +109,7 @@ final class FirebaseAuthService extends AuthService<fb.User> {
         password: password,
       ),
       {
-        'auth/email-already-exists': (e, s) => AccountAlreadyExistsException(),
+        'email-already-exists': (e, s) => AccountAlreadyExistsException(),
       },
     );
   }
