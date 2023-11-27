@@ -353,7 +353,7 @@ final class NullableDateTimeAccessor extends FieldAccessor<DateTime?> {
     required super.key,
     super.defaultValue = _defaultValue,
   }) : super(
-          fromJson: (json) => DateTime.tryParse(json),
+          fromJson: (json) => json != null ? DateTime.tryParse(json) : null,
           toJson: (value) => value?.toIso8601String(),
         );
 }
