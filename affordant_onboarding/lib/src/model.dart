@@ -61,13 +61,7 @@ class OnboardingModel<SessionData, StepType extends Step<SessionData>> {
     _updateStatus();
 
     /// Iterate over all step and found the first non-visited step
-    _setCurrentStepAndNotify(
-      steps.firstWhereOrNull(
-        (step) =>
-            _visitedSteps.contains(step.id) == false ||
-            step.validate(data) == false,
-      ),
-    );
+    _setCurrentStepAndNotify(_findCurrentStep(data));
   }
 
   set sessionData(SessionData? data) {
@@ -104,6 +98,12 @@ class OnboardingModel<SessionData, StepType extends Step<SessionData>> {
   SpecificStep? step<SpecificStep extends StepType>() =>
       steps.firstWhereOrNull((step) => step is SpecificStep) as SpecificStep;
 
+  StepType? _findCurrentStep(SessionData data) => steps.firstWhereOrNull(
+        (step) =>
+            _visitedSteps.contains(step.id) == false ||
+            step.validate(data) == false,
+      );
+
   void _setCurrentStepAndNotify(StepType? value) {
     if (_currentStep != value) {
       _currentStep = value;
@@ -113,7 +113,8 @@ class OnboardingModel<SessionData, StepType extends Step<SessionData>> {
   }
 
   void _updateStatus() {
-    final isDone = _visitedSteps.contains(steps.last.id);
+    final data = sessionData;
+    final isDone = data != null && _findCurrentStep(data) == null;
     OnboardingStatus status;
     if (isDone) {
       status = OnboardingStatus.done;
