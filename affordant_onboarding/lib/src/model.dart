@@ -53,8 +53,9 @@ class OnboardingModel<SessionData, StepType extends Step<SessionData>> {
       StreamController<OnboardingStatus>.broadcast();
 
   Future<void> init() async {
-    sessionData = await onboardingRepository.getSessionData() ??
+    final data = await onboardingRepository.getSessionData() ??
         await initialSessionData();
+    sessionData = data;
     _visitedSteps = await onboardingRepository.getVisitedSteps() ?? [];
 
     _updateStatus();
@@ -62,7 +63,9 @@ class OnboardingModel<SessionData, StepType extends Step<SessionData>> {
     /// Iterate over all step and found the first non-visited step
     _setCurrentStepAndNotify(
       steps.firstWhereOrNull(
-        (step) => _visitedSteps.contains(step.id) == false,
+        (step) =>
+            _visitedSteps.contains(step.id) == false ||
+            step.validate(data) == false,
       ),
     );
   }
