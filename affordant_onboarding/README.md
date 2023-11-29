@@ -1,6 +1,14 @@
 # Affordant onboarding
 Affordant Onboarding is a comprehensive opinionated framework for creating onboarding experiences in Flutter apps. It is built on top of the go_router and bloc libraries.
 
+To improve:
+- Step.validate function is not clear
+- Lack of way to fetch data based on current step (use step factory instead of step ?)
+- Lack of way to change strategy for session data save
+- Should use a more general approach instead of a go route
+  - design it like a "guard" that show required pages (mixin that overload redirect function ?)
+- Route file is outside the feature folder
+
 ## Concept
 
 Onboarding is the process of guiding users through a series of screens when they first enter a specific section of the app. This onboarding sequence is shown only once, but if a user exits the onboarding before completing it, they will be prompted to start it again. This package supports both continuing a previous onboarding session and starting a new one each time the user enters the relevant section.
