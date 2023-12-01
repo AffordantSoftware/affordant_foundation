@@ -50,6 +50,8 @@ final class FirebaseAuthService extends AuthService<fb.User> {
   @override
   User? get currentUser => _firebase.currentUser;
 
+  GoogleSignIn? _googleSignIn;
+
   @override
   Future<void> signInAnonymously() async {
     await _safeFirebaseCall(_firebase.signInAnonymously);
@@ -83,11 +85,13 @@ final class FirebaseAuthService extends AuthService<fb.User> {
         clientID = iosClientID;
       }
 
-      final GoogleSignInAccount? googleUser = await GoogleSignIn(
+      final signIn = GoogleSignIn(
         scopes: ['email'],
         hostedDomain: "",
         clientId: clientID,
-      ).signIn();
+      );
+      _googleSignIn = signIn;
+      final GoogleSignInAccount? googleUser = await signIn.signIn();
 
       // Obtain the auth details from the request
       final GoogleSignInAuthentication? googleAuth =
@@ -123,6 +127,7 @@ final class FirebaseAuthService extends AuthService<fb.User> {
   @override
   Future<void> signOut() async {
     await _safeFirebaseCall(_firebase.signOut);
+    await _googleSignIn?.signOut();
   }
 
   @override
