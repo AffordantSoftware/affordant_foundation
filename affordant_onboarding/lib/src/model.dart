@@ -28,6 +28,7 @@ class OnboardingModel<SessionData, StepType extends Step<SessionData>> {
     required this.initialSessionData,
     required this.onboardingRepository,
     required this.steps,
+    this.onOnboardingCompleted,
   }) : assert(steps.isNotEmpty);
 
   FutureOr<SessionData> Function() initialSessionData;
@@ -35,6 +36,8 @@ class OnboardingModel<SessionData, StepType extends Step<SessionData>> {
   final OnboardingRepository onboardingRepository;
 
   final List<StepType> steps;
+
+  final void Function()? onOnboardingCompleted;
 
   final _stepStreamController = StreamController<StepType?>.broadcast();
 
@@ -124,6 +127,7 @@ class OnboardingModel<SessionData, StepType extends Step<SessionData>> {
       status = OnboardingStatus.inProgress;
     }
     _setStatusAndNotify(status);
+    onOnboardingCompleted?.call();
   }
 
   void _setStatusAndNotify(OnboardingStatus status) {
