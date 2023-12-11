@@ -8,7 +8,10 @@ environment:
 
 # Add regular dependencies here.
 dependencies:
+  flutter:
+    sdk: flutter
   affordant_auth:
+    # path: ../affordant_auth
     git:
       url: https://github.com/AffordantSoftware/affordant_foundation.git
       path: affordant_auth

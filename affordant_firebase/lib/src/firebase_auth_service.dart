@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:affordant_core/affordant_core.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fb;
 import 'package:affordant_auth/affordant_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 typedef User = fb.User;
@@ -142,14 +143,10 @@ final class FirebaseAuthService extends AuthService<fb.User> {
   @override
   Future<void> signInWithApple() async {
     final appleProvider = fb.AppleAuthProvider();
-
-    fb.UserCredential userCredential =
-        await _firebase.signInWithPopup(appleProvider);
-    // Keep the authorization code returned from Apple platforms
-    String? authCode = userCredential.additionalUserInfo?.authorizationCode;
-    // Revoke Apple auth token
-    if (authCode != null) {
-      await _firebase.revokeTokenWithAuthorizationCode(authCode);
+    if (kIsWeb) {
+      await _firebase.signInWithPopup(appleProvider);
+    } else {
+      await _firebase.signInWithProvider(appleProvider);
     }
   }
 
