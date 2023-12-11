@@ -138,4 +138,23 @@ final class FirebaseAuthService extends AuthService<fb.User> {
   Future<void> deleteAccount() async {
     await _firebase.currentUser?.delete();
   }
+
+  @override
+  Future<void> signInWithApple() async {
+    final appleProvider = fb.AppleAuthProvider();
+
+    fb.UserCredential userCredential =
+        await _firebase.signInWithPopup(appleProvider);
+    // Keep the authorization code returned from Apple platforms
+    String? authCode = userCredential.additionalUserInfo?.authorizationCode;
+    // Revoke Apple auth token
+    if (authCode != null) {
+      await _firebase.revokeTokenWithAuthorizationCode(authCode);
+    }
+  }
+
+  @override
+  Future<void> signInWithFacebook() {
+    throw UnimplementedError();
+  }
 }

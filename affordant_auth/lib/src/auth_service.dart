@@ -84,6 +84,10 @@ abstract base class AuthService<User> with Disposable {
     required String iosClientID,
   });
 
+  Future<void> signInWithApple();
+
+  Future<void> signInWithFacebook();
+
   Future<void> signOut();
 
   Future<void> sendPasswordResetEmail(String email);
