@@ -11,11 +11,11 @@ dependencies:
     sdk: flutter
   affordant_core:
     git:
-      url: https://github.com/AffordantSoftware/affordant_foundation
+      url: https://github.com/AffordantSoftware/affordant_foundation.git
       path: affordant_core
   affordant_view_model:
     git:
-      url: https://github.com/AffordantSoftware/affordant_foundation
+      url: https://github.com/AffordantSoftware/affordant_foundation.git
       path: affordant_view_model
   dart_mappable: ^3.2.0
   intl: ^0.18.1
