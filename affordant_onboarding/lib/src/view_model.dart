@@ -1,7 +1,7 @@
-import 'package:affordant_navigation/affordant_navigation.dart';
 import 'package:affordant_view_model/affordant_view_model.dart';
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:go_router/go_router.dart';
 
 import 'model.dart';
 part 'view_model.freezed.dart';
@@ -56,7 +56,7 @@ class OnboardingViewModel<SessionData, StepType extends Step<SessionData>>
   final Duration pageTransitionDuration;
   final Curve pageTransitionCurve;
   final String redirection;
-  final NavigationService navigationService;
+  final GoRouter navigationService;
   final OnboardingModel<SessionData, StepType> onboardingModel;
   final List<StepType> steps;
   PageController pageController;
