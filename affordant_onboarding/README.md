@@ -2,6 +2,7 @@
 Affordant Onboarding is a comprehensive opinionated framework for creating onboarding experiences in Flutter apps. It is built on top of the go_router and bloc libraries.
 
 To improve:
+- Data should be sync to the back-end only when step is validated to avoid useless api call
 - Step.validate function is not clear
 - Lack of way to fetch data based on current step (use step factory instead of step ?)
 - Lack of way to change strategy for session data save
