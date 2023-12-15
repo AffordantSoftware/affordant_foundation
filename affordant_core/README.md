@@ -15,6 +15,8 @@ The class is mainly designed to be used as return values for repositories's comm
 
 This package also include an extension on `Future<Result>` which provides a similar API to the `Result` object, simply forwarding function call to the underlying `Result` object using `Future.then`. This makes working with async operation more straightforward.
 
+This package doesn't provide Result implementation directly, instead it re-export the Result from `rust_core`.
+
 ## Usage
 TODO
 

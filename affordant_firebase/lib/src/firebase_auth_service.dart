@@ -37,7 +37,7 @@ Future<Result<T, E>> _safeFirebaseCall<T, E extends Error>(
     (e) {
       e.withContext("call FirebaseAuth");
       return switch (e) {
-        Err(error: final fb.FirebaseAuthException firebaseError) =>
+        fb.FirebaseAuthException firebaseError =>
           onError(e, firebaseError.code),
         _ => onError(e, null),
       };

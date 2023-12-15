@@ -30,8 +30,8 @@ extension FutureResultErrorExtension<T, E extends Error>
 extension ResultErrExtension<T, E extends Error> on Result<T, E> {
   /// If add context to Error if Result is Err
   Result<T, E> withContext(String context) {
-    if (this case Err(:final error)) {
-      error.withContext(context);
+    if (this case Err(:final err)) {
+      err.withContext(context);
     }
     return this;
   }

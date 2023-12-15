@@ -1,119 +1,130 @@
-sealed class Result<T, E> {
-  const Result();
+import 'package:rust_core/result.dart';
 
-  static Result<T, void> fromNullable<T>(T? value) {
-    return switch (value) {
-      Object() => Ok(value),
-      null => Err(null),
-    };
-  }
+export 'package:rust_core/src/result/result.dart' hide okay, error;
+export 'package:rust_core/src/result/result_extensions.dart';
+export 'package:rust_core/src/result/future_result.dart';
 
-  bool get isOk => switch (this) {
-        Ok<T, E>() => true,
-        Err<T, E>() => false,
-      };
+// sealed class Result<T, E> {
+//   const Result();
 
-  bool get isErr => switch (this) {
-        Ok<T, E>() => false,
-        Err<T, E>() => true,
-      };
+//   static Result<T, void> fromNullable<T>(T? value) {
+//     return switch (value) {
+//       Object() => Ok(value),
+//       null => Err(null),
+//     };
+//   }
 
-  C fold<C>({
-    required C Function(T) ok,
-    required C Function(E) err,
-  }) =>
-      switch (this) {
-        final Ok<T, E> res => ok(res.value),
-        final Err<T, E> res => err(res.error),
-      };
+//   bool get isOk => switch (this) {
+//         Ok<T, E>() => true,
+//         Err<T, E>() => false,
+//       };
 
-  Result<U, F> map<U, F>({
-    required U Function(T value) ok,
-    required F Function(E error) err,
-  }) =>
-      switch (this) {
-        final Ok<T, E> res => Ok(ok(res.value)),
-        final Err<T, E> res => Err(err(res.error)),
-      };
+//   bool get isErr => switch (this) {
+//         Ok<T, E>() => false,
+//         Err<T, E>() => true,
+//       };
 
-  Result<U, E> mapOk<U>(U Function(T value) delegate) => map(
-        ok: delegate,
-        err: (err) => err,
-      );
+//   C fold<C>({
+//     required C Function(T) ok,
+//     required C Function(E) err,
+//   }) =>
+//       switch (this) {
+//         final Ok<T, E> res => ok(res.value),
+//         final Err<T, E> res => err(res.error),
+//       };
 
-  Result<T, F> mapErr<F>(F Function(E error) delegate) => map(
-        ok: (ok) => ok,
-        err: delegate,
-      );
+//   Result<U, F> map<U, F>({
+//     required U Function(T value) ok,
+//     required F Function(E error) err,
+//   }) =>
+//       switch (this) {
+//         final Ok<T, E> res => Ok(ok(res.value)),
+//         final Err<T, E> res => Err(err(res.error)),
+//       };
 
-  T getOrElse(T Function(E) orElse) => fold(
-        ok: (ok) => ok,
-        err: orElse,
-      );
+//   Result<U, E> mapOk<U>(U Function(T value) delegate) => map(
+//         ok: delegate,
+//         err: (err) => err,
+//       );
 
-  T? getOrNull() => fold(
-        ok: (ok) => ok,
-        err: (_) => null,
-      );
+//   Result<T, F> mapErr<F>(F Function(E error) delegate) => map(
+//         ok: (ok) => ok,
+//         err: delegate,
+//       );
 
-  // Result<T, E> when({
-  //   required void Function(T) ok,
-  //   required void Function(E) err,
-  // }) {
-  //   switch (this) {
-  //     case final Ok<T, E> res:
-  //       ok(res.value);
-  //     case final Err<T, E> res:
-  //       err(res.value);
-  //   }
-  //   return this;
-  // }
+//   T getOrElse(T Function(E) orElse) => fold(
+//         ok: (ok) => ok,
+//         err: orElse,
+//       );
 
-  // Result<T, E> whenOk(void Function(T) sideEffect) => when(
-  //       ok: sideEffect,
-  //       err: (_) {},
-  //     );
+//   T? getOrNull() => fold(
+//         ok: (ok) => ok,
+//         err: (_) => null,
+//       );
 
-  // Result<T, E> whenErr(void Function(E) sideEffect) => when(
-  //       ok: (ok) {},
-  //       err: sideEffect,
-  //     );
-}
+//   // Result<T, E> when({
+//   //   required void Function(T) ok,
+//   //   required void Function(E) err,
+//   // }) {
+//   //   switch (this) {
+//   //     case final Ok<T, E> res:
+//   //       ok(res.value);
+//   //     case final Err<T, E> res:
+//   //       err(res.value);
+//   //   }
+//   //   return this;
+//   // }
 
-class Ok<T, E> extends Result<T, E> {
-  const Ok(this.value);
+//   // Result<T, E> whenOk(void Function(T) sideEffect) => when(
+//   //       ok: sideEffect,
+//   //       err: (_) {},
+//   //     );
 
-  final T value;
-}
+//   // Result<T, E> whenErr(void Function(E) sideEffect) => when(
+//   //       ok: (ok) {},
+//   //       err: sideEffect,
+//   //     );
+// }
 
-class Err<T, E> extends Result<T, E> {
-  const Err(this.error);
+// class Ok<T, E> extends Result<T, E> {
+//   const Ok(this.value);
 
-  final E error;
-}
+//   final T value;
+// }
 
-extension FutureResult<T, E> on Future<Result<T, E>> {
-  Future<C> fold<C>({
-    required C Function(T) ok,
-    required C Function(E) err,
-  }) =>
-      then((r) => r.fold(ok: ok, err: err));
+// class Err<T, E> extends Result<T, E> {
+//   const Err(this.error);
 
-  Future<Result<U, F>> map<U, F>({
-    required U Function(T value) ok,
-    required F Function(E error) err,
-  }) =>
-      then((r) => r.map(ok: ok, err: err));
+//   final E error;
+// }
 
-  Future<Result<U, E>> mapOk<U>(U Function(T value) delegate) =>
-      then((r) => r.mapOk(delegate));
+// extension FutureResult<T, E> on Future<Result<T, E>> {
+//   Future<C> fold<C>({
+//     required C Function(T) ok,
+//     required C Function(E) err,
+//   }) =>
+//       then((r) => r.fold(ok: ok, err: err));
 
-  Future<Result<T, F>> mapErr<F>(F Function(E error) delegate) =>
-      then((r) => r.mapErr(delegate));
+//   Future<Result<U, F>> map<U, F>({
+//     required U Function(T value) ok,
+//     required F Function(E error) err,
+//   }) =>
+//       then((r) => r.map(ok: ok, err: err));
 
-  Future<T> getOrElse(T Function(E) orElse) => then((r) => r.getOrElse(orElse));
+//   Future<Result<U, E>> mapOk<U>(U Function(T value) delegate) =>
+//       then((r) => r.mapOk(delegate));
 
-  Future<T?> getOrNull() => then((r) => r.getOrNull());
-}
+//   Future<Result<T, F>> mapErr<F>(F Function(E error) delegate) =>
+//       then((r) => r.mapErr(delegate));
 
-Ok<void, E> ok<E>() => Ok(null);
+//   Future<T> unwrapOrElse(T Function(E) orElse) =>
+//       then((r) => r.getOrElse(orElse));
+
+//   Future<T?> unwrapOrNull() => then((r) => r.getOrNull());
+
+//   Future<bool> get isOk => then((r) => r.isOk);
+
+//   Future<bool> get isErr => then((r) => r.isErr);
+// }
+
+Ok<(), E> ok<E extends Object>() => Ok(());

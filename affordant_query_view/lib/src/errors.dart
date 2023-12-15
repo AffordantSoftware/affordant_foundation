@@ -2,8 +2,8 @@ import 'package:affordant_core/affordant_core.dart';
 import 'package:affordant_query_view/src/l10n/affordant_query_view_localizations.dart';
 import 'package:flutter/material.dart';
 
-base class QueryError extends TraceableException with DisplayableException {
-  const QueryError(super.error, super.stackTrace);
+base class QueryError extends Error with DisplayableError {
+  QueryError(super.error, super.stackTrace);
 
   @override
   String localizedTitle(BuildContext context) {

@@ -21,9 +21,9 @@ dependencies:
   firebase_auth: ^4.7.2
   google_sign_in: ^6.1.6
 
-# dependency_overrides:
-#   affordant_core:
-#     path: ../affordant_core
+dependency_overrides:
+  affordant_core:
+    path: ../affordant_core
 
 dev_dependencies:
   lints: ^2.0.0
