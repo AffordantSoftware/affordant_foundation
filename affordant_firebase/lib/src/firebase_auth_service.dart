@@ -8,33 +8,47 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 typedef User = fb.User;
 
-FutureOr<T> _safeFirebaseCall<T>(
-  FutureOr<T> Function() run, [
-  Map<String, Function(Object e, StackTrace s)>? convertExceptions,
-]) async {
-  return await safeServerCall(() async {
-    try {
-      return await run();
-    } on fb.FirebaseAuthException catch (e, s) {
-      final converter = convertExceptions?[e.code];
-      if (converter != null) {
-        throw converter(e, s);
-      } else {
-        rethrow;
-      }
-    }
-  });
+// Future<Result<T, E>> _safeFirebaseCall<T, E extends Error>(
+//   Future<T> Function() run,
+//   Map<String, E Function(Error e)>? onErrorCode,
+//   E Function(Error e) onUnknownError,
+// ) async {
+//   return await safeNetworkCall(
+//     run,
+//   ).mapErr(
+//     (e) {
+//       e.withContext("call FirebaseAuth");
+//       E? convertedError;
+//       if (e case Err(error: final fb.FirebaseAuthException firebaseError)) {
+//         convertedError = onErrorCode?[firebaseError.code]?.call(e);
+//       }
+//       return convertedError ?? onUnknownError(e);
+//     },
+//   );
+// }
+
+Future<Result<T, E>> _safeFirebaseCall<T, E extends Error>(
+  Future<T> Function() run,
+  E Function(Error e, String? code) onError,
+) async {
+  return await safeNetworkCall(
+    run,
+  ).mapErr(
+    (e) {
+      e.withContext("call FirebaseAuth");
+      return switch (e) {
+        Err(error: final fb.FirebaseAuthException firebaseError) =>
+          onError(e, firebaseError.code),
+        _ => onError(e, null),
+      };
+    },
+  );
 }
 
-abstract class FirebaseUserService extends UserService<fb.User> {
-  const FirebaseUserService(AuthService<fb.User> firebaseAuthService)
-      : super(firebaseAuthService);
-}
-
-final class FirebaseAuthService extends AuthService<fb.User> {
-  FirebaseAuthService({
-    super.registerUserServices,
-    super.disposeUserServices,
+final class FirebaseAuthRepository extends AuthRepository<fb.User> {
+  FirebaseAuthRepository({
+    super.registerPrivateRepositories,
+    super.disposePrivateRepositories,
   });
 
   fb.FirebaseAuth get _firebase => fb.FirebaseAuth.instance;
@@ -52,106 +66,141 @@ final class FirebaseAuthService extends AuthService<fb.User> {
   User? get currentUser => _firebase.currentUser;
 
   @override
-  Future<void> signInAnonymously() async {
-    await _safeFirebaseCall(_firebase.signInAnonymously);
+  Future<Result<void, SignInError>> signInAnonymously() async {
+    return await _safeFirebaseCall(
+      _firebase.signInAnonymously,
+      (error, code) =>
+          AnonymousSignInError(error)..withContext("Sign-in anonymously"),
+    );
   }
 
   @override
-  Future<void> signInWithEmailAndPassword({
+  Future<Result<void, SignInError>> signInWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
-    await _safeFirebaseCall(
+    return await _safeFirebaseCall(
       () => _firebase.signInWithEmailAndPassword(
         email: email,
         password: password,
       ),
-      {
-        'invalid-email': (e, s) => InvalidCredentialException(),
-        'invalid-credential': (e, s) => InvalidCredentialException(),
-        'rejected-credential': (e, s) => InvalidCredentialException(),
+      (e, code) {
+        e.withContext("Sign-in with email and password");
+        return switch (code) {
+          'invalid-email' ||
+          'invalid-credential' ||
+          'rejected-credential' =>
+            InvalidCredentialError(e),
+          _ => UnknownSignInError(e),
+        };
       },
     );
   }
 
   @override
-  Future<void> signInWithGoogle({
+  Future<Result<void, SignInError>> signInWithGoogle({
     required String iosClientID,
   }) async {
-    await _safeFirebaseCall(() async {
-      String? clientID;
-      if (Platform.isIOS) {
-        clientID = iosClientID;
-      }
+    return await _safeFirebaseCall(
+      () async {
+        String? clientID;
+        if (Platform.isIOS) {
+          clientID = iosClientID;
+        }
 
-      final signIn = GoogleSignIn(
-        scopes: ['email'],
-        hostedDomain: "",
-        clientId: clientID,
-      );
-      final GoogleSignInAccount? googleUser = await signIn.signIn();
+        final signIn = GoogleSignIn(
+          scopes: ['email'],
+          hostedDomain: "",
+          clientId: clientID,
+        );
+        final GoogleSignInAccount? googleUser = await signIn.signIn();
 
-      // Obtain the auth details from the request
-      final GoogleSignInAuthentication? googleAuth =
-          await googleUser?.authentication;
+        // Obtain the auth details from the request
+        final GoogleSignInAuthentication? googleAuth =
+            await googleUser?.authentication;
 
-      // Create a new credential
-      final credential = fb.GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
-      );
+        // Create a new credential
+        final credential = fb.GoogleAuthProvider.credential(
+          accessToken: googleAuth?.accessToken,
+          idToken: googleAuth?.idToken,
+        );
 
-      // Once signed in, return the UserCredential
-      return await _firebase.signInWithCredential(credential);
-    });
+        // Once signed in, return the UserCredential
+        await _firebase.signInWithCredential(credential);
+      },
+      (e, _) => GoogleSignInError(e),
+    );
   }
 
   @override
-  Future<void> createUserWithEmailAndPassword({
+  Future<Result<void, RegistrationError>> createUserWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
-    await _safeFirebaseCall(
+    return await _safeFirebaseCall(
       () => _firebase.createUserWithEmailAndPassword(
         email: email,
         password: password,
       ),
-      {
-        'email-already-exists': (e, s) => AccountAlreadyExistsException(),
-      },
+      (e, code) => switch (code) {
+        'email-already-exists' => AccountAlreadyExistsError(e),
+        _ => UnknownRegistrationError(e),
+      }
+        ..withContext("Create user with email and password"),
     );
   }
 
   @override
-  Future<void> signOut() async {
-    await _safeFirebaseCall(_firebase.signOut);
-    await GoogleSignIn().disconnect();
-  }
-
-  @override
-  Future<void> sendPasswordResetEmail(String email) async {
-    await _safeFirebaseCall(
-      () => _firebase.sendPasswordResetEmail(email: email),
-    );
-  }
-
-  @override
-  Future<void> deleteAccount() async {
-    await _firebase.currentUser?.delete();
-  }
-
-  @override
-  Future<void> signInWithApple() async {
-    final appleProvider = fb.AppleAuthProvider();
-    if (kIsWeb) {
-      await _firebase.signInWithPopup(appleProvider);
-    } else {
-      await _firebase.signInWithProvider(appleProvider);
+  CommandResult<SignOutError> signOut() async {
+    try {
+      await _firebase.signOut();
+      await GoogleSignIn().disconnect();
+      return ok();
+    } catch (e, s) {
+      return Err(SignOutError(e, s));
     }
   }
 
   @override
-  Future<void> signInWithFacebook() {
+  CommandResult<ResetPasswordError> sendPasswordResetEmail(String email) async {
+    return await _safeFirebaseCall(
+      () => _firebase.sendPasswordResetEmail(email: email),
+      (e, _) => ResetPasswordError(e),
+    );
+  }
+
+  @override
+  CommandResult<DeleteAccountError> deleteAccount() async {
+    return await _safeFirebaseCall(
+      () async {
+        await _firebase.currentUser?.delete();
+      },
+      (e, code) => DeleteAccountError(e),
+    );
+  }
+
+  @override
+  CommandResult<SignInError> signInWithApple() async {
+    return await _safeFirebaseCall(
+      () async {
+        final appleProvider = fb.AppleAuthProvider();
+        if (kIsWeb) {
+          await _firebase.signInWithPopup(appleProvider);
+        } else {
+          await _firebase.signInWithProvider(appleProvider);
+        }
+      },
+      (e, code) => AppleSignInError(e),
+    );
+  }
+
+  @override
+  CommandResult<SignInError> signInWithFacebook() {
+    throw UnimplementedError();
+  }
+
+  @override
+  CommandResult<ReAuthenticateError> reAuthenticate() {
     throw UnimplementedError();
   }
 }

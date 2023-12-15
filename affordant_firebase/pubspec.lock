@@ -22,16 +22,16 @@ packages:
     description:
       path: affordant_auth
       ref: HEAD
-      resolved-ref: "26efb0aaa50efe698388863c1a1f4f3c4c6162ef"
+      resolved-ref: "71c15bf648d82883882accfcc5d7fb67c63aa40f"
       url: "https://github.com/AffordantSoftware/affordant_foundation.git"
     source: git
     version: "0.0.1"
   affordant_core:
-    dependency: transitive
+    dependency: "direct main"
     description:
       path: affordant_core
       ref: HEAD
-      resolved-ref: "26efb0aaa50efe698388863c1a1f4f3c4c6162ef"
+      resolved-ref: "71c15bf648d82883882accfcc5d7fb67c63aa40f"
       url: "https://github.com/AffordantSoftware/affordant_foundation.git"
     source: git
     version: "0.0.1"

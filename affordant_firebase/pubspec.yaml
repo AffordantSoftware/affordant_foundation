@@ -9,6 +9,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  affordant_core:
+    git:
+      url: https://github.com/AffordantSoftware/affordant_foundation.git
+      path: affordant_core
   affordant_auth:
     git:
       url: https://github.com/AffordantSoftware/affordant_foundation.git
@@ -16,6 +20,10 @@ dependencies:
   cloud_firestore: ^4.9.1
   firebase_auth: ^4.7.2
   google_sign_in: ^6.1.6
+
+# dependency_overrides:
+#   affordant_core:
+#     path: ../affordant_core
 
 dev_dependencies:
   lints: ^2.0.0
