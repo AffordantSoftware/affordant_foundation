@@ -13,6 +13,17 @@ typedef RegisterPrivateRepository<User> = FutureOr<void> Function(
 );
 typedef DisposePrivateRepositoryDelegate = FutureOr<void> Function();
 
+enum AuthProvider {
+  emailAndPassword,
+  google,
+  apple,
+  facebook,
+  microsoft,
+  twitter,
+  github,
+  yahoo,
+}
+
 /// Repository that manage user authentication
 ///
 /// [registerPrivateRepositories] is used to instantiate user's private repositories when he successfully signed-in
@@ -47,6 +58,8 @@ abstract base class AuthRepository<AuthData> with Disposable {
   Stream<AuthData?> get userChangeStream;
 
   AuthData? get currentUser;
+
+  AuthProvider? get currentProvider;
 
   @override
   Future<void> onDispose() async {
@@ -97,7 +110,12 @@ abstract base class AuthRepository<AuthData> with Disposable {
 
   CommandResult<ResetPasswordError> sendPasswordResetEmail(String email);
 
-  CommandResult<ReAuthenticateError> reAuthenticate();
+  CommandResult<ReAuthenticateError> reauthenticateWithEmailAndPassword({
+    required String email,
+    required String password,
+  });
+
+  CommandResult<ReAuthenticateError> reauthenticateWithSocialProvider();
 
   CommandResult<DeleteAccountError> deleteAccount();
 }
