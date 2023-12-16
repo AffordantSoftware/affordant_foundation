@@ -1,9 +1,51 @@
-import 'package:rust_core/result.dart';
+import 'dart:async';
 
+import 'package:rust_core/result.dart';
+import 'package:affordant_core/src/error.dart';
 export 'package:rust_core/src/result/result.dart' hide okay, error;
 export 'package:rust_core/src/result/result_extensions.dart';
 export 'package:rust_core/src/result/future_result.dart';
-export 'package:rust_core/src/result/execute_protected.dart';
+
+/// Executes the function in a protected context. [func] is called inside a try catch block. If the result is not
+/// catch, then return value [func] returned inside an [Ok]. If [func] throws, then the thrown value is returned
+/// inside an [Err].
+Result<S, Error> safeExec<S>(S Function() func) {
+  assert(S is! Result, "Use executeProtectedResult instead");
+  try {
+    return Ok(func());
+  } catch (e, s) {
+    return Err(Error(e, s));
+  }
+}
+
+/// Result unwrapping version of [executeProtected]. Where [func] returns an [Result], but can still throw.
+Result<S, Error> safeExecResult<S>(Result<S, Error> Function() func) {
+  try {
+    return func();
+  } catch (e, s) {
+    return Err(Error(e, s));
+  }
+}
+
+/// Async version of [executeProtected]
+FutureResult<S, Error> safeExecAsync<S>(Future<S> Function() func) async {
+  assert(S is! Result, "Use executeProtectedAsyncResult instead");
+  try {
+    return Ok(await func());
+  } catch (e, s) {
+    return Err(Error(e, s));
+  }
+}
+
+/// Async version of [executeProtectedResult]
+FutureResult<S, Error> safeExecAsyncResult<S>(
+    Future<Result<S, Error>> Function() func) async {
+  try {
+    return await func();
+  } catch (e, s) {
+    return Err(Error(e, s));
+  }
+}
 
 // sealed class Result<T, E> {
 //   const Result();
