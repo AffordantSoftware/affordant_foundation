@@ -3,6 +3,7 @@ import 'package:rust_core/result.dart';
 export 'package:rust_core/src/result/result.dart' hide okay, error;
 export 'package:rust_core/src/result/result_extensions.dart';
 export 'package:rust_core/src/result/future_result.dart';
+export 'package:rust_core/src/result/execute_protected.dart';
 
 // sealed class Result<T, E> {
 //   const Result();
