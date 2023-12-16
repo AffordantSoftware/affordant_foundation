@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/widgets.dart';
 
 import 'result.dart';
@@ -25,6 +27,15 @@ extension FutureResultErrorExtension<T, E extends Error>
   Future<Result<T, E>> withContext(String context) => then(
         (r) => r.withContext(context),
       );
+}
+
+extension FutureOrResultErrorExtension<T, E extends Error>
+    on FutureOr<Result<T, E>> {
+  /// If add context to Error if Result is Err
+  FutureOr<Result<T, E>> withContext(String context) => switch (this) {
+        final Future f => f.then((r) => r.withContext(context)),
+        _ => this.withContext(context),
+      };
 }
 
 extension ResultErrExtension<T, E extends Error> on Result<T, E> {
