@@ -28,7 +28,8 @@ Object? _convertSignInWithEmailAndPAsswordErrorCodeToException(
     switch (code) {
       'invalid-email' ||
       'invalid-credential' ||
-      'rejected-credential' =>
+      'rejected-credential' ||
+      'INVALID_LOGIN_CREDENTIALS' =>
         InvalidCredentialException(),
       _ => null,
     };
@@ -122,6 +123,7 @@ final class FirebaseAuthRepository extends AuthRepository<fb.User> {
         password: password,
       ),
       (e, code) => switch (code) {
+        'email-already-in-use' => AccountAlreadyExistsException(),
         'email-already-exists' => AccountAlreadyExistsException(),
         _ => null,
       },
