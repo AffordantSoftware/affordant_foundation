@@ -148,7 +148,14 @@ final class FirebaseAuthRepository extends AuthRepository<fb.User> {
 
   @override
   Future<void> deleteAccount() async {
+    final provider = currentProvider;
     await _firebase.currentUser?.delete();
+
+    switch (provider) {
+      case AuthProvider.google:
+        await _googleSignIn.disconnect();
+      default:
+    }
   }
 
   @override
@@ -293,11 +300,8 @@ final class FirebaseAuthRepository extends AuthRepository<fb.User> {
     try {
       return await run();
     } catch (e) {
-      try {
-        await signOut();
-      } finally {
-        rethrow;
-      }
+      signOut().ignore();
+      rethrow;
     }
   }
 }
