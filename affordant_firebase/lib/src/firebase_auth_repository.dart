@@ -255,20 +255,17 @@ final class FirebaseAuthRepository extends AuthRepository<fb.User> {
 
   @override
   Future<void> reauthenticate({
-    required Future<({String email, String password})?> Function()
-        requestEmailAndPassword,
+    required Future<EmailAndPassword> Function() getEmailAndPassword,
   }) async {
     switch (currentProvider) {
       case null:
         throw Error();
       case AuthProvider.emailAndPassword:
-        final credentials = await requestEmailAndPassword();
-        if (credentials != null) {
-          return await reauthenticateWithEmailAndPassword(
-            email: credentials.email,
-            password: credentials.password,
-          );
-        }
+        final credentials = await getEmailAndPassword();
+        return await reauthenticateWithEmailAndPassword(
+          email: credentials.email,
+          password: credentials.password,
+        );
       default:
         return await reauthenticateWithSocialProvider();
     }
