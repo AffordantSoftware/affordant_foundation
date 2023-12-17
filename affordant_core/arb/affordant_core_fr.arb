@@ -1,4 +1,7 @@
 {
+  "error_unknown_title": "Une erreur est survenue",
+  "error_unknown_message": "Une erreur inconnue est survenue. Si le problème persiste, veuillez nous contacter",
+
   "error_server_unspecified_title": "Une erreur est survenue sur notre serveur",
   "error_server_unspecified_message": "Une erreur est survenue sur notre serveur. Veuillez réessayer plus tard. Si le problème persiste, veuillez nous contacter.",
 

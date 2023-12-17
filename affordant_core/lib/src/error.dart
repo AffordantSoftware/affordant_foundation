@@ -1,3 +1,4 @@
+import 'package:affordant_core/src/l10n/affordant_core_localizations.dart';
 import 'package:flutter/widgets.dart';
 
 /// How to write a good error message:
@@ -15,4 +16,20 @@ import 'package:flutter/widgets.dart';
 mixin DisplayableError {
   String localizedTitle(BuildContext context);
   String localizedMessage(BuildContext context);
+}
+
+class UnknownError with DisplayableError implements Exception {
+  @override
+  String localizedMessage(BuildContext context) {
+    return Localizations.of<AffordantCoreLocalizations>(
+            context, AffordantCoreLocalizations)!
+        .error_unknown_message;
+  }
+
+  @override
+  String localizedTitle(BuildContext context) {
+    return Localizations.of<AffordantCoreLocalizations>(
+            context, AffordantCoreLocalizations)!
+        .error_unknown_title;
+  }
 }

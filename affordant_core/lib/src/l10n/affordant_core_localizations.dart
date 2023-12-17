@@ -93,6 +93,18 @@ abstract class AffordantCoreLocalizations {
     Locale('fr')
   ];
 
+  /// No description provided for @error_unknown_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Unexpected error'**
+  String get error_unknown_title;
+
+  /// No description provided for @error_unknown_message.
+  ///
+  /// In en, this message translates to:
+  /// **'Something unexpected error happened. Please try again later. If the problem persist please contact us'**
+  String get error_unknown_message;
+
   /// No description provided for @error_server_unspecified_title.
   ///
   /// In en, this message translates to:

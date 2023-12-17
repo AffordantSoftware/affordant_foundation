@@ -5,6 +5,12 @@ class AffordantCoreLocalizationsEn extends AffordantCoreLocalizations {
   AffordantCoreLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get error_unknown_title => 'Unexpected error';
+
+  @override
+  String get error_unknown_message => 'Something unexpected error happened. Please try again later. If the problem persist please contact us';
+
+  @override
   String get error_server_unspecified_title => 'An error occurred on our server';
 
   @override

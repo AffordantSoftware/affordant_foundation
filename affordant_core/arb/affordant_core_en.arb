@@ -1,4 +1,7 @@
 {
+  "error_unknown_title": "Unexpected error",
+  "error_unknown_message": "Something unexpected error happened. Please try again later. If the problem persist please contact us",
+
   "error_server_unspecified_title": "An error occurred on our server",
   "error_server_unspecified_message": "An error occurred on our server. Please try again later. If the problem persist please contact us.",
   

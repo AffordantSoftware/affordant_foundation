@@ -5,6 +5,12 @@ class AffordantCoreLocalizationsFr extends AffordantCoreLocalizations {
   AffordantCoreLocalizationsFr([String locale = 'fr']) : super(locale);
 
   @override
+  String get error_unknown_title => 'Une erreur est survenue';
+
+  @override
+  String get error_unknown_message => 'Une erreur inconnue est survenue. Si le problème persiste, veuillez nous contacter';
+
+  @override
   String get error_server_unspecified_title => 'Une erreur est survenue sur notre serveur';
 
   @override
