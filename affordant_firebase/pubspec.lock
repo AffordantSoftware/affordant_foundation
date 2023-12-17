@@ -5,10 +5,10 @@ packages:
     dependency: transitive
     description:
       name: _fe_analyzer_shared
-      sha256: ae92f5d747aee634b87f89d9946000c2de774be1d6ac3e58268224348cd0101a
+      sha256: "36a321c3d2cbe01cbcb3540a87b8843846e0206df3e691fa7b23e19e78de6d49"
       url: "https://pub.dev"
     source: hosted
-    version: "61.0.0"
+    version: "65.0.0"
   _flutterfire_internals:
     dependency: transitive
     description:
@@ -22,23 +22,25 @@ packages:
     description:
       path: affordant_auth
       ref: HEAD
-      resolved-ref: "560fd3bafc41ca77d58ede6fdbe8e16c9a019b83"
+      resolved-ref: "4cf79a794ebf5c6049877860e94016e26f6d6434"
       url: "https://github.com/AffordantSoftware/affordant_foundation.git"
     source: git
     version: "0.0.1"
   affordant_core:
     dependency: "direct main"
     description:
-      path: "../affordant_core"
-      relative: true
-    source: path
+      path: affordant_core
+      ref: HEAD
+      resolved-ref: "4cf79a794ebf5c6049877860e94016e26f6d6434"
+      url: "https://github.com/AffordantSoftware/affordant_foundation.git"
+    source: git
     version: "0.0.1"
   affordant_view_model:
     dependency: transitive
     description:
       path: affordant_view_model
       ref: HEAD
-      resolved-ref: "560fd3bafc41ca77d58ede6fdbe8e16c9a019b83"
+      resolved-ref: "4cf79a794ebf5c6049877860e94016e26f6d6434"
       url: "https://github.com/AffordantSoftware/affordant_foundation.git"
     source: git
     version: "0.0.1"
@@ -46,10 +48,10 @@ packages:
     dependency: transitive
     description:
       name: analyzer
-      sha256: ea3d8652bda62982addfd92fdc2d0214e5f82e43325104990d4f4c4a2a313562
+      sha256: dfe03b90ec022450e22513b5e5ca1f01c0c01de9c3fba2f7fd233cb57a6b9a07
       url: "https://pub.dev"
     source: hosted
-    version: "5.13.0"
+    version: "6.3.0"
   args:
     dependency: transitive
     description:
@@ -298,10 +300,10 @@ packages:
     dependency: transitive
     description:
       name: google_sign_in_ios
-      sha256: e050cd907db1ee441b8efc0d8db63f3514f343872fdef6de36940fb09a92b2d7
+      sha256: "0822b0abc94ff6d705d7a321ef58818ffed864787f23f5ac3451e3e6afbcf90d"
       url: "https://pub.dev"
     source: hosted
-    version: "5.7.0"
+    version: "5.7.1"
   google_sign_in_platform_interface:
     dependency: transitive
     description:
@@ -462,14 +464,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.8.3"
-  pigeon:
-    dependency: transitive
-    description:
-      name: pigeon
-      sha256: "5a79fd0b10423f6b5705525e32015597f861c31220b522a67d1e6b580da96719"
-      url: "https://pub.dev"
-    source: hosted
-    version: "11.0.1"
   plugin_platform_interface:
     dependency: transitive
     description:
@@ -502,14 +496,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
-  rust_core:
-    dependency: transitive
-    description:
-      name: rust_core
-      sha256: "2c1161bb80bf5dcb6c94ce548e1982618fc295879258573489e69e8e94e7d87d"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.5"
   shelf:
     dependency: transitive
     description:
