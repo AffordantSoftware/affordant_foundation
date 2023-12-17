@@ -13,6 +13,7 @@ typedef RegisterPrivateRepository<User> = FutureOr<void> Function(
   AuthRepository<User>,
 );
 typedef DisposePrivateRepositoryDelegate = FutureOr<void> Function();
+typedef EmailAndPassword = ({String email, String password});
 
 enum AuthProvider {
   emailAndPassword,
@@ -110,8 +111,7 @@ abstract base class AuthRepository<AuthData> with Disposable {
   Future<void> sendPasswordResetEmail(String email);
 
   Future<void> reauthenticate({
-    required Future<({String email, String password})?> Function()
-        requestEmailAndPassword,
+    required Future<EmailAndPassword> Function() getEmailAndPassword,
   });
 
   Future<void> reauthenticateWithEmailAndPassword({
