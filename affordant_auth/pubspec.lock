@@ -12,18 +12,16 @@ packages:
   affordant_core:
     dependency: "direct main"
     description:
-      path: affordant_core
-      ref: HEAD
-      resolved-ref: "560fd3bafc41ca77d58ede6fdbe8e16c9a019b83"
-      url: "https://github.com/AffordantSoftware/affordant_foundation.git"
-    source: git
+      path: "../affordant_core"
+      relative: true
+    source: path
     version: "0.0.1"
   affordant_view_model:
     dependency: "direct main"
     description:
       path: affordant_view_model
       ref: HEAD
-      resolved-ref: "560fd3bafc41ca77d58ede6fdbe8e16c9a019b83"
+      resolved-ref: e62fd79e934de72c4663d0abac186e4816553de8
       url: "https://github.com/AffordantSoftware/affordant_foundation.git"
     source: git
     version: "0.0.1"
@@ -309,6 +307,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
+  rust_core:
+    dependency: transitive
+    description:
+      name: rust_core
+      sha256: "2c1161bb80bf5dcb6c94ce548e1982618fc295879258573489e69e8e94e7d87d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.5"
   shelf:
     dependency: transitive
     description:
@@ -491,5 +497,5 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.2.0-194.0.dev <4.0.0"
+  dart: ">=3.2.0 <4.0.0"
   flutter: ">=1.16.0"

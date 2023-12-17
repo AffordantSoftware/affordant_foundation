@@ -1,9 +1,8 @@
 import 'dart:async';
-import 'package:affordant_core/affordant_core.dart';
 import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
 
-part 'errors.dart';
+part 'exceptions.dart';
 
 const _authScopeName = "authScope";
 
@@ -86,36 +85,36 @@ abstract base class AuthRepository<AuthData> with Disposable {
     }
   }
 
-  CommandResult<RegistrationError> createUserWithEmailAndPassword({
+  Future<void> createUserWithEmailAndPassword({
     required String email,
     required String password,
   });
 
-  CommandResult<SignInError> signInWithEmailAndPassword({
+  Future<void> signInWithEmailAndPassword({
     required String email,
     required String password,
   });
 
-  CommandResult<SignInError> signInAnonymously();
+  Future<void> signInAnonymously();
 
-  CommandResult<SignInError> signInWithGoogle({
+  Future<void> signInWithGoogle({
     required String iosClientID,
   });
 
-  CommandResult<SignInError> signInWithApple();
+  Future<void> signInWithApple();
 
-  CommandResult<SignInError> signInWithFacebook();
+  Future<void> signInWithFacebook();
 
-  CommandResult<SignOutError> signOut();
+  Future<void> signOut();
 
-  CommandResult<ResetPasswordError> sendPasswordResetEmail(String email);
+  Future<void> sendPasswordResetEmail(String email);
 
-  CommandResult<ReAuthenticateError> reauthenticateWithEmailAndPassword({
+  Future<void> reauthenticateWithEmailAndPassword({
     required String email,
     required String password,
   });
 
-  CommandResult<ReAuthenticateError> reauthenticateWithSocialProvider();
+  Future<void> reauthenticateWithSocialProvider();
 
-  CommandResult<DeleteAccountError> deleteAccount();
+  Future<void> deleteAccount();
 }
