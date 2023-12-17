@@ -190,11 +190,11 @@ abstract base class QueryViewModel<QueryParameters, DisplayParameters,
         error: null,
         isLoading: false,
       ));
-    } catch (e, s) {
+    } catch (e) {
       _safeEmit(
         state.copyWith(
           isLoading: false,
-          error: QueryError(e, s),
+          error: QueryError(),
         ),
       );
     }
