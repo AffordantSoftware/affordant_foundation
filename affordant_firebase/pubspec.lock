@@ -22,7 +22,7 @@ packages:
     description:
       path: affordant_auth
       ref: HEAD
-      resolved-ref: "4cf79a794ebf5c6049877860e94016e26f6d6434"
+      resolved-ref: cf79c962cbf469c8b2ea25cd2f3262c6cd5f927c
       url: "https://github.com/AffordantSoftware/affordant_foundation.git"
     source: git
     version: "0.0.1"

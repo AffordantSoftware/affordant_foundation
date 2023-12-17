@@ -79,9 +79,7 @@ final class FirebaseAuthRepository extends AuthRepository<fb.User> {
   }
 
   @override
-  Future<void> signInWithGoogle({
-    required String iosClientID,
-  }) async {
+  Future<void> signInWithGoogle() async {
     return await _safeFirebaseCall(
       () async {
         final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
