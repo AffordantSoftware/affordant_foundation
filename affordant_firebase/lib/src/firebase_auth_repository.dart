@@ -120,12 +120,12 @@ final class FirebaseAuthRepository extends AuthRepository<fb.User> {
 
   @override
   Future<void> signOut() async {
-    await _firebase.signOut();
     switch (currentProvider) {
       case AuthProvider.google:
         await GoogleSignIn().disconnect();
       default:
     }
+    await _firebase.signOut();
   }
 
   @override
