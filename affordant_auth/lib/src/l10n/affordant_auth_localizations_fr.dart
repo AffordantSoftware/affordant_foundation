@@ -15,4 +15,10 @@ class AffordantAuthLocalizationsFr extends AffordantAuthLocalizations {
 
   @override
   String get error_sign_in_invalid_credentials_message => 'Les identifiants fournis sont invalides.';
+
+  @override
+  String get error_sign_in_social_provider_title => 'Impossible de se connecter';
+
+  @override
+  String get error_sign_in_social_provider_message => 'Une erreur est survenue lors de la tentative de connection avec ce fournisseur d\'authentification';
 }

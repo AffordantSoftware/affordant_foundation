@@ -4,6 +4,9 @@
   
   "error_sign_in_invalid_credentials_title": "Identifiants invalides.",
   "error_sign_in_invalid_credentials_message": "Les identifiants fournis sont invalides.",
+
+  "error_sign_in_social_provider_title": "Impossible de se connecter",
+  "error_sign_in_social_provider_message": "Une erreur est survenue lors de la tentative de connection avec ce fournisseur d'authentification",
   
   "@END": "Don't add coma here"
 }

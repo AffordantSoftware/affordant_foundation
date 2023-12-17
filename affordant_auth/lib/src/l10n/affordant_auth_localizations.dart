@@ -114,8 +114,20 @@ abstract class AffordantAuthLocalizations {
   /// No description provided for @error_sign_in_invalid_credentials_message.
   ///
   /// In en, this message translates to:
-  /// **'The password entered doesn\'t match the credential. Please try another password or use a different email address. If the problem persist, please try to reset the password.'**
+  /// **'The password entered doesn\'t match the credential. Please try another password or use a different email address.'**
   String get error_sign_in_invalid_credentials_message;
+
+  /// No description provided for @error_sign_in_social_provider_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to connect'**
+  String get error_sign_in_social_provider_title;
+
+  /// No description provided for @error_sign_in_social_provider_message.
+  ///
+  /// In en, this message translates to:
+  /// **'An error happened while trying to connect with the authentication provider.'**
+  String get error_sign_in_social_provider_message;
 }
 
 class _AffordantAuthLocalizationsDelegate extends LocalizationsDelegate<AffordantAuthLocalizations> {
