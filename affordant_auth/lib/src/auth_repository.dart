@@ -109,6 +109,11 @@ abstract base class AuthRepository<AuthData> with Disposable {
 
   Future<void> sendPasswordResetEmail(String email);
 
+  Future<void> reauthenticate({
+    required Future<({String email, String password})?> Function()
+        requestEmailAndPassword,
+  });
+
   Future<void> reauthenticateWithEmailAndPassword({
     required String email,
     required String password,

@@ -252,4 +252,25 @@ final class FirebaseAuthRepository extends AuthRepository<fb.User> {
       (e, _) => SocialSignInException(e),
     );
   }
+
+  @override
+  Future<void> reauthenticate({
+    required Future<({String email, String password})?> Function()
+        requestEmailAndPassword,
+  }) async {
+    switch (currentProvider) {
+      case null:
+        throw Error();
+      case AuthProvider.emailAndPassword:
+        final credentials = await requestEmailAndPassword();
+        if (credentials != null) {
+          return await reauthenticateWithEmailAndPassword(
+            email: credentials.email,
+            password: credentials.password,
+          );
+        }
+      default:
+        return await reauthenticateWithSocialProvider();
+    }
+  }
 }
