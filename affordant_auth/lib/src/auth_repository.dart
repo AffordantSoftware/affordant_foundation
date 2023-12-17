@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'package:affordant_auth/affordant_auth.dart';
+import 'package:affordant_core/affordant_core.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
-import 'package:meta/meta.dart';
 
 part 'exceptions.dart';
 
@@ -97,9 +99,7 @@ abstract base class AuthRepository<AuthData> with Disposable {
 
   Future<void> signInAnonymously();
 
-  Future<void> signInWithGoogle({
-    required String iosClientID,
-  });
+  Future<void> signInWithGoogle();
 
   Future<void> signInWithApple();
 
