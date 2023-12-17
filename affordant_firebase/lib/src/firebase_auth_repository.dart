@@ -70,9 +70,11 @@ final class FirebaseAuthRepository extends AuthRepository<fb.User> {
     required String password,
   }) async {
     return await _safeFirebaseCall(
-      () => _firebase.signInWithEmailAndPassword(
-        email: email,
-        password: password,
+      () => _safeSignInCall(
+        () => _firebase.signInWithEmailAndPassword(
+          email: email,
+          password: password,
+        ),
       ),
       _convertSignInWithEmailAndPAsswordErrorCodeToException,
     );
@@ -81,22 +83,30 @@ final class FirebaseAuthRepository extends AuthRepository<fb.User> {
   @override
   Future<void> signInWithGoogle() async {
     return await _safeFirebaseCall(
-      () async {
-        final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      () => _safeSignInCall(
+        () async {
+          try {
+            final GoogleSignInAccount? googleUser =
+                await _googleSignIn.signIn();
 
-        // Obtain the auth details from the request
-        final GoogleSignInAuthentication? googleAuth =
-            await googleUser?.authentication;
+            // Obtain the auth details from the request
+            final GoogleSignInAuthentication? googleAuth =
+                await googleUser?.authentication;
 
-        // Create a new credential
-        final credential = fb.GoogleAuthProvider.credential(
-          accessToken: googleAuth?.accessToken,
-          idToken: googleAuth?.idToken,
-        );
+            // Create a new credential
+            final credential = fb.GoogleAuthProvider.credential(
+              accessToken: googleAuth?.accessToken,
+              idToken: googleAuth?.idToken,
+            );
 
-        // Once signed in, return the UserCredential
-        await _firebase.signInWithCredential(credential);
-      },
+            // Once signed in, return the UserCredential
+            await _firebase.signInWithCredential(credential);
+          } catch (e) {
+            await _firebase.signOut();
+            rethrow;
+          }
+        },
+      ),
       (e, _) => SocialSignInException(e),
     );
   }
@@ -120,12 +130,15 @@ final class FirebaseAuthRepository extends AuthRepository<fb.User> {
 
   @override
   Future<void> signOut() async {
-    switch (currentProvider) {
-      case AuthProvider.google:
-        await GoogleSignIn().disconnect();
-      default:
+    try {
+      switch (currentProvider) {
+        case AuthProvider.google:
+          await _googleSignIn.disconnect();
+        default:
+      }
+    } finally {
+      await _firebase.signOut();
     }
-    await _firebase.signOut();
   }
 
   @override
@@ -141,15 +154,17 @@ final class FirebaseAuthRepository extends AuthRepository<fb.User> {
   @override
   Future<void> signInWithApple() async {
     return await _safeFirebaseCall(
-      () async {
-        final appleProvider = fb.AppleAuthProvider();
-        if (kIsWeb) {
-          await _firebase.signInWithPopup(appleProvider);
-        } else {
-          await _firebase.signInWithProvider(appleProvider);
-        }
-        return;
-      },
+      () => _safeSignInCall(
+        () async {
+          final appleProvider = fb.AppleAuthProvider();
+          if (kIsWeb) {
+            await _firebase.signInWithPopup(appleProvider);
+          } else {
+            await _firebase.signInWithProvider(appleProvider);
+          }
+          return;
+        },
+      ),
       (e, code) => SocialSignInException(e),
     );
   }
@@ -165,12 +180,13 @@ final class FirebaseAuthRepository extends AuthRepository<fb.User> {
     required String password,
   }) async {
     await _safeFirebaseCall(
-      () => _firebase.currentUser!.reauthenticateWithCredential(
-        fb.EmailAuthProvider.credential(
-          email: email,
-          password: password,
-        ),
-      ),
+      () => _safeSignInCall(
+          () => _firebase.currentUser!.reauthenticateWithCredential(
+                fb.EmailAuthProvider.credential(
+                  email: email,
+                  password: password,
+                ),
+              )),
       _convertSignInWithEmailAndPAsswordErrorCodeToException,
     );
   }
@@ -268,6 +284,20 @@ final class FirebaseAuthRepository extends AuthRepository<fb.User> {
         );
       default:
         return await reauthenticateWithSocialProvider();
+    }
+  }
+
+  Future<T> _safeSignInCall<T>(
+    Future<T> Function() run,
+  ) async {
+    try {
+      return await run();
+    } catch (e) {
+      try {
+        await signOut();
+      } finally {
+        rethrow;
+      }
     }
   }
 }
