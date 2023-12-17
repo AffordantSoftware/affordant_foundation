@@ -202,7 +202,7 @@ final class FirebaseAuthRepository extends AuthRepository<fb.User> {
   @override
   AuthProvider? get currentProvider {
     for (final fb.UserInfo(:providerId)
-        in _firebase.currentUser?.providerData.reversed) {
+        in _firebase.currentUser?.providerData.reversed ?? []) {
       final provider = switch (providerId) {
         'google.com' => AuthProvider.google,
         'apple.com' => AuthProvider.apple,
