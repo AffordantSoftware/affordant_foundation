@@ -64,6 +64,7 @@ class _View<StepType extends Step,
     if (loading) return loadingBuilder(context);
     final steps = context.select((OnboardingViewModelType vm) => vm.steps);
     return PageView.builder(
+      physics: const NeverScrollableScrollPhysics(),
       controller: context.read<OnboardingViewModelType>().pageController,
       itemBuilder: (context, index) => stepBuilder(
         context,
