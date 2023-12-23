@@ -84,7 +84,7 @@ class QueryViewModelState<QueryParameters, DisplayParameters, QueryResult,
 /// when the user changes display parameters.
 abstract base class QueryViewModel<QueryParameters, DisplayParameters,
         QueryResult, DisplayData>
-    extends ViewModel<
+    extends Cubit<
         QueryViewModelState<QueryParameters, DisplayParameters, QueryResult,
             DisplayData>> {
   QueryViewModel({

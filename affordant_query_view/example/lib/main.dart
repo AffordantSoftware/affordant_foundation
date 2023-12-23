@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         scheme: FlexScheme.indigoM3,
         useMaterial3: true,
       ),
-      home: Bind(
+      home: BlocProvider(
         create: (_) => SearchViewModel(),
         child: const HomePage(),
       ),
