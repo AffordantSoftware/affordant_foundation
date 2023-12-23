@@ -1,7 +1,7 @@
 name: affordant_view_model
 description: A ViewModel API build on top of the Cubit class from the Bloc library
 repository: https://github.com/AffordantSoftware/affordant_foundation
-version: 0.0.1
+version: 0.1.0
 publish_to: "none"
 
 environment:
@@ -15,8 +15,9 @@ dependencies:
       url: https://github.com/AffordantSoftware/affordant_foundation.git
       path: affordant_core
 
-  bloc: ^8.1.2 
+  provider: ^6.1.1
   flutter_bloc: ^8.1.3
+  
 
 dev_dependencies:
   lints: ^2.0.0

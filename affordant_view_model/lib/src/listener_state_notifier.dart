@@ -1,13 +1,8 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-/// A wrapper around Cubit from bloc package
-abstract class ViewModel<T> extends Cubit<T> {
-  ViewModel(super.initialState);
-}
-
-/// Provide [onEach] and [forEach] functions for a ViewModel, similar
+/// Provide [onEach] and [forEach] and [ForEachAsync] functions for a [Cubit], similar
 /// to [Bloc]'s [Emitter.forEach] and [Emitter.onEach]
 /// Usage:
 /// ```dart
@@ -17,13 +12,13 @@ abstract class ViewModel<T> extends Cubit<T> {
 ///   }
 /// }
 /// ```
-mixin Observer<T> on ViewModel<T> {
+mixin Listener<T> on Cubit<T> {
   final Set<StreamSubscription> _streamSubscriptions = {};
 
   /// Call onData or onError for each event received from the stream
-  void onEach<StreamType>(
-    Stream<StreamType> s, {
-    required void Function(StreamType) onData,
+  void onEach<DataType>(
+    Stream<DataType> s, {
+    required void Function(DataType) onData,
     void Function(Object, StackTrace)? onError,
     void Function()? onDone,
     bool? cancelOnError,
@@ -38,12 +33,12 @@ mixin Observer<T> on ViewModel<T> {
   }
 
   /// Emit a new state for each event received from the stream
-  void forEach<StreamType>(
-    Stream<StreamType> stream, {
-    required T Function(StreamType) onData,
+  void forEach<DataType>(
+    Stream<DataType> stream, {
+    required T Function(DataType) onData,
     T Function(Object, StackTrace)? onError,
   }) {
-    void handler(StreamType d) {
+    void handler(DataType d) {
       emit(onData(d));
     }
 
@@ -62,11 +57,15 @@ mixin Observer<T> on ViewModel<T> {
   }
 
   /// Emit a new state for each event received from the stream
-  void forEachAsync<StreamType>(
-    Stream<StreamType> stream, {
-    required FutureOr<T> Function(StreamType) onData,
+  void forEachAsync<DataType>(
+    Stream<DataType> stream, {
+    required FutureOr<T> Function(DataType) onData,
     T Function(Object, StackTrace)? onError,
   }) {
+    void setState(T newState) {
+      emit(newState);
+    }
+
     Function? errorHandler;
     if (onError != null) {
       errorHandler = (Object e, StackTrace s) {
@@ -75,7 +74,7 @@ mixin Observer<T> on ViewModel<T> {
     }
 
     final sub = stream.asyncMap(onData).listen(
-          emit,
+          setState,
           onError: errorHandler,
         );
     _streamSubscriptions.add(sub);
@@ -88,7 +87,7 @@ mixin Observer<T> on ViewModel<T> {
   }
 }
 
-class MutableStreamSubscription<StreamType> {
+class ReassignableStreamSubscription<DataType> {
   /// A stream subscription that can be re-assigned
   /// This is useful when you need a to switch between multiple stream of
   /// the same type.
@@ -120,9 +119,9 @@ class MutableStreamSubscription<StreamType> {
   ///   }
   /// }
   /// ```
-  MutableStreamSubscription(
-    this._observer,
-    Stream<StreamType> stream, {
+  ReassignableStreamSubscription(
+    this._listener,
+    Stream<DataType> stream, {
     required this.onData,
     this.onError,
   }) {
@@ -130,17 +129,17 @@ class MutableStreamSubscription<StreamType> {
       onData,
       onError: onError,
     );
-    _observer._streamSubscriptions.add(_sub);
+    _listener._streamSubscriptions.add(_sub);
   }
 
-  final Observer _observer;
+  final Listener _listener;
 
-  late StreamSubscription<StreamType> _sub;
-  final void Function(StreamType) onData;
+  late StreamSubscription<DataType> _sub;
+  final void Function(DataType) onData;
   final void Function(Object, StackTrace)? onError;
 
-  Future<void> setStream(Stream<StreamType> stream) async {
-    _observer._streamSubscriptions.remove(_sub);
+  Future<void> setSource(Stream<DataType> stream) async {
+    _listener._streamSubscriptions.remove(_sub);
     final oldSub = _sub;
     await oldSub.cancel();
     _sub = stream.listen(
