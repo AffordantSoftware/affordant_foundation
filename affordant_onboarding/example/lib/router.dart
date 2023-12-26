@@ -44,13 +44,13 @@ class HomeRoute extends GoRouteData {
 
 class MyOnboardingViewModel extends OnboardingViewModel<SessionData, MyStep> {
   MyOnboardingViewModel({
-    required super.onboardingModel,
+    required super.onboardingRepository,
     required super.navigationService,
     required super.redirection,
   });
 
   void setStep1Read() {
-    onboardingModel.sessionData?.hasReadStep1 = true;
+    sessionData = sessionData?..hasReadStep1 = true;
   }
 }
 
@@ -62,15 +62,15 @@ class OnboardingRoute extends GoRouteData with OnboardingRouteMixin {
   final String redirection = '/';
 
   @override
-  getModel(BuildContext context) => exampleModel;
+  getModel(BuildContext context) => exampleRepo;
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return OnboardingView(
       createViewModel: (_) => MyOnboardingViewModel(
+        onboardingRepository: exampleRepo,
         redirection: redirection,
         navigationService: router,
-        onboardingModel: exampleModel,
       ),
       loadingBuilder: (_) => const Scaffold(
         body: Center(child: CircularProgressIndicator()),

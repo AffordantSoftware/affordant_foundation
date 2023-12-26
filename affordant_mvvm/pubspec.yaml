@@ -11,9 +11,10 @@ dependencies:
   flutter:
     sdk: flutter    
   affordant_core:
-    git:
-      url: https://github.com/AffordantSoftware/affordant_foundation.git
-      path: affordant_core
+    path: ../affordant_core
+    # git:
+    #   url: https://github.com/AffordantSoftware/affordant_foundation.git
+    #   path: affordant_core
   provider: ^6.1.1
   signals: ^2.1.10
   get_it: ^7.6.4

@@ -10,13 +10,15 @@ dependencies:
   flutter:
     sdk: flutter
   affordant_core:
-    git:
-      url: https://github.com/AffordantSoftware/affordant_foundation.git
-      path: affordant_core
-  affordant_view_model:
-    git:
-      url: https://github.com/AffordantSoftware/affordant_foundation.git
-      path: affordant_view_model
+    path: ../affordant_core
+    # git:
+    #   url: https://github.com/AffordantSoftware/affordant_foundation.git
+    #   path: affordant_core
+  affordant_mvvm:
+    path: ../affordant_mvvm
+    # git:
+    #   url: https://github.com/AffordantSoftware/affordant_foundation.git
+    #   path: affordant_mvvm
   dart_mappable: ^3.2.0
   intl: ^0.18.1
   flutter_localizations:
@@ -27,3 +29,4 @@ dev_dependencies:
   dart_mappable_builder: ^3.2.1
   lints: ^2.0.0
   test: ^1.21.0
+

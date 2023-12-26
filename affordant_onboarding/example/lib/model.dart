@@ -1,12 +1,20 @@
 import 'package:affordant_onboarding/affordant_onboarding.dart';
 
-import 'repository.dart';
+class ExampleOnboardingStorageDelegate implements StorageDelegate<SessionData> {
+  const ExampleOnboardingStorageDelegate();
 
-// sealed class ExampleStep<T> extends Step<T> {}
+  @override
+  SessionData? getSessionData() => null;
 
-// class Step1 extends ExampleStep<bool> {}
+  @override
+  void setSessionData(SessionData? sessionData) {}
 
-// class Step2 extends ExampleStep<bool> {}
+  @override
+  List<String>? getVisitedSteps() => null;
+
+  @override
+  void setVisitedSteps(List<String>? visitedSteps) {}
+}
 
 class SessionData {
   bool hasReadStep1 = false;
@@ -18,18 +26,17 @@ sealed class MyStep with Step<SessionData> {
   String get id => runtimeType.toString();
 
   @override
-  bool validate(SessionData data) => true;
+  bool canGoNext(SessionData? data) => true;
 }
 
 class Step1 extends MyStep {}
 
 class Step2 extends MyStep {}
 
-class MyOnboardingModel extends OnboardingModel<SessionData, MyStep> {
-  MyOnboardingModel({
-    required super.onboardingRepository,
-  }) : super(
-          initialSessionData: () => SessionData(),
+class MyOnboardingRepository extends OnboardingRepository<SessionData, MyStep> {
+  MyOnboardingRepository()
+      : super(
+          storageDelegate: const ExampleOnboardingStorageDelegate(),
           steps: [
             Step1(),
             Step2(),
@@ -37,6 +44,4 @@ class MyOnboardingModel extends OnboardingModel<SessionData, MyStep> {
         );
 }
 
-final exampleModel = MyOnboardingModel(
-  onboardingRepository: ExampleOnboardingRepository(),
-);
+final exampleRepo = MyOnboardingRepository();

@@ -13,12 +13,8 @@ dependencies:
   go_router: ^12.1.0
   affordant_onboarding:
     path: ../
-  affordant_view_model:
-    path: ../../affordant_view_model
-
-dependency_overrides:
-  affordant_view_model:
-    path: ../../affordant_view_model
+  affordant_mvvm:
+    path: ../../affordant_mvvm
 
 dev_dependencies:
   flutter_test:

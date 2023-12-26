@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 void main() async {
   print("test");
-  await exampleModel.init();
+  await exampleRepo.init();
   runApp(const OnboardingExample());
 }
 

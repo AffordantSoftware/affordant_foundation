@@ -1,5 +1,5 @@
+import 'package:affordant_mvvm/affordant_mvvm.dart';
 import 'package:affordant_onboarding/affordant_onboarding.dart';
-import 'package:affordant_view_model/affordant_view_model.dart';
 import 'package:example/router.dart';
 import 'package:flutter/material.dart' hide Step;
 
@@ -40,7 +40,7 @@ class OnboardingScreen extends StatelessWidget {
           Row(
             children: [
               ElevatedButton(
-                onPressed: () => context.read<MyOnboardingViewModel>().prev(),
+                onPressed: context.watch<MyOnboardingViewModel>().prev,
                 child: const Text("back"),
               ),
               ElevatedButton(
