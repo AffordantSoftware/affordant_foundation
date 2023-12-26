@@ -9,8 +9,19 @@ import 'repository.dart';
 // class Step2 extends ExampleStep<bool> {}
 
 class SessionData {
-  bool hasReadStep1 = false;
-  bool hasReadStep2 = false;
+  final bool hasReadStep1;
+  final bool hasReadStep2;
+
+  SessionData({required this.hasReadStep1, required this.hasReadStep2});
+
+  SessionData copyWith({
+    bool? hasReadStep1,
+    bool? hasReadStep2,
+  }) =>
+      SessionData(
+        hasReadStep1: hasReadStep1 ?? this.hasReadStep1,
+        hasReadStep2: hasReadStep2 ?? this.hasReadStep2,
+      );
 }
 
 sealed class MyStep with Step<SessionData> {
@@ -18,18 +29,21 @@ sealed class MyStep with Step<SessionData> {
   String get id => runtimeType.toString();
 
   @override
-  bool validate(SessionData data) => true;
+  bool canGoNext(SessionData? data) => true;
 }
 
 class Step1 extends MyStep {}
 
 class Step2 extends MyStep {}
 
-class MyOnboardingModel extends OnboardingModel<SessionData, MyStep> {
-  MyOnboardingModel({
-    required super.onboardingRepository,
+class MyOnboardingRepo extends OnboardingRepository<SessionData, MyStep> {
+  MyOnboardingRepo({
+    required super.storageDelegate,
   }) : super(
-          initialSessionData: () => SessionData(),
+          initialSessionData: () => SessionData(
+            hasReadStep1: false,
+            hasReadStep2: false,
+          ),
           steps: [
             Step1(),
             Step2(),
@@ -37,6 +51,6 @@ class MyOnboardingModel extends OnboardingModel<SessionData, MyStep> {
         );
 }
 
-final exampleModel = MyOnboardingModel(
-  onboardingRepository: ExampleOnboardingRepository(),
+final exampleModel = MyOnboardingRepo(
+  storageDelegate: ExampleOnboardingStorage(),
 );

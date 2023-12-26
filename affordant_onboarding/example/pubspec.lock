@@ -14,9 +14,16 @@ packages:
     description:
       path: affordant_core
       ref: HEAD
-      resolved-ref: a64fe87c16d2227882fe2310e880e0a5a00c1ee5
+      resolved-ref: "99d5fd5ddae0ad0b57dd81b35c001fcb2161520d"
       url: "https://github.com/AffordantSoftware/affordant_foundation.git"
     source: git
+    version: "0.0.1"
+  affordant_mvvm:
+    dependency: "direct main"
+    description:
+      path: "../../affordant_mvvm"
+      relative: true
+    source: path
     version: "0.0.1"
   affordant_onboarding:
     dependency: "direct main"
@@ -25,13 +32,6 @@ packages:
       relative: true
     source: path
     version: "1.0.0+1"
-  affordant_view_model:
-    dependency: "direct main"
-    description:
-      path: "../../affordant_view_model"
-      relative: true
-    source: path
-    version: "0.0.1"
   analyzer:
     dependency: transitive
     description:
@@ -484,6 +484,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.3"
+  rxdart:
+    dependency: transitive
+    description:
+      name: rxdart
+      sha256: "0c7c0cedd93788d996e33041ffecda924cc54389199cde4e6a34b440f50044cb"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.27.7"
   shelf:
     dependency: transitive
     description:
@@ -629,10 +637,10 @@ packages:
     dependency: transitive
     description:
       name: web_socket_channel
-      sha256: d88238e5eac9a42bb43ca4e721edba3c08c6354d4a53063afaa568516217621b
+      sha256: "045ec2137c27bf1a32e6ffa0e734d532a6677bf9016a0d1a406c54e499ff945b"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.0"
+    version: "2.4.1"
   yaml:
     dependency: transitive
     description:
@@ -642,5 +650,5 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.2.0-194.0.dev <4.0.0"
+  dart: ">=3.2.0 <4.0.0"
   flutter: ">=3.10.0"

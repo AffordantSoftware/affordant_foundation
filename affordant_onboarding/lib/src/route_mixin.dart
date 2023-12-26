@@ -2,18 +2,18 @@ import 'package:affordant_mvvm/affordant_mvvm.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/widgets.dart';
 
-import 'model.dart';
+import 'repository.dart';
 import 'view_model.dart';
 
 mixin OnboardingRouteMixin on GoRouteData {
   String get redirection;
 
-  OnboardingModel getModel(BuildContext context);
+  OnboardingRepository getRepository(BuildContext context);
 
   @override
   String? redirect(BuildContext context, GoRouterState state) {
-    final model = getModel(context);
-    if (model.isDone) {
+    final repository = getRepository(context);
+    if (repository.state.isDone) {
       return redirection;
     }
     return null;

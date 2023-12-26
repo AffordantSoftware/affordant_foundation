@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:affordant_onboarding/affordant_onboarding.dart';
 import 'package:example/model.dart';
 
-class ExampleOnboardingRepository implements OnboardingRepository<SessionData> {
+class ExampleOnboardingStorage
+    implements OnboardingStorageDelegate<SessionData> {
   @override
   Future<SessionData?> getSessionData() async {
     return null;
@@ -13,8 +16,8 @@ class ExampleOnboardingRepository implements OnboardingRepository<SessionData> {
   }
 
   @override
-  Future<void> markStepVisited(String stepID, bool visited) async {}
+  Future<void> setSessionData(data) async {}
 
   @override
-  Future<void> setSessionData(data) async {}
+  FutureOr<void> setVisitedSteps(List<String>? visitedSteps) {}
 }

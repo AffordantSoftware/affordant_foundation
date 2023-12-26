@@ -16,10 +16,6 @@ dependencies:
   affordant_mvvm:
     path: ../../affordant_mvvm
 
-dependency_overrides:
-  affordant_view_model:
-    path: ../../affordant_view_model
-
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:affordant_onboarding/affordant_onboarding.dart';
 import 'package:example/model.dart';
 import 'package:flutter/material.dart';
@@ -44,13 +43,17 @@ class HomeRoute extends GoRouteData {
 
 class MyOnboardingViewModel extends OnboardingViewModel<SessionData, MyStep> {
   MyOnboardingViewModel({
-    required super.onboardingModel,
+    required super.onboardingRepository,
     required super.navigationService,
     required super.redirection,
   });
 
   void setStep1Read() {
-    onboardingModel.sessionData?.hasReadStep1 = true;
+    onboardingRepository.setSessionData(
+      state.sessionData?.copyWith(
+        hasReadStep1: true,
+      ),
+    );
   }
 }
 
@@ -62,7 +65,7 @@ class OnboardingRoute extends GoRouteData with OnboardingRouteMixin {
   final String redirection = '/';
 
   @override
-  getModel(BuildContext context) => exampleModel;
+  getRepository(BuildContext context) => exampleModel;
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
@@ -70,7 +73,7 @@ class OnboardingRoute extends GoRouteData with OnboardingRouteMixin {
       createViewModel: (_) => MyOnboardingViewModel(
         redirection: redirection,
         navigationService: router,
-        onboardingModel: exampleModel,
+        onboardingRepository: exampleModel,
       ),
       loadingBuilder: (_) => const Scaffold(
         body: Center(child: CircularProgressIndicator()),
