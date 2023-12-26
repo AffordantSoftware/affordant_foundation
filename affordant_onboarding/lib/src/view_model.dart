@@ -1,4 +1,4 @@
-import 'package:affordant_view_model/affordant_view_model.dart';
+import 'package:affordant_mvvm/affordant_mvvm.dart';
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:go_router/go_router.dart';
@@ -25,7 +25,8 @@ class OnboardingState<SessionDataType, StepType extends Step<SessionDataType>>
 }
 
 class OnboardingViewModel<SessionData, StepType extends Step<SessionData>>
-    extends ViewModel<OnboardingState<SessionData, StepType>> with Observer {
+    extends Cubit<OnboardingState<SessionData, StepType>>
+    with StreamListenerCubit {
   OnboardingViewModel({
     this.pageTransitionCurve = Curves.easeInOutCubic,
     this.pageTransitionDuration = const Duration(milliseconds: 460),

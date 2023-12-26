@@ -1,4 +1,4 @@
-import 'package:affordant_view_model/affordant_view_model.dart';
+import 'package:affordant_mvvm/affordant_mvvm.dart';
 import 'package:example/view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         scheme: FlexScheme.indigoM3,
         useMaterial3: true,
       ),
-      home: Bind(
+      home: BlocProvider(
         create: (_) => SearchViewModel(),
         child: const HomePage(),
       ),

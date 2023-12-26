@@ -1,6 +1,6 @@
 import 'dart:async';
+import 'package:affordant_mvvm/affordant_mvvm.dart';
 import 'package:affordant_query_view/src/errors.dart';
-import 'package:affordant_view_model/affordant_view_model.dart';
 import 'package:affordant_core/affordant_core.dart';
 import 'package:dart_mappable/dart_mappable.dart';
 
@@ -84,7 +84,7 @@ class QueryViewModelState<QueryParameters, DisplayParameters, QueryResult,
 /// when the user changes display parameters.
 abstract base class QueryViewModel<QueryParameters, DisplayParameters,
         QueryResult, DisplayData>
-    extends ViewModel<
+    extends Cubit<
         QueryViewModelState<QueryParameters, DisplayParameters, QueryResult,
             DisplayData>> {
   QueryViewModel({

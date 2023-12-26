@@ -1,4 +1,4 @@
-name: affordant_view_model
+name: affordant_mvvm
 description: A ViewModel API build on top of the Cubit class from the Bloc library
 repository: https://github.com/AffordantSoftware/affordant_foundation
 version: 0.0.1
@@ -17,6 +17,8 @@ dependencies:
 
   bloc: ^8.1.2 
   flutter_bloc: ^8.1.3
+  provider: ^6.1.1
+  rxdart: ^0.27.7
 
 dev_dependencies:
   lints: ^2.0.0

@@ -11,10 +11,8 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.2
   flex_color_scheme: ^7.3.1
-  affordant_view_model:
-    git:
-      url: https://github.com/AffordantSoftware/affordant_foundation.git
-      path: affordant_view_model
+  affordant_mvvm:
+    path: ../../affordant_mvvm/
   affordant_query_view:
     path: ../
   dart_mappable: ^3.2.0

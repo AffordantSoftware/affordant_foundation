@@ -1,4 +1,4 @@
-import 'package:affordant_view_model/affordant_view_model.dart';
+import 'package:affordant_mvvm/affordant_mvvm.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/widgets.dart';
 
@@ -36,7 +36,7 @@ class OnboardingView<StepType extends Step,
 
   @override
   Widget build(BuildContext context) {
-    return Bind<OnboardingViewModelType>(
+    return BlocProvider<OnboardingViewModelType>(
       create: createViewModel,
       child: _View<StepType, OnboardingViewModelType>(
         loadingBuilder: loadingBuilder,
