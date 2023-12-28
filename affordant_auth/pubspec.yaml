@@ -13,17 +13,21 @@ dependencies:
   get_it: ^7.6.0
   meta: ^1.9.1
   affordant_core:
-    git:
-      url: https://github.com/AffordantSoftware/affordant_foundation.git
-      path: affordant_core
-  affordant_view_model:
-    git:
-      url: https://github.com/AffordantSoftware/affordant_foundation.git
-      path: affordant_view_model
+    path: ../affordant_core
+    # git:
+    #   url: https://github.com/AffordantSoftware/affordant_foundation.git
+    #   path: affordant_core
+  affordant_mvvm:
+    path: ../affordant_mvvm
+    # git:
+    #   url: https://github.com/AffordantSoftware/affordant_foundation.git
+    #   path: affordant_view_model
 
   intl: ^0.18.1
   flutter_localizations:
     sdk: flutter
+  go_router: ^13.0.0
+  collection: ^1.18.0
 
 dev_dependencies:
   lints: ^2.0.0

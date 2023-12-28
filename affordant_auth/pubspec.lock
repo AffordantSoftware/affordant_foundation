@@ -12,20 +12,16 @@ packages:
   affordant_core:
     dependency: "direct main"
     description:
-      path: affordant_core
-      ref: HEAD
-      resolved-ref: "6dfbe7f5acc56d0d3f999eb3cb6ab44681967bbe"
-      url: "https://github.com/AffordantSoftware/affordant_foundation.git"
-    source: git
+      path: "../affordant_core"
+      relative: true
+    source: path
     version: "0.0.1"
-  affordant_view_model:
+  affordant_mvvm:
     dependency: "direct main"
     description:
-      path: affordant_view_model
-      ref: HEAD
-      resolved-ref: "6dfbe7f5acc56d0d3f999eb3cb6ab44681967bbe"
-      url: "https://github.com/AffordantSoftware/affordant_foundation.git"
-    source: git
+      path: "../affordant_mvvm"
+      relative: true
+    source: path
     version: "0.0.1"
   analyzer:
     dependency: transitive
@@ -84,7 +80,7 @@ packages:
     source: hosted
     version: "1.1.1"
   collection:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: collection
       sha256: ee67cb0715911d28db6bf4af1026078bd6f0128b07a5f66fb2ed94ec6783c09a
@@ -141,6 +137,11 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_web_plugins:
+    dependency: transitive
+    description: flutter
+    source: sdk
+    version: "0.0.0"
   frontend_server_client:
     dependency: transitive
     description:
@@ -165,6 +166,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.2"
+  go_router:
+    dependency: "direct main"
+    description:
+      name: go_router
+      sha256: ca7e4a2249f96773152f1853fa25933ac752495cdd7fdf5dafb9691bd05830fd
+      url: "https://pub.dev"
+    source: hosted
+    version: "13.0.0"
   http_multi_server:
     dependency: transitive
     description:
@@ -309,6 +318,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
+  rxdart:
+    dependency: transitive
+    description:
+      name: rxdart
+      sha256: "0c7c0cedd93788d996e33041ffecda924cc54389199cde4e6a34b440f50044cb"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.27.7"
   shelf:
     dependency: transitive
     description:
@@ -492,4 +509,4 @@ packages:
     version: "3.1.2"
 sdks:
   dart: ">=3.2.0-194.0.dev <4.0.0"
-  flutter: ">=1.16.0"
+  flutter: ">=3.10.0"
