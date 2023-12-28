@@ -12,11 +12,9 @@ packages:
   affordant_core:
     dependency: transitive
     description:
-      path: affordant_core
-      ref: HEAD
-      resolved-ref: "99d5fd5ddae0ad0b57dd81b35c001fcb2161520d"
-      url: "https://github.com/AffordantSoftware/affordant_foundation.git"
-    source: git
+      path: "../../affordant_core"
+      relative: true
+    source: path
     version: "0.0.1"
   affordant_mvvm:
     dependency: "direct main"

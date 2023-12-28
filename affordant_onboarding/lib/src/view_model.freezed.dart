@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'repository.dart';
+part of 'view_model.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -16,9 +16,12 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$OnboardingState<SessionData, StepType extends Step<SessionData>> {
-  OnboardingStatus get status => throw _privateConstructorUsedError;
-  SessionData? get data => throw _privateConstructorUsedError;
+  SessionData? get sessionData => throw _privateConstructorUsedError;
   StepType? get step => throw _privateConstructorUsedError;
+  OnboardingStatus get status => throw _privateConstructorUsedError;
+  bool get canGoNext => throw _privateConstructorUsedError;
+  int get stepCount => throw _privateConstructorUsedError;
+  int? get stepIndex => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $OnboardingStateCopyWith<SessionData, StepType,
@@ -34,7 +37,13 @@ abstract class $OnboardingStateCopyWith<SessionData,
       _$OnboardingStateCopyWithImpl<SessionData, StepType, $Res,
           OnboardingState<SessionData, StepType>>;
   @useResult
-  $Res call({OnboardingStatus status, SessionData? data, StepType? step});
+  $Res call(
+      {SessionData? sessionData,
+      StepType? step,
+      OnboardingStatus status,
+      bool canGoNext,
+      int stepCount,
+      int? stepIndex});
 }
 
 /// @nodoc
@@ -54,23 +63,38 @@ class _$OnboardingStateCopyWithImpl<
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? status = null,
-    Object? data = freezed,
+    Object? sessionData = freezed,
     Object? step = null,
+    Object? status = freezed,
+    Object? canGoNext = null,
+    Object? stepCount = null,
+    Object? stepIndex = freezed,
   }) {
     return _then(_value.copyWith(
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as OnboardingStatus,
-      data: freezed == data
-          ? _value.data
-          : data // ignore: cast_nullable_to_non_nullable
+      sessionData: freezed == sessionData
+          ? _value.sessionData
+          : sessionData // ignore: cast_nullable_to_non_nullable
               as SessionData?,
       step: null == step
           ? _value.step
           : step // ignore: cast_nullable_to_non_nullable
               as StepType?,
+      status: freezed == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as OnboardingStatus,
+      canGoNext: null == canGoNext
+          ? _value.canGoNext
+          : canGoNext // ignore: cast_nullable_to_non_nullable
+              as bool,
+      stepCount: null == stepCount
+          ? _value.stepCount
+          : stepCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      stepIndex: freezed == stepIndex
+          ? _value.stepIndex
+          : stepIndex // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
   }
 }
@@ -86,7 +110,13 @@ abstract class _$$OnboardingStateImplCopyWith<
       __$$OnboardingStateImplCopyWithImpl<SessionData, StepType, $Res>;
   @override
   @useResult
-  $Res call({OnboardingStatus status, SessionData? data, StepType? step});
+  $Res call(
+      {SessionData? sessionData,
+      StepType? step,
+      OnboardingStatus status,
+      bool canGoNext,
+      int stepCount,
+      int? stepIndex});
 }
 
 /// @nodoc
@@ -103,23 +133,38 @@ class __$$OnboardingStateImplCopyWithImpl<SessionData,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? status = null,
-    Object? data = freezed,
+    Object? sessionData = freezed,
     Object? step = null,
+    Object? status = freezed,
+    Object? canGoNext = null,
+    Object? stepCount = null,
+    Object? stepIndex = freezed,
   }) {
     return _then(_$OnboardingStateImpl<SessionData, StepType>(
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as OnboardingStatus,
-      data: freezed == data
-          ? _value.data
-          : data // ignore: cast_nullable_to_non_nullable
+      sessionData: freezed == sessionData
+          ? _value.sessionData
+          : sessionData // ignore: cast_nullable_to_non_nullable
               as SessionData?,
       step: null == step
           ? _value.step
           : step // ignore: cast_nullable_to_non_nullable
               as StepType?,
+      status: freezed == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as OnboardingStatus,
+      canGoNext: null == canGoNext
+          ? _value.canGoNext
+          : canGoNext // ignore: cast_nullable_to_non_nullable
+              as bool,
+      stepCount: null == stepCount
+          ? _value.stepCount
+          : stepCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      stepIndex: freezed == stepIndex
+          ? _value.stepIndex
+          : stepIndex // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -129,19 +174,30 @@ class __$$OnboardingStateImplCopyWithImpl<SessionData,
 class _$OnboardingStateImpl<SessionData, StepType extends Step<SessionData>>
     extends _OnboardingState<SessionData, StepType> {
   const _$OnboardingStateImpl(
-      {required this.status, required this.data, required this.step})
+      {required this.sessionData,
+      required this.step,
+      required this.status,
+      required this.canGoNext,
+      required this.stepCount,
+      required this.stepIndex})
       : super._();
 
   @override
-  final OnboardingStatus status;
-  @override
-  final SessionData? data;
+  final SessionData? sessionData;
   @override
   final StepType? step;
+  @override
+  final OnboardingStatus status;
+  @override
+  final bool canGoNext;
+  @override
+  final int stepCount;
+  @override
+  final int? stepIndex;
 
   @override
   String toString() {
-    return 'OnboardingState<$SessionData, $StepType>(status: $status, data: $data, step: $step)';
+    return 'OnboardingState<$SessionData, $StepType>(sessionData: $sessionData, step: $step, status: $status, canGoNext: $canGoNext, stepCount: $stepCount, stepIndex: $stepIndex)';
   }
 
   @override
@@ -149,17 +205,27 @@ class _$OnboardingStateImpl<SessionData, StepType extends Step<SessionData>>
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$OnboardingStateImpl<SessionData, StepType> &&
-            (identical(other.status, status) || other.status == status) &&
-            const DeepCollectionEquality().equals(other.data, data) &&
-            const DeepCollectionEquality().equals(other.step, step));
+            const DeepCollectionEquality()
+                .equals(other.sessionData, sessionData) &&
+            const DeepCollectionEquality().equals(other.step, step) &&
+            const DeepCollectionEquality().equals(other.status, status) &&
+            (identical(other.canGoNext, canGoNext) ||
+                other.canGoNext == canGoNext) &&
+            (identical(other.stepCount, stepCount) ||
+                other.stepCount == stepCount) &&
+            (identical(other.stepIndex, stepIndex) ||
+                other.stepIndex == stepIndex));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      status,
-      const DeepCollectionEquality().hash(data),
-      const DeepCollectionEquality().hash(step));
+      const DeepCollectionEquality().hash(sessionData),
+      const DeepCollectionEquality().hash(step),
+      const DeepCollectionEquality().hash(status),
+      canGoNext,
+      stepCount,
+      stepIndex);
 
   @JsonKey(ignore: true)
   @override
@@ -173,18 +239,27 @@ class _$OnboardingStateImpl<SessionData, StepType extends Step<SessionData>>
 abstract class _OnboardingState<SessionData, StepType extends Step<SessionData>>
     extends OnboardingState<SessionData, StepType> {
   const factory _OnboardingState(
-          {required final OnboardingStatus status,
-          required final SessionData? data,
-          required final StepType? step}) =
+          {required final SessionData? sessionData,
+          required final StepType? step,
+          required final OnboardingStatus status,
+          required final bool canGoNext,
+          required final int stepCount,
+          required final int? stepIndex}) =
       _$OnboardingStateImpl<SessionData, StepType>;
   const _OnboardingState._() : super._();
 
   @override
-  OnboardingStatus get status;
-  @override
-  SessionData? get data;
+  SessionData? get sessionData;
   @override
   StepType? get step;
+  @override
+  OnboardingStatus get status;
+  @override
+  bool get canGoNext;
+  @override
+  int get stepCount;
+  @override
+  int? get stepIndex;
   @override
   @JsonKey(ignore: true)
   _$$OnboardingStateImplCopyWith<SessionData, StepType,

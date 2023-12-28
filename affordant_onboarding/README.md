@@ -1,14 +1,9 @@
 # Affordant onboarding
 Affordant Onboarding is a comprehensive opinionated framework for creating onboarding experiences in Flutter apps. It is built on top of the go_router and bloc libraries.
 
-To improve:
-- Data should be sync to the back-end only when step is validated to avoid useless api call
-- Step.validate function is not clear
-- Lack of way to fetch data based on current step (use step factory instead of step ?)
-- Lack of way to change strategy for session data save
-- Should use a more general approach instead of a go route
-  - design it like a "guard" that show required pages (mixin that overload redirect function ?)
-- Route file is outside the feature folder
+## Todo
+- [ ] Storage error handling
+  - convert errors to displayable errors in the view_model
 
 ## Concept
 
@@ -21,7 +16,34 @@ The framework provides an API for navigating back and forth within the onboardin
 
 ## Usage
 
-1. create an onboaridng model:
+
+2. implement an onboarding storage delegate
+
+Onboarding repository provides data storage api for the onborading model.
+You onboarding repository should implement the OnboardingRepository interface
+
+```dart
+class ExampleOnboardingStorage
+    implements OnboardingStorageDelegate<SessionData> {
+  @override
+  Future<SessionData?> getSessionData() async {
+    return null;
+  }
+
+  @override
+  Future<List<String>?> getVisitedSteps() async {
+    return null;
+  }
+
+  @override
+  Future<void> setSessionData(data) async {}
+
+  @override
+  FutureOr<void> setVisitedSteps(List<String>? visitedSteps) {}
+}
+```
+
+1. define an onboarding repository:
 ```dart
 /// Session data object, hold all onboarding data
 /// Each step is validated based on its data
@@ -37,50 +59,26 @@ sealed class MyStep with Step<SessionData> {
 
   /// This method is used to determine if user could move to the next step.
   @override
-  bool validate(SessionData data) => true;
+  bool canGoNext(SessionData? data) => true;
 }
 
 class Step1 extends MyStep {}
 
 class Step2 extends MyStep {}
 
-class MyOnboardingModel extends OnboardingModel<SessionData, MyStep> {
+class MyOnboardingRepository extends OnboardingRepository<SessionData, MyStep> {
   MyOnboardingModel({
     required super.onboardingRepository,
   }) : super(
           /// instantiate new session data.
           /// this is used when user arrive on the onboarding for the first time.
           initialSessionData: () => SessionData(),
-          config: [
+          storageDelegate: ExampleStorageDelegate(),
+          steps: [
             Step1(),
             Step2(),
           ],
         );
-}
-```
-
-2. create an oboarding repository
-
-Onboarding repository provides data storage api for the onborading model.
-You onboarding repository should implement the OnboardingRepository interface
-
-```dart
-class ExampleOnboardingRepository implements OnboardingRepository<SessionData> {
-  @override
-  Future<SessionData?> getSessionData() async {
-    return null;
-  }
-
-  @override
-  Future<List<String>?> getVisitedSteps() async {
-    return null;
-  }
-
-  @override
-  Future<void> markStepVisited(String stepID, bool visited) async {}
-
-  @override
-  Future<void> setSessionData(data) async {}
 }
 ```
 

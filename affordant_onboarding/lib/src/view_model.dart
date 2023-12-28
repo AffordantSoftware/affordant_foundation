@@ -1,119 +1,160 @@
+import 'dart:async';
+
 import 'package:affordant_mvvm/affordant_mvvm.dart';
 import 'package:flutter/widgets.dart';
-import 'package:go_router/go_router.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'repository.dart' as repo;
+import 'repository.dart';
+import 'strategy.dart';
 
-PageController
-    _initPageController<SessionData, StepType extends repo.Step<SessionData>>(
-  repo.OnboardingRepository repository,
-) {
-  final currentStep = repository.state.step;
-  return PageController(
-    initialPage:
-        currentStep != null ? repository.steps.indexOf(currentStep) : 0,
-  );
+part 'view_model.freezed.dart';
+
+mixin Step<SessionData> {
+  String get id;
+
+  bool canGoNext(SessionData? data);
 }
 
-class OnboardingState<SessionData, StepType extends repo.Step<SessionData>> {
-  final SessionData? sessionData;
-  final StepType? step;
-  final repo.OnboardingStatus status;
-  final bool canGoNext;
-  final int stepCount;
-  final int? stepIndex;
-
-  const OnboardingState({
-    required this.sessionData,
-    required this.step,
-    required this.status,
-    required this.canGoNext,
-    required this.stepCount,
-    required this.stepIndex,
-  });
+enum OnboardingStatus {
+  loading,
+  inProgress,
+  done,
 }
 
-class OnboardingViewModel<SessionData, StepType extends repo.Step<SessionData>>
+@freezed
+class OnboardingState<SessionData, StepType extends Step<SessionData>>
+    with _$OnboardingState<SessionData, StepType> {
+  const OnboardingState._();
+
+  const factory OnboardingState({
+    required SessionData? sessionData,
+    required StepType? step,
+    required OnboardingStatus status,
+    required bool canGoNext,
+    required int stepCount,
+    required int? stepIndex,
+  }) = _OnboardingState;
+}
+
+class OnboardingViewModel<SessionData, StepType extends Step<SessionData>>
     extends Cubit<OnboardingState<SessionData, StepType>>
     with StreamListenerCubit {
   OnboardingViewModel({
     required this.onboardingRepository,
+    required this.steps,
+    required this.onOnboardingCompleted,
     this.pageTransitionCurve = Curves.easeInOutCubic,
     this.pageTransitionDuration = const Duration(milliseconds: 460),
-    required this.redirection,
-    required this.navigationService,
-  })  : pageController = _initPageController(onboardingRepository),
+    this.replicationStrategy =
+        const OnboardingDataReplicationStrategy.onStepChanged(),
+  })  : pageController = PageController(),
+        computeOnboardingState = ComputeOnboardingState(
+          onboardingRepository: onboardingRepository,
+          steps: steps,
+        ),
         super(
           OnboardingState(
-            sessionData: onboardingRepository.state.data,
-            step: onboardingRepository.state.step,
-            status: onboardingRepository.state.status,
-            canGoNext: onboardingRepository.state.step
-                    ?.canGoNext(onboardingRepository.state.data) ==
-                true,
-            stepCount: onboardingRepository.steps.length,
-            stepIndex: onboardingRepository.state.step != null
-                ? onboardingRepository.steps
-                    .indexOf(onboardingRepository.state.step!)
-                : null,
+            sessionData: null,
+            step: null,
+            status: OnboardingStatus.loading,
+            canGoNext: false,
+            stepCount: steps.length,
+            stepIndex: 0,
           ),
         ) {
-    onEach(
-      onboardingRepository.stateStream,
-      onData: (newState) {
-        final newStep = newState.step;
-        final newData = newState.data;
+    forEach(onboardingRepository.sessionData.stream, onData: (sessionData) {
+      return state.copyWith(
+        sessionData: sessionData,
+        canGoNext: state.step?.canGoNext(sessionData) == true,
+      );
+    });
+    forEach(onboardingRepository.visitedSteps.stream, onData: (_) {
+      final (step, status) = computeOnboardingState.computeForCurrent();
 
-        if (newState.isDone) {
-          navigationService.go(redirection);
-        } else {
-          _handleStepChange(newStep);
+      if (status == OnboardingStatus.done) {
+        onOnboardingCompleted.call();
+      } else {
+        _handleStepTransitionPageAnimation(step);
+      }
 
-          emit(OnboardingState(
-            sessionData: newData,
-            step: newStep,
-            status: newState.status,
-            canGoNext: newStep?.canGoNext(newData) == true,
-            stepCount: onboardingRepository.steps.length,
-            stepIndex: newStep != null
-                ? onboardingRepository.steps.indexOf(newStep)
-                : null,
-          ));
-        }
-      },
-    );
+      // Todo: test if this can raise an exception if the call back navigate to andother page
+      // await Future.delayed(miliseonds: 300);
+
+      return state.copyWith(
+        step: step,
+        status: status,
+        stepIndex: step != null ? steps.indexOf(step) : null,
+        canGoNext: step?.canGoNext(state.sessionData) == true,
+      );
+    });
   }
 
-  final repo.OnboardingRepository<SessionData, StepType> onboardingRepository;
+  final VoidCallback onOnboardingCompleted;
+  final ComputeOnboardingState<SessionData, StepType> computeOnboardingState;
   final Duration pageTransitionDuration;
   final Curve pageTransitionCurve;
-  final String redirection;
-  final GoRouter navigationService;
+  final OnboardingRepository<SessionData> onboardingRepository;
+  final OnboardingDataReplicationStrategy replicationStrategy;
+  final List<StepType> steps;
+
   PageController pageController;
 
-  late final Function() _signalSubscriptionDisposer;
-  set sessionData(SessionData? data) {
-    onboardingRepository.setSessionData(data);
+  Future<void> setSessionData(SessionData? data) async {
+    final policy = replicationStrategy.replicateOnDataChanged
+        ? WritePolicy.optimistic
+        : WritePolicy.cacheOnly;
+    onboardingRepository.sessionData.set(data, policy: policy);
   }
 
-  List<StepType> get steps => onboardingRepository.steps;
+  /// We remove previous screen from visited list so we can re-enter again
+  Future<void> prev() async {
+    if (state.status == OnboardingStatus.loading) return;
 
-  void prev() {
-    onboardingRepository.previousStep();
+    final data = state.sessionData;
+    final step = state.step;
+
+    if (data != null && step != null) {
+      final (newStep, newStatus) =
+          computeOnboardingState.computeForPreviousStep();
+
+      if (newStep != null) {
+        final visited = {...?onboardingRepository.visitedSteps.value}
+          ..remove(newStep.id);
+        onboardingRepository.visitedSteps.set(visited.toList());
+      }
+
+      await _maybeReplicateSessionDataOnStepChanged(data, newStatus);
+    }
   }
 
-  void next() {
-    onboardingRepository.nextStep();
+  Future<void> next() async {
+    if (state.status != OnboardingStatus.inProgress) return;
+
+    final step = state.step;
+    final data = state.sessionData;
+    if (data != null && step != null && step.canGoNext(data) == true) {
+      final visited =
+          {...?onboardingRepository.visitedSteps.value, step.id}.toList();
+
+      final (_, newStatus) = computeOnboardingState.computeFor(
+        onboardingRepository.sessionData.value,
+        visited,
+      );
+
+      await _maybeReplicateSessionDataOnStepChanged(data, newStatus);
+
+      onboardingRepository.visitedSteps.set(visited.toList());
+    }
   }
 
   void dispose() {
-    _signalSubscriptionDisposer();
+    pageController.dispose();
   }
 
-  void _handleStepChange(StepType? newStep) {
+  void _handleStepTransitionPageAnimation(StepType? newStep) {
     if (newStep == null || state.step == newStep) return;
 
-    final int index = onboardingRepository.steps.indexOf(newStep);
+    final int index = steps.indexOf(newStep);
 
     if (state.step == null) {
       _jumpToPage(index);
@@ -142,5 +183,23 @@ class OnboardingViewModel<SessionData, StepType extends repo.Step<SessionData>>
       /// We can safely re-construct the controller since it doesn't have client
       pageController = PageController(initialPage: index);
     }
+  }
+
+  FutureOr<void> _maybeReplicateSessionDataOnStepChanged(
+    SessionData newData,
+    OnboardingStatus newStatus,
+  ) async {
+    final WritePolicy policy;
+    if (replicationStrategy.replicateOnStepChanged) {
+      if (newStatus == OnboardingStatus.done &&
+          replicationStrategy.waitForDataReplicatedBeforeDone) {
+        policy = WritePolicy.networkFirst;
+      } else {
+        policy = WritePolicy.optimistic;
+      }
+    } else {
+      policy = WritePolicy.cacheOnly;
+    }
+    onboardingRepository.sessionData.set(newData, policy: policy);
   }
 }
