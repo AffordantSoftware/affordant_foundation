@@ -10,9 +10,10 @@ dependencies:
   flutter:
     sdk: flutter
   affordant_core:
-    git:
-      url: https://github.com/AffordantSoftware/affordant_foundation.git
-      path: affordant_core
+    path: ../affordant_core
+    # git:
+    #   url: https://github.com/AffordantSoftware/affordant_foundation.git
+    #   path: affordant_core
   affordant_mvvm:
     path: ../affordant_mvvm
     # git:

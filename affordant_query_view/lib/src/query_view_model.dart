@@ -4,35 +4,7 @@ import 'package:affordant_query_view/src/errors.dart';
 import 'package:affordant_core/affordant_core.dart';
 import 'package:dart_mappable/dart_mappable.dart';
 
-part 'query_view.mapper.dart';
-
-abstract interface class Debouncer {
-  const Debouncer();
-
-  void debounce(void Function() delegate);
-  FutureOr<void> dispose();
-}
-
-class SearchDebouncer implements Debouncer {
-  SearchDebouncer({this.duration = const Duration(milliseconds: 330)});
-
-  final Duration duration;
-  Timer? _timer;
-  // U Function()? _delegate;
-
-  @override
-  void debounce(void Function() delegate) {
-    _timer?.cancel();
-    _timer = Timer(duration, () {
-      delegate();
-    });
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-  }
-}
+part 'query_view_model.mapper.dart';
 
 /// Query view model's state
 @MappableClass()
@@ -94,7 +66,10 @@ abstract base class QueryViewModel<QueryParameters, DisplayParameters,
     required DisplayData initialData,
     QueryResult? initialQueryResult,
     bool runQuery = true,
-  })  : debouncer = debouncer ?? SearchDebouncer(),
+  })  : debouncer = debouncer ??
+            Debouncer.duration(
+              const Duration(milliseconds: 330),
+            ),
         super(
           QueryViewModelState(
             displayParams: initialDisplayParams,

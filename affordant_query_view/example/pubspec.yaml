@@ -11,6 +11,8 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.2
   flex_color_scheme: ^7.3.1
+  affordant_core:
+    path: ../../affordant_core/
   affordant_mvvm:
     path: ../../affordant_mvvm/
   affordant_query_view:

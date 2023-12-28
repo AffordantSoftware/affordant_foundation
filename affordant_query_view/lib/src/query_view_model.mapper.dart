@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element
 
-part of 'query_view.dart';
+part of 'query_view_model.dart';
 
 class QueryViewModelStateMapper extends ClassMapperBase<QueryViewModelState> {
   QueryViewModelStateMapper._();

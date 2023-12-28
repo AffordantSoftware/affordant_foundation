@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:affordant_core/affordant_core.dart';
 import 'package:affordant_query_view/affordant_query_view.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:fuzzywuzzy/fuzzywuzzy.dart';
@@ -178,8 +179,8 @@ class PerformQuery extends SearchEvent {
   const PerformQuery(super.time, super.label);
 }
 
-class LogDebouncer extends SearchDebouncer {
-  LogDebouncer({super.duration});
+class LogDebouncer extends TimerDebouncer {
+  LogDebouncer(super.duration);
 
   late SearchViewModel vm;
   String text = "";
@@ -220,7 +221,7 @@ final class SearchViewModel
             queryNumber: 0,
             results: [],
           ),
-          debouncer: LogDebouncer(),
+          debouncer: LogDebouncer(const Duration(milliseconds: 330)),
         ) {
     (debouncer as LogDebouncer).vm = this;
   }
