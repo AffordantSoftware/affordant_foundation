@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:affordant_onboarding/affordant_onboarding.dart';
-import 'package:example/model.dart';
+import 'package:example/repository.dart';
+import 'package:example/view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -22,58 +23,16 @@ class HomeRoute extends GoRouteData {
   Widget build(BuildContext context, GoRouterState state) => const HomeScreen();
 }
 
-// @TypedGoRoute<OnboardingRoute>(
-//   path: '/onboarding',
-// )
-// class OnboardingRoute extends GoRouteData
-//     with OnboardingRouteMixin<ExampleStep> {
-//   @override
-//   final redirection = '/';
-
-//   @override
-//   OnboardingModel<ExampleStep> get model => exampleModel;
-
-//   @override
-//   Widget buildStep(BuildContext context, ExampleStep? step) => switch (step) {
-//         Step1 s => Onboarding1Screen(step: s),
-//         Step2 s => Onboarding2Screen(step: s),
-//         _ => const SizedBox.shrink(),
-//       };
-// }
-
-class MyOnboardingViewModel extends OnboardingViewModel<SessionData, MyStep> {
-  MyOnboardingViewModel({
-    required super.onboardingRepository,
-    required super.navigationService,
-    required super.redirection,
-  });
-
-  void setStep1Read() {
-    onboardingRepository.setSessionData(
-      state.sessionData?.copyWith(
-        hasReadStep1: true,
-      ),
-    );
-  }
-}
-
 @TypedGoRoute<OnboardingRoute>(
   path: '/onboarding',
 )
 class OnboardingRoute extends GoRouteData with OnboardingRouteMixin {
   @override
-  final String redirection = '/';
-
-  @override
-  getRepository(BuildContext context) => exampleModel;
-
-  @override
   Widget build(BuildContext context, GoRouterState state) {
     return OnboardingView(
       createViewModel: (_) => MyOnboardingViewModel(
-        redirection: redirection,
-        navigationService: router,
         onboardingRepository: exampleModel,
+        onOnboardingCompleted: () => context.go('/'),
       ),
       loadingBuilder: (_) => const Scaffold(
         body: Center(child: CircularProgressIndicator()),
@@ -84,4 +43,16 @@ class OnboardingRoute extends GoRouteData with OnboardingRouteMixin {
       },
     );
   }
+
+  @override
+  OnboardingRepository getOnboardingRepository(
+          BuildContext context, GoRouterState state) =>
+      exampleModel;
+
+  @override
+  List<MyStep> getOnboardingSteps(BuildContext context, GoRouterState state) =>
+      onboardingSteps;
+
+  @override
+  String redirection(BuildContext context, GoRouterState state) => '/';
 }

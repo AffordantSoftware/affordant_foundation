@@ -6,12 +6,12 @@ import 'view_model.dart';
 
 mixin OnboardingRouteMixin<SessionData, StepType extends Step<SessionData>>
     on GoRouteData {
-  List<StepType> steps(
+  List<StepType> getOnboardingSteps(
     BuildContext context,
     GoRouterState state,
   );
 
-  OnboardingRepository<SessionData> onboardingRepository(
+  OnboardingRepository<SessionData> getOnboardingRepository(
     BuildContext context,
     GoRouterState state,
   );
@@ -23,11 +23,11 @@ mixin OnboardingRouteMixin<SessionData, StepType extends Step<SessionData>>
 
   @override
   String? redirect(BuildContext context, GoRouterState state) {
-    final repository = onboardingRepository(context, state);
+    final repository = getOnboardingRepository(context, state);
 
     final (_, status) = ComputeOnboardingState<SessionData, StepType>(
       onboardingRepository: repository,
-      steps: steps(context, state),
+      steps: getOnboardingSteps(context, state),
     ).computeForCurrent();
 
     if (status == OnboardingStatus.done) {

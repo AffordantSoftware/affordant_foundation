@@ -1,9 +1,8 @@
 import 'package:affordant_mvvm/affordant_mvvm.dart';
 import 'package:affordant_onboarding/affordant_onboarding.dart';
-import 'package:example/router.dart';
 import 'package:flutter/material.dart' hide Step;
 
-import 'model.dart';
+import 'view_model.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({
