@@ -1,5 +1,6 @@
 export 'src/view_model.dart';
 export 'src/listener_cubit.dart';
+export 'src/reactive.dart';
 
 export 'package:flutter_bloc/flutter_bloc.dart';
 export 'package:provider/provider.dart';
