@@ -62,31 +62,37 @@ class OnboardingViewModel<SessionData, StepType extends Step<SessionData>>
             stepIndex: 0,
           ),
         ) {
-    forEach(onboardingRepository.sessionData.stream, onData: (sessionData) {
-      return state.copyWith(
-        sessionData: sessionData,
-        canGoNext: state.step?.canGoNext(sessionData) == true,
-      );
-    });
-    forEach(onboardingRepository.visitedSteps.stream, onData: (_) {
-      final (step, status) = computeOnboardingState.computeForCurrent();
+    forEach(
+      onboardingRepository.sessionData.stream,
+      onData: (sessionData) {
+        return state.copyWith(
+          sessionData: sessionData,
+          canGoNext: state.step?.canGoNext(sessionData) == true,
+        );
+      },
+    );
+    forEach(
+      onboardingRepository.visitedSteps.stream,
+      onData: (_) {
+        final (step, status) = computeOnboardingState.computeForCurrent();
 
-      if (status == OnboardingStatus.done) {
-        onOnboardingCompleted.call();
-      } else {
-        _handleStepTransitionPageAnimation(step);
-      }
+        if (status == OnboardingStatus.done) {
+          onOnboardingCompleted.call();
+        } else {
+          _handleStepTransitionPageAnimation(step);
+        }
 
-      // Todo: test if this can raise an exception if the call back navigate to andother page
-      // await Future.delayed(miliseonds: 300);
+        // Todo: test if this can raise an exception if the call back navigate to andother page
+        // await Future.delayed(milliseconds: 300);
 
-      return state.copyWith(
-        step: step,
-        status: status,
-        stepIndex: step != null ? steps.indexOf(step) : null,
-        canGoNext: step?.canGoNext(state.sessionData) == true,
-      );
-    });
+        return state.copyWith(
+          step: step,
+          status: status,
+          stepIndex: step != null ? steps.indexOf(step) : null,
+          canGoNext: step?.canGoNext(state.sessionData) == true,
+        );
+      },
+    );
   }
 
   final VoidCallback onOnboardingCompleted;
