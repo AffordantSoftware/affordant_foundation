@@ -115,6 +115,8 @@ typedef AsyncWrite<T> = FutureOr<void> Function(T value);
 
 /// {@template replicated_reactive}
 /// A reactive piece of data that replicated it's data on network
+/// You can control how data is replicated by providing a [WritePolicy] to
+/// the [set] method. The default WritingPolicy is [WritePolicy.optimistic].
 ///
 /// {@macro reactive_content}
 ///
@@ -180,6 +182,41 @@ class ReplicatedReactive<T> implements Reactive<T> {
   }
 }
 
+/// A mixin to automatically manage multiple [Reactive]'s lifecycle
+/// You still MUST call [dispose] method when host is no longer needed
+/// Reactives are created using [reactive] and [replicatedReactive] methods
+///
+/// Example usage:
+/// ```dart
+/// class MyRepo with ReactiveHost {
+///     late final _data = reactive<int>(0);
+///
+///     get data => _data.readOnly;
+///
+///     void setData(int data) {
+///       _data.set(data);
+///     }
+///
+///     late final _replicatedData = replicatedReactive<int>(
+///       fetch: () async => /** fetch value */
+///       write: (value) async => /** write value */
+///     );
+///
+///     get replicatedData => _replicatedData.readOnly;
+///
+///      void setReplicatedData(int data) {
+///       _replicatedData.set(data, WritePolicy.networkFirst);
+///     }
+/// }
+/// ...
+///
+/// final Stream<int> stream = myRepo.data.stream
+/// final int value = myRepo.data.value
+/// ```
+///
+/// * [Reactive], the base class for reactives
+/// * [ReplicatedReactive], a reactive that replicate it's data over network
+///
 mixin ReactiveHost {
   final List<Reactive> _reactives = [];
 
