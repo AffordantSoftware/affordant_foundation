@@ -17,9 +17,7 @@ class SessionData {
       );
 }
 
-class MyOnboardingRepo extends OnboardingRepository<SessionData> {
-  MyOnboardingRepo();
-
+final class MyOnboardingRepo extends OnboardingRepository<SessionData> {
   @override
   late final ReplicatedReactive<SessionData?> sessionData = replicatedReactive(
     fetch: () => null,

@@ -5,9 +5,8 @@ import 'package:collection/collection.dart';
 
 import 'view_model.dart';
 
-abstract class OnboardingRepository<SessionData> with ReactiveHost {
-  OnboardingRepository();
-
+abstract base class OnboardingRepository<SessionData>
+    extends ReactiveRepository {
   ReplicatedReactive<SessionData?> get sessionData;
   ReplicatedReactive<List<String>?> get visitedSteps;
 }

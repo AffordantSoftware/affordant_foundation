@@ -3,26 +3,60 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:rxdart/rxdart.dart';
 
-class ReadOnlyReactive<T> {
-  const ReadOnlyReactive(this._reactive);
-
-  final Reactive<T> _reactive;
-
-  Stream<T> get stream => _reactive.stream;
-  T? get cache => _reactive.value;
+/// A read-only reactive piece of data
+/// You can obtain a read-only reactive by using [readOnly] getter on any [Reactive]
+///
+/// Example usage:
+/// ```dart
+/// class MyRepo with ReactiveHost {
+///     late final _data = reactive<int>(0);
+///     get data => _data.readOnly;
+/// }
+/// ```
+abstract interface class ReadOnlyReactive<T> {
+  Stream<T> get stream;
+  T? get value;
 }
 
-abstract class Reactive<T> {
+/// {@template reactive}
+/// A reactive piece of data
+///
+/// {@template reactive_common}
+/// [Reactive] MUST be disposed using [dispose] method.
+/// To avoid managing [Reactive]'s lifecycle create them inside a [ReactiveHost]
+/// with [reactive] or [replicatedReactive] methods.
+///
+/// - [Reactive.value] to access the last known value.
+/// - Subscribes to [stream] to get updated when value changes. The stream will immediately emit current value to any new subscribers.
+/// - [Reactive.set] is used to update current value and propagate the result to stream subscribers.
+///
+/// Example usage:
+/// ```dart
+/// class MyRepo with ReactiveHost {
+///     late final _data = reactive<int>(0);
+///     get data => _data.readOnly;
+///
+///     void setData(int data) {
+///       _data.set(data);
+///     }
+/// }
+///
+/// final Stream<int> stream = myRepo.data.stream
+/// final int value = myRepo.data.value
+/// ```
+/// {@endtemplate}
+///
+/// * [ReactiveHost], a mixin that manages Reactive's lifecycle automatically.
+/// * [ReplicatedReactive], a reactive that replicate it's data over network
+///
+/// {@endtemplate}
+abstract class Reactive<T> implements ReadOnlyReactive<T> {
   factory Reactive([T? initialValue]) = _ReactiveSync;
   factory Reactive.replicated({
     T? initialValue,
     required AsyncFetch<T> fetch,
     required AsyncWrite<T> write,
   }) = ReplicatedReactive;
-
-  Stream<T> get stream;
-
-  T? get value;
 
   FutureOr<void> set(T newValue);
 
@@ -31,7 +65,7 @@ abstract class Reactive<T> {
   ReadOnlyReactive<T> get readOnly;
 }
 
-class _ReactiveSync<T> implements Reactive<T> {
+class _ReactiveSync<T> implements Reactive<T>, ReadOnlyReactive<T> {
   _ReactiveSync([T? initialValue])
       : _subject = initialValue != null
             ? BehaviorSubject.seeded(initialValue)
@@ -46,7 +80,7 @@ class _ReactiveSync<T> implements Reactive<T> {
   T? get value => _subject.valueOrNull;
 
   @override
-  late final ReadOnlyReactive<T> readOnly = ReadOnlyReactive(this);
+  late final ReadOnlyReactive<T> readOnly = this;
 
   @override
   void set(T newValue) => _subject.add(newValue);
@@ -57,6 +91,14 @@ class _ReactiveSync<T> implements Reactive<T> {
   }
 }
 
+/// Controls how's [ReplicatedReactive]'s [set] method replicates data to network:
+///
+/// * [optimistic] replicated data but do not wait for any success confirmation
+/// before writing to cache and propagating new value. If an error occur during replication, it will be accessible through [stream.onError]
+///
+/// * [networkFirst] replicated data and wait for success confirmation before writing to cache propagating new value. If an error occur during replication, it will be accessible through [stream.onError]
+///
+/// * [cacheOnly] do not replicated data and update cache immediately, propagating value to subscribers.
 enum WritePolicy {
   // write value to the cache then update the network. fail if network call doesn't succeed and reset the last known value before failure.
   optimistic,
@@ -71,6 +113,16 @@ enum WritePolicy {
 typedef AsyncFetch<T> = FutureOr<T> Function();
 typedef AsyncWrite<T> = FutureOr<void> Function(T value);
 
+/// {@template replicated_reactive}
+/// A reactive piece of data that replicated it's data on network
+///
+/// {@macro reactive_content}
+///
+/// See also:
+/// * [WritePolicy], the enum used to control how [set] replicates data.
+/// * [ReactiveHost], a mixin that manages Reactive's lifecycle automatically.
+/// * [Reactive], the base class for reactive value.
+/// {@endtemplate}
 class ReplicatedReactive<T> implements Reactive<T> {
   ReplicatedReactive({
     T? initialValue,
@@ -95,7 +147,7 @@ class ReplicatedReactive<T> implements Reactive<T> {
   Stream<T> get stream => _subject.stream;
 
   @override
-  late final ReadOnlyReactive<T> readOnly = ReadOnlyReactive(this);
+  ReadOnlyReactive<T> get readOnly => this;
 
   @override
   FutureOr<void> set(
@@ -131,12 +183,14 @@ class ReplicatedReactive<T> implements Reactive<T> {
 mixin ReactiveHost {
   final List<Reactive> _reactives = [];
 
+  /// {@macro reactive}
   Reactive<T> reactive<T>([T? value]) {
     final reactive = Reactive(value);
     _reactives.add(reactive);
     return reactive;
   }
 
+  /// {@macro replicated_reactive}
   ReplicatedReactive<T> replicatedReactive<T>({
     T? initialValue,
     required AsyncFetch<T> fetch,
