@@ -5,3 +5,4 @@ export 'src/repository/repository.dart';
 export 'package:flutter_bloc/flutter_bloc.dart';
 export 'package:provider/provider.dart';
 export 'package:rxdart/rxdart.dart';
+export 'package:get_it/get_it.dart';
