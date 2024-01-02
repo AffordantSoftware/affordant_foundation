@@ -51,9 +51,8 @@ abstract interface class ReadOnlyReactive<T> {
 ///
 /// {@endtemplate}
 abstract class Reactive<T> implements ReadOnlyReactive<T> {
-  factory Reactive([T? initialValue]) = _ReactiveSync;
+  factory Reactive(T initialValue) = _ReactiveSync;
   factory Reactive.replicated({
-    T? initialValue,
     required AsyncFetch<T> fetch,
     required AsyncWrite<T> write,
   }) = ReplicatedReactive;
@@ -66,10 +65,8 @@ abstract class Reactive<T> implements ReadOnlyReactive<T> {
 }
 
 class _ReactiveSync<T> implements Reactive<T>, ReadOnlyReactive<T> {
-  _ReactiveSync([T? initialValue])
-      : _subject = initialValue != null
-            ? BehaviorSubject.seeded(initialValue)
-            : BehaviorSubject();
+  _ReactiveSync(T initialValue)
+      : _subject = BehaviorSubject.seeded(initialValue);
 
   final BehaviorSubject<T> _subject;
 
@@ -127,18 +124,23 @@ typedef AsyncWrite<T> = FutureOr<void> Function(T value);
 /// {@endtemplate}
 class ReplicatedReactive<T> implements Reactive<T> {
   ReplicatedReactive({
-    T? initialValue,
-    required this.fetch,
-    required this.write,
-  }) : _subject = initialValue != null
-            ? BehaviorSubject.seeded(initialValue)
-            : BehaviorSubject();
+    required AsyncFetch<T> fetch,
+    required AsyncWrite<T> write,
+  })  : _fetch = fetch,
+        _write = write,
+        _subject = BehaviorSubject() {
+    _subject.onListen = () {
+      if (_subject.hasValue == false) {
+        this.fetch();
+      }
+    };
+  }
 
   /// Fetch value from source
-  final AsyncFetch<T> fetch;
+  final AsyncFetch<T> _fetch;
 
   /// Update source with new value
-  final AsyncWrite<T> write;
+  final AsyncWrite<T> _write;
 
   final BehaviorSubject<T> _subject;
 
@@ -146,7 +148,9 @@ class ReplicatedReactive<T> implements Reactive<T> {
   T? get value => _subject.valueOrNull;
 
   @override
-  Stream<T> get stream => _subject.stream;
+  Stream<T> get stream {
+    return _subject.stream;
+  }
 
   @override
   ReadOnlyReactive<T> get readOnly => this;
@@ -160,19 +164,28 @@ class ReplicatedReactive<T> implements Reactive<T> {
       case WritePolicy.optimistic:
         _subject.value = newValue;
         try {
-          await write(newValue);
+          await _write(newValue);
         } catch (e, s) {
           _subject.addError(e, s);
         }
       case WritePolicy.networkFirst:
         try {
-          await write(newValue);
+          await _write(newValue);
           _subject.value = newValue;
         } catch (e, s) {
           _subject.addError(e, s);
         }
       case WritePolicy.cacheOnly:
         _subject.value = newValue;
+    }
+  }
+
+  FutureOr<void> fetch() async {
+    try {
+      final newValue = await _fetch();
+      _subject.value = newValue;
+    } catch (e, s) {
+      _subject.addError(e, s);
     }
   }
 
@@ -221,7 +234,7 @@ mixin ReactiveHost {
   final List<Reactive> _reactives = [];
 
   /// {@macro reactive}
-  Reactive<T> reactive<T>([T? value]) {
+  Reactive<T> reactive<T>(T value) {
     final reactive = Reactive(value);
     _reactives.add(reactive);
     return reactive;
@@ -229,12 +242,10 @@ mixin ReactiveHost {
 
   /// {@macro replicated_reactive}
   ReplicatedReactive<T> replicatedReactive<T>({
-    T? initialValue,
     required AsyncFetch<T> fetch,
     required AsyncWrite<T> write,
   }) {
     final reactive = ReplicatedReactive<T>(
-      initialValue: initialValue,
       fetch: fetch,
       write: write,
     );
